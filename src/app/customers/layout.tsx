@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Customer Reviews & Testimonials - Mekong Border Run Service",
     description:
       "Read genuine customer reviews and testimonials for Mekong Border Run service. 5-star rated visa extension service.",
-    url: "https://mekong-transfer.vercel.app/customers",
+    url: "/customers",
     type: "website",
     images: [
       {

@@ -1,8 +1,10 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://mekong-transfer.vercel.app";
-
+  const baseUrl = process.env.SITE_URL;
+  if (!baseUrl) {
+    throw new Error("Missing environment variable: SITE_URL");
+  }
   return [
     {
       url: baseUrl,

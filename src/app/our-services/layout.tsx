@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Border Run Services - Professional Visa Extension Chiang Mai",
     description:
       "Professional border run services from Chiang Mai to Laos. Daily departures, multiple pickup points, licensed TAT operator.",
-    url: "https://mekong-transfer.vercel.app/our-services",
+    url: "/our-services",
     images: [
       {
         url: "/og-services-main.jpg",

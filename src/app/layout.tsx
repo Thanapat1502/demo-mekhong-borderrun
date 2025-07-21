@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.SITE_URL;
+
+if (!siteUrl) {
+  throw new Error("Missing environment variable: SITE_URL");
+}
+
 export const metadata: Metadata = {
   title: {
     default:
@@ -41,9 +47,7 @@ export const metadata: Metadata = {
     "tourist visa",
     "immigration service",
   ],
-  authors: [
-    { name: "Mekong Border Run", url: "https://mekong-transfer.vercel.app" },
-  ],
+  authors: [{ name: "Mekong Border Run", url: siteUrl }],
   creator: "Mekong Border Run",
   publisher: "Mekong Border Run",
   formatDetection: {
@@ -51,14 +55,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://mekong-transfer.vercel.app"),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mekong-transfer.vercel.app",
+    url: siteUrl,
     title: "Mekong Border Run - Professional Visa Extension Service",
     description:
       "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator. 4,100 THB all-inclusive service.",
