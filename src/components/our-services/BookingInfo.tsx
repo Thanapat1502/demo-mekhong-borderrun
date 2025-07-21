@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardHeader, CardBody } from "@heroui/react";
 import { FiBookOpen, FiInfo } from "react-icons/fi";
 
@@ -8,7 +10,7 @@ export default function BookingInfo() {
         <h2 className="text-4xl font-light text-black text-center mb-16">
           Booking Information
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card className="shadow-lg">
             <CardHeader className="flex gap-3">

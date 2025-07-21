@@ -1,3 +1,5 @@
+"use client";
+
 import PickupPointsModal from "@/components/base/PickupPointsModal";
 
 export default function ServicesPickupPoints() {

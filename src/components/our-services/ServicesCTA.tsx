@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@heroui/react";
 import NextLink from "next/link";
 
@@ -16,8 +17,7 @@ export default function ServicesCTA() {
             as={NextLink}
             href="/contact"
             size="lg"
-            className="bg-accent-500 text-white hover:bg-accent-600 px-12 py-4 text-lg font-light rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-accent-500 text-white hover:bg-accent-600 px-12 py-4 text-lg font-light rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
             Book Your Trip
           </Button>
           <Button
@@ -25,8 +25,7 @@ export default function ServicesCTA() {
             href="tel:+66951029528"
             variant="bordered"
             size="lg"
-            className="border-2 border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-white px-12 py-4 text-lg font-light rounded-full transition-all duration-300"
-          >
+            className="border-2 border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-white px-12 py-4 text-lg font-light rounded-full transition-all duration-300">
             Call +66 95 102 9528
           </Button>
         </div>

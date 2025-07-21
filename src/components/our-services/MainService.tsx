@@ -1,12 +1,14 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-} from "@heroui/react";
+"use client";
+
+import { Button, Card, CardBody, CardHeader, Chip } from "@heroui/react";
 import NextLink from "next/link";
-import { FiTruck, FiUser, FiArrowRight, FiMapPin, FiCoffee } from "react-icons/fi";
+import {
+  FiTruck,
+  FiUser,
+  FiArrowRight,
+  FiMapPin,
+  FiCoffee,
+} from "react-icons/fi";
 
 export default function MainService() {
   return (
@@ -18,18 +20,23 @@ export default function MainService() {
               Border Run Service
             </h2>
             <p className="text-lg text-black leading-relaxed mb-8">
-              Our comprehensive one-day border run service takes you from Chiang Mai to the 
-              Huay Xai border crossing in Laos. Perfect for visa extensions and tourist visa runs.
+              Our comprehensive one-day border run service takes you from Chiang
+              Mai to the Huay Xai border crossing in Laos. Perfect for visa
+              extensions and tourist visa runs.
             </p>
-            
+
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-3">
                 <FiTruck className="text-accent-500" size={20} />
-                <span className="text-black">Comfortable air-conditioned transport</span>
+                <span className="text-black">
+                  Comfortable air-conditioned transport
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <FiUser className="text-accent-500" size={20} />
-                <span className="text-black">Professional English-speaking guide</span>
+                <span className="text-black">
+                  Professional English-speaking guide
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <FiArrowRight className="text-accent-500" size={20} />
@@ -37,7 +44,9 @@ export default function MainService() {
               </div>
               <div className="flex items-center gap-3">
                 <FiMapPin className="text-accent-500" size={20} />
-                <span className="text-black">Cultural stop at White Temple</span>
+                <span className="text-black">
+                  Cultural stop at White Temple
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <FiCoffee className="text-accent-500" size={20} />
@@ -52,13 +61,15 @@ export default function MainService() {
             </CardHeader>
             <CardBody className="p-8">
               <div className="text-center mb-6">
-                <div className="text-5xl font-light text-accent-600 mb-2">4,100</div>
+                <div className="text-5xl font-light text-accent-600 mb-2">
+                  4,100
+                </div>
                 <div className="text-black text-lg mb-4">THB per person</div>
                 <Chip color="warning" variant="flat" className="mb-6">
                   Special Offer - Limited Time
                 </Chip>
               </div>
-              
+
               <div className="space-y-3 mb-8">
                 <div className="flex justify-between">
                   <span className="text-black">Departure Time:</span>
@@ -77,13 +88,12 @@ export default function MainService() {
                   <span className="text-black font-medium">Max 12 people</span>
                 </div>
               </div>
-              
+
               <Button
                 as={NextLink}
                 href="/contact"
                 className="w-full bg-accent-500 text-white hover:bg-accent-600 font-light rounded-full py-3"
-                size="lg"
-              >
+                size="lg">
                 Book Now
               </Button>
             </CardBody>

@@ -10,51 +10,12 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useState } from "react";
-
-interface PickupPoint {
-  name: string;
-  image: string;
-  desc: string;
-}
-
+import { useContentStore } from "@/store/zustand/contentContent";
 interface PickupPointsModalProps {
   title?: string;
   subtitle?: string;
   className?: string;
 }
-
-const pickupPoints: PickupPoint[] = [
-  {
-    name: "Tha Pae Gate",
-    image: "/image/home/pickup/thapae.jpg",
-    desc: "Historic city gate area",
-  },
-  {
-    name: "Chiang Mai Gate",
-    image: "/image/home/pickup/chiangmai.jpg",
-    desc: "South gate entrance",
-  },
-  {
-    name: "Central Festival",
-    image: "/image/home/pickup/central.jpg",
-    desc: "Shopping center",
-  },
-  {
-    name: "MAYA Lifestyle",
-    image: "/image/home/pickup/maya.jpg",
-    desc: "Nimman shopping mall",
-  },
-  {
-    name: "Airport Area",
-    image: "/image/home/pickup/airport.jpg",
-    desc: "Hotels near airport",
-  },
-  {
-    name: "Old City",
-    image: "/image/home/pickup/oldcity.jpg",
-    desc: "Historic center",
-  },
-];
 
 export default function PickupPointsModal({
   title = "Pickup Points",
@@ -62,6 +23,8 @@ export default function PickupPointsModal({
   className = "",
 }: PickupPointsModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { destinations } = useContentStore();
+
   const [selectedImage, setSelectedImage] = useState<string>("");
 
   const handleImageClick = (image: string) => {
@@ -78,7 +41,7 @@ export default function PickupPointsModal({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {pickupPoints.map((point, index) => (
+          {destinations.map((point, index) => (
             <Card
               key={index}
               className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
@@ -90,13 +53,13 @@ export default function PickupPointsModal({
                   alt={point.name}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = "/image/home/pickup/default.jpg";
+                    e.currentTarget.src = "/image/home/pickup/tha-pae-gate.jpg";
                   }}
                 />
               </div>
               <CardBody className="p-4 text-center">
                 <h3 className="font-medium text-black mb-2">{point.name}</h3>
-                <p className="text-sm text-black">{point.desc}</p>
+                <p className="text-sm text-black">{point.description}</p>
               </CardBody>
             </Card>
           ))}

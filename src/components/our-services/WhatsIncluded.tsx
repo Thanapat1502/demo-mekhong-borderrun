@@ -1,3 +1,4 @@
+"use client";
 import { Card, CardHeader, CardBody } from "@heroui/react";
 import { FiTruck, FiUser, FiCoffee, FiFileText } from "react-icons/fi";
 
@@ -8,7 +9,7 @@ export default function WhatsIncluded() {
         <h2 className="text-4xl font-light text-black text-center mb-16">
           What&apos;s Included
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card className="shadow-lg">
             <CardHeader className="flex gap-3">
