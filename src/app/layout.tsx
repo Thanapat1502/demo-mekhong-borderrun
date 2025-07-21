@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,30 +17,38 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Next.js + HeroUI App",
-    template: "%s | Next.js + HeroUI App",
+    default: "Mekong Border Run - Visa Extension Service Chiang Mai to Laos",
+    template: "%s | Mekong Border Run",
   },
   description:
-    "A modern web application built with Next.js, TypeScript, Tailwind CSS, and HeroUI",
-  keywords: ["Next.js", "React", "TypeScript", "Tailwind CSS", "HeroUI"],
-  authors: [{ name: "Your Name" }],
-  creator: "Your Name",
-  metadataBase: new URL("https://your-domain.com"),
+    "Professional border run service from Chiang Mai to Huay Xai, Laos. One-day trip for visa extension. Licensed TAT operator.",
+  keywords: [
+    "border run",
+    "extend visa",
+    "Chiang Mai",
+    "Laos",
+    "visa extension",
+    "Thailand",
+    "Huay Xai",
+    "round trip",
+  ],
+  authors: [{ name: "Mekong Border Run" }],
+  creator: "Mekong Border Run",
+  metadataBase: new URL("https://mekong-transfer.vercel.app"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://your-domain.com",
-    title: "Next.js + HeroUI App",
+    url: "https://mekong-transfer.vercel.app",
+    title: "Mekong Border Run - Visa Extension Service",
     description:
-      "A modern web application built with Next.js, TypeScript, Tailwind CSS, and HeroUI",
-    siteName: "Next.js + HeroUI App",
+      "Professional border run service from Chiang Mai to Huay Xai, Laos",
+    siteName: "Mekong Border Run",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Next.js + HeroUI App",
+    title: "Mekong Border Run - Visa Extension Service",
     description:
-      "A modern web application built with Next.js, TypeScript, Tailwind CSS, and HeroUI",
-    creator: "@yourusername",
+      "Professional border run service from Chiang Mai to Huay Xai, Laos",
   },
   robots: {
     index: true,
@@ -62,7 +72,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navigation />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

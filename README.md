@@ -1,6 +1,6 @@
-# Next.js + HeroUI Project
+# Mekong Border Run - Visa Extension Service
 
-A modern, SEO-optimized web application built with Next.js 15, TypeScript, Tailwind CSS 3.4.5, and HeroUI components.
+A modern, SEO-optimized web application for professional border run service from Chiang Mai to Huay Xai, Laos. Built with Next.js 15, TypeScript, Tailwind CSS 3.4.5, and HeroUI components.
 
 ## 🚀 Features
 
@@ -14,6 +14,8 @@ A modern, SEO-optimized web application built with Next.js 15, TypeScript, Tailw
 - 🤖 **Robots.txt** and **Sitemap.xml** included
 - 📄 **PWA manifest** for progressive web app support
 - ⚡ **Turbopack** for fast development
+- 🖼️ **Interactive pickup points** with modal gallery
+- 📞 **Multiple contact methods** integration
 
 ## 🛠️ Tech Stack
 
@@ -23,7 +25,59 @@ A modern, SEO-optimized web application built with Next.js 15, TypeScript, Tailw
 - **UI Components:** HeroUI
 - **Theme Management:** next-themes
 - **Font:** Geist Sans & Geist Mono
-- **Zustan:** For stage menagment
+- **Icons:** React Icons
+- **State Management:** Zustand
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/
+│   ├── globals.css          # Global styles with Tailwind
+│   ├── layout.tsx           # Root layout with SEO metadata
+│   ├── page.tsx             # Home page
+│   ├── providers.tsx        # HeroUI and theme providers
+│   ├── sitemap.ts           # Dynamic sitemap generation
+│   ├── manifest.ts          # PWA manifest
+│   ├── services/            # Services page
+│   ├── customers/           # Customers page
+│   └── contact/             # Contact page
+├── components/
+│   ├── base/                # Reusable base components
+│   ├── home/                # Home page components
+│   ├── services/            # Services page components
+│   ├── customers/           # Customers page components
+│   ├── contact/             # Contact page components
+│   ├── Navigation.tsx       # Main navigation
+│   └── Footer.tsx           # Site footer
+└── lib/                     # Utility functions
+```
+
+## 🎨 Key Features
+
+### Interactive Pickup Points
+
+- Clickable pickup location cards
+- Modal gallery for full-size images
+- Reusable component architecture
+
+### Responsive Navigation
+
+- Logo integration
+- Conditional styling (transparent on home, white on other pages)
+- Mobile-friendly menu
+
+### SEO Optimization
+
+- Keyword-focused content ("extend visa", "round trip")
+- Comprehensive meta tags
+- Structured data markup
+
+### Professional Branding
+
+- Consistent "Mekong Border Run" branding
+- Orange accent color scheme
+- Professional typography
 
 ## 📦 Installation
 

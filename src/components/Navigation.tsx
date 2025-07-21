@@ -1,0 +1,130 @@
+"use client";
+
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Link,
+  Button,
+} from "@heroui/react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import NextLink from "next/link";
+import Image from "next/image";
+
+const menuItems = [
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services" },
+  { name: "Our Customers", href: "/customers" },
+  { name: "Contact", href: "/contact" },
+];
+
+export default function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // For non-home pages, always use white background
+  const navbarBg = !isHomePage
+    ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
+    : scrolled
+    ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
+    : "bg-transparent";
+
+  const textColor = !isHomePage || scrolled ? "text-primary-800" : "text-white";
+  const buttonStyle =
+    !isHomePage || scrolled
+      ? "bg-accent-500 text-white hover:bg-accent-600"
+      : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm";
+
+  return (
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${navbarBg}`}
+      maxWidth="xl"
+      height="80px">
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+        <NavbarBrand>
+          <Link
+            as={NextLink}
+            href="/"
+            className={`flex items-center gap-3 font-light text-2xl transition-colors duration-300 ${textColor}`}>
+            <Image
+              src="/image/logo/40028.png"
+              alt="Mekong Border Run Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
+            Mekong{" "}
+            <span className="text-accent-500 font-extralight">Border Run</span>
+          </Link>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-12" justify="center">
+        {menuItems.map((item) => (
+          <NavbarItem key={item.href}>
+            <Link
+              as={NextLink}
+              href={item.href}
+              className={`font-light text-lg transition-all duration-300 ${
+                pathname === item.href
+                  ? "text-accent-500 border-b-2 border-accent-500"
+                  : !isHomePage || scrolled
+                  ? "text-primary-700 hover:text-accent-600"
+                  : "text-white hover:text-accent-300"
+              }`}>
+              {item.name}
+            </Link>
+          </NavbarItem>
+        ))}
+      </NavbarContent>
+
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <Button
+            as="a"
+            href="tel:+66951029528"
+            className={`font-light rounded-full px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 ${buttonStyle}`}>
+            Call Now
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+
+      <NavbarMenu className="bg-white/95 backdrop-blur-md">
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item.name}-${index}`}>
+            <Link
+              as={NextLink}
+              href={item.href}
+              className={`w-full text-lg font-light py-3 ${
+                pathname === item.href ? "text-accent-600" : "text-primary-700"
+              }`}
+              size="lg">
+              {item.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+    </Navbar>
+  );
+}
