@@ -9,8 +9,9 @@ import {
   CardBody,
   useDisclosure,
 } from "@heroui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContentStore } from "@/store/zustand/contentContent";
+import Image from "next/image";
 interface PickupPointsModalProps {
   title?: string;
   subtitle?: string;
@@ -24,16 +25,35 @@ export default function PickupPointsModal({
 }: PickupPointsModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { destinations } = useContentStore();
-
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
     onOpen();
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById("pickup-points-section");
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className={`py-24 px-6 ${className}`}>
+    <section id="pickup-points-section" className={`py-24 px-6 ${className}`}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-light text-black mb-6">{title}</h2>
@@ -41,28 +61,42 @@ export default function PickupPointsModal({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {destinations.map((point, index) => (
-            <Card
-              key={index}
-              className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-              isPressable
-              onPress={() => handleImageClick(point.image)}>
-              <div className="aspect-video overflow-hidden">
-                <img
-                  src={point.image}
-                  alt={point.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    e.currentTarget.src = "/image/home/pickup/tha-pae-gate.jpg";
-                  }}
-                />
-              </div>
-              <CardBody className="p-4 text-center">
-                <h3 className="font-medium text-black mb-2">{point.name}</h3>
-                <p className="text-sm text-black">{point.description}</p>
-              </CardBody>
-            </Card>
-          ))}
+          {!isVisible
+            ? // Loading skeleton
+              Array.from({ length: 5 }).map((_, index) => (
+                <Card key={index} className="shadow-lg">
+                  <div className="aspect-video bg-gray-200 animate-pulse" />
+                  <CardBody className="p-4 text-center">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
+                    <div className="h-3 bg-gray-200 rounded animate-pulse" />
+                  </CardBody>
+                </Card>
+              ))
+            : destinations.map((point, index) => (
+                <Card
+                  key={index}
+                  className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                  isPressable
+                  onPress={() => handleImageClick(point.image)}>
+                  <div className="aspect-video overflow-hidden relative">
+                    <Image
+                      src={point.image}
+                      alt={point.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                      quality={80}
+                    />
+                  </div>
+                  <CardBody className="p-4 text-center">
+                    <h3 className="font-medium text-black mb-2">
+                      {point.name}
+                    </h3>
+                    <p className="text-sm text-black">{point.description}</p>
+                  </CardBody>
+                </Card>
+              ))}
         </div>
 
         <Modal
@@ -81,14 +115,14 @@ export default function PickupPointsModal({
               <h3 className="text-xl font-medium">Pickup Location</h3>
             </ModalHeader>
             <ModalBody>
-              <div className="w-full">
-                <img
+              <div className="w-full relative aspect-video">
+                <Image
                   src={selectedImage}
                   alt="Pickup location"
-                  className="w-full h-auto rounded-lg"
-                  onError={(e) => {
-                    e.currentTarget.src = "/image/home/pickup/default.jpg";
-                  }}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  className="object-cover rounded-lg"
+                  quality={90}
                 />
               </div>
             </ModalBody>

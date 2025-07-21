@@ -112,6 +112,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preload critical resources */}
+        <link
+          rel="preload"
+          href="/image/home/other3.jpg"
+          as="image"
+          type="image/jpeg"
+        />
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        {/* Preconnect to critical third-party origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>

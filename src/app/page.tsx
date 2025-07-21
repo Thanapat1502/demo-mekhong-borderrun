@@ -1,10 +1,42 @@
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
-import AboutSection from "@/components/home/AboutSection";
-import JourneySection from "@/components/home/JourneySection";
-import PickupPointsSection from "@/components/home/PickupPointsSection";
-import TestimonialSection from "@/components/home/TestimonialSection";
-import ContactSection from "@/components/home/ContactSection";
-import CTASection from "@/components/home/CTASection";
+
+// Dynamic imports for below-the-fold content
+const AboutSection = dynamic(() => import("@/components/home/AboutSection"), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+});
+
+const JourneySection = dynamic(
+  () => import("@/components/home/JourneySection"),
+  {
+    loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+  }
+);
+
+const PickupPointsSection = dynamic(
+  () => import("@/components/home/PickupPointsSection"),
+  {
+    loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+  }
+);
+
+const TestimonialSection = dynamic(
+  () => import("@/components/home/TestimonialSection"),
+  {
+    loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+  }
+);
+
+const ContactSection = dynamic(
+  () => import("@/components/home/ContactSection"),
+  {
+    loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+  }
+);
+
+const CTASection = dynamic(() => import("@/components/home/CTASection"), {
+  loading: () => <div className="h-32 bg-gray-50 animate-pulse" />,
+});
 
 export default function Home() {
   return (

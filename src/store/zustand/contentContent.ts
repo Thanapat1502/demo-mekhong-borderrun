@@ -23,7 +23,7 @@ export const useContentStore = create<State>(() => ({
     {
       name: "Central Festival",
       image: "/image/home/pickup/central.webp",
-      description: "Central Chรang Mai Shopping center",
+      description: "Central Chiang Mai Shopping center",
     },
     {
       name: "MAYA Lifestyle",
