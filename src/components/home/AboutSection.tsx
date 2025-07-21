@@ -27,7 +27,7 @@ export default function AboutSection() {
             </div>
             <Button
               as={NextLink}
-              href="/services"
+              href="/our-services"
               variant="bordered"
               className="border-accent-500 text-accent-600 hover:bg-accent-50 px-8 py-3 rounded-full font-light">
               Explore Our Services

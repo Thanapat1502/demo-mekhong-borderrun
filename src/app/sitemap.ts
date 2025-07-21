@@ -1,24 +1,32 @@
-import { MetadataRoute } from 'next'
- 
+import { MetadataRoute } from "next";
+
 export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://mekong-transfer.vercel.app";
+
   return [
     {
-      url: 'https://your-domain.com',
+      url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: 'https://your-domain.com/about',
+      url: `${baseUrl}/our-services`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
+      changeFrequency: "monthly",
+      priority: 0.9,
     },
     {
-      url: 'https://your-domain.com/contact',
+      url: `${baseUrl}/contact`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
-  ]
+    {
+      url: `${baseUrl}/customers`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
+    },
+  ];
 }

@@ -1,8 +1,26 @@
+# Robots.txt for Mekong Border Run
+# Professional visa extension service from Chiang Mai to Laos
+
 User-agent: *
 Allow: /
 
-# Host
-Host: https://your-domain.com
+# Allow all search engines to crawl the site
+Allow: /our-services
+Allow: /our-services
+Allow: /contact
+Allow: /customers
 
-# Sitemaps
-Sitemap: https://your-domain.com/sitemap.xml
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /private/
+
+# Host
+Host: https://mekong-transfer.vercel.app
+
+# Sitemap location
+Sitemap: https://mekong-transfer.vercel.app/sitemap.xml
+
+# Crawl delay (optional - helps prevent server overload)
+Crawl-delay: 1

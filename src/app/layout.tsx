@@ -17,50 +17,88 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mekong Border Run - Visa Extension Service Chiang Mai to Laos",
+    default:
+      "Mekong Border Run - Professional Visa Extension Service Chiang Mai to Laos",
     template: "%s | Mekong Border Run",
   },
   description:
-    "Professional border run service from Chiang Mai to Huay Xai, Laos. One-day trip for visa extension. Licensed TAT operator.",
+    "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension. Licensed TAT operator with 4,100 THB all-inclusive service. Book your one-day trip today!",
   keywords: [
     "border run",
-    "extend visa",
+    "visa extension",
     "Chiang Mai",
     "Laos",
-    "visa extension",
-    "Thailand",
     "Huay Xai",
+    "Thailand visa",
+    "visa run service",
+    "Chiang Rai",
+    "White Temple",
+    "TAT licensed",
+    "daily departure",
     "round trip",
+    "border crossing",
+    "visa renewal",
+    "tourist visa",
+    "immigration service",
   ],
-  authors: [{ name: "Mekong Border Run" }],
+  authors: [
+    { name: "Mekong Border Run", url: "https://mekong-transfer.vercel.app" },
+  ],
   creator: "Mekong Border Run",
+  publisher: "Mekong Border Run",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   metadataBase: new URL("https://mekong-transfer.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://mekong-transfer.vercel.app",
-    title: "Mekong Border Run - Visa Extension Service",
+    title: "Mekong Border Run - Professional Visa Extension Service",
     description:
-      "Professional border run service from Chiang Mai to Huay Xai, Laos",
+      "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator. 4,100 THB all-inclusive service.",
     siteName: "Mekong Border Run",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Mekong Border Run - Visa Extension Service",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mekong Border Run - Visa Extension Service",
+    title: "Mekong Border Run - Professional Visa Extension Service",
     description:
-      "Professional border run service from Chiang Mai to Huay Xai, Laos",
+      "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator.",
+    images: ["/og-image.jpg"],
+    creator: "@mekongborderrun",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code",
+    yahoo: "your-yahoo-verification-code",
+  },
+  category: "travel",
 };
 
 export default function RootLayout({

@@ -41,7 +41,7 @@ export default function Footer() {
               </Link>
               <Link
                 as={NextLink}
-                href="/services"
+                href="/our-services"
                 className="block text-gray-600 hover:text-accent-500 transition-colors">
                 Services
               </Link>

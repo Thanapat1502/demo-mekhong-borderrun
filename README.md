@@ -39,13 +39,13 @@ src/
 │   ├── providers.tsx        # HeroUI and theme providers
 │   ├── sitemap.ts           # Dynamic sitemap generation
 │   ├── manifest.ts          # PWA manifest
-│   ├── services/            # Services page
+│   ├── our-services/            # Services page
 │   ├── customers/           # Customers page
 │   └── contact/             # Contact page
 ├── components/
 │   ├── base/                # Reusable base components
 │   ├── home/                # Home page components
-│   ├── services/            # Services page components
+│   ├── our-services/            # Services page components
 │   ├── customers/           # Customers page components
 │   ├── contact/             # Contact page components
 │   ├── Navigation.tsx       # Main navigation

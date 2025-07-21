@@ -1,3 +1,4 @@
+"use client";
 import { Avatar } from "@heroui/react";
 
 export default function TestimonialSection() {
@@ -7,7 +8,7 @@ export default function TestimonialSection() {
         <div className="mb-12">
           <div className="text-6xl text-accent-200 mb-6">&quot;</div>
           <p className="text-2xl md:text-3xl font-light text-black leading-relaxed mb-8 italic">
-            Exceptional service from start to finish. Professional, punctual, 
+            Exceptional service from start to finish. Professional, punctual,
             and completely stress-free experience.
           </p>
           <div className="flex items-center justify-center gap-4">
@@ -22,7 +23,7 @@ export default function TestimonialSection() {
             </div>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
             <div className="text-4xl font-light text-accent-600 mb-2">500+</div>
