@@ -98,11 +98,11 @@ export default function FloatingContactButton({
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 translate-y-4 scale-95 pointer-events-none"
         }`}>
-        <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 min-w-[240px]">
+        <div className="bg-primary-800 rounded-2xl shadow-2xl border border-primary-700 p-4 min-w-[240px]">
           {/* Bubble Arrow */}
-          <div className="absolute bottom-0 right-6 transform translate-y-full">
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white"></div>
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-gray-200 absolute -top-px"></div>
+          <div className="absolute bottom-0 left-6 transform translate-y-full">
+            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800"></div>
+            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800 absolute -top-px"></div>
           </div>
 
           {/* Contact Options */}
@@ -115,21 +115,18 @@ export default function FloatingContactButton({
                   as="a"
                   href={option.href}
                   target={option.target}
-                  className="w-full h-12 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900 rounded-xl flex items-center justify-start px-4 gap-3 transition-all duration-200 group border-0"
+                  className="w-full h-12 bg-primary-800 hover:bg-white/10 text-accent-400 hover:text-accent-300 rounded-xl flex items-center justify-start px-4 gap-3 transition-all duration-200 group border-0"
                   style={{
                     animationDelay: isOpen ? `${index * 50}ms` : "0ms",
                   }}>
-                  <div
-                    className={`w-8 h-8 ${
-                      option.bgColor.split(" ")[0]
-                    } rounded-lg flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform duration-200`}>
-                    <IconComponent className="text-sm" />
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-primary-800 flex-shrink-0 group-hover:scale-110 transition-all duration-200">
+                    <IconComponent className="text-sm font-bold text-accent-400" />
                   </div>
                   <div className="flex flex-col items-start flex-1 min-w-0">
-                    <span className="font-medium text-sm text-gray-900 leading-tight">
+                    <span className="font-medium text-sm text-accent-400 group-hover:text-accent-300 leading-tight transition-colors duration-200">
                       {option.label}
                     </span>
-                    <span className="text-xs text-gray-500 leading-tight truncate w-full">
+                    <span className="text-xs text-accent-400/70 group-hover:text-accent-300/70 leading-tight truncate w-full transition-colors duration-200">
                       {option.sublabel}
                     </span>
                   </div>

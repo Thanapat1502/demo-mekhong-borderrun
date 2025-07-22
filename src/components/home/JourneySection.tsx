@@ -3,31 +3,38 @@ import Image from "next/image";
 export default function JourneySection() {
   const journeySteps = [
     {
+      time: "24h",
+      title: "Book in Advance",
+      desc: "Reserve your spot at least 24 hours before departure for guaranteed availability",
+      step: "01",
+      image: "/image/home/commercial/commercial2.jpg",
+    },
+    {
       time: "09:30",
       title: "Departure",
       desc: "Professional pickup from your accommodation in Chiang Mai",
-      step: "01",
+      step: "02",
       image: "/image/home/commercial/commercial1.jpg",
     },
     {
       time: "12:30",
       title: "Cultural Stop",
       desc: "Lunch and visit to the magnificent White Temple in Chiang Rai",
-      step: "02",
+      step: "03",
       image: "/image/home/commercial/commercial3.jpg",
     },
     {
       time: "15:30",
       title: "Border Crossing",
       desc: "Arrive at Chiang Khong and cross to Huay Xai, Laos",
-      step: "03",
+      step: "04",
       image: "/image/home/commercial/commercial5.jpg",
     },
     {
       time: "16:00",
       title: "Return Journey",
       desc: "Begin comfortable return to Chiang Mai with new entry stamp",
-      step: "04",
+      step: "05",
       image: "/image/home/commercial/commercial7.jpeg",
     },
   ];
@@ -95,10 +102,6 @@ export default function JourneySection() {
           {/* Image Gallery - Right Side */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-6 text-center">
-                Experience Gallery
-              </h3>
-
               {/* Image Grid */}
               <div className="grid grid-cols-2 gap-3">
                 {galleryImages.map((imageSrc, index) => (
