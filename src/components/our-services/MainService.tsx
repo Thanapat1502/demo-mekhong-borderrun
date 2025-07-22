@@ -50,7 +50,7 @@ export default function MainService() {
               </div>
               <div className="flex items-center gap-3">
                 <FiCoffee className="text-accent-500" size={20} />
-                <span className="text-black">Lunch included</span>
+                <span className="text-black">Lunch break</span>
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function MainService() {
             <CardBody className="p-8">
               <div className="text-center mb-6">
                 <div className="text-5xl font-light text-accent-600 mb-2">
-                  4,100
+                  4,200
                 </div>
                 <div className="text-black text-lg mb-4">THB per person</div>
                 <Chip color="warning" variant="flat" className="mb-6">
@@ -71,6 +71,10 @@ export default function MainService() {
               </div>
 
               <div className="space-y-3 mb-8">
+                <div className="flex justify-between">
+                  <span className="text-black">Advance booking:</span>
+                  <span className="text-black font-medium">24 hours</span>
+                </div>
                 <div className="flex justify-between">
                   <span className="text-black">Departure Time:</span>
                   <span className="text-black font-medium">09:30 AM</span>

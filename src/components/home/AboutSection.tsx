@@ -35,10 +35,10 @@ export default function AboutSection() {
           </div>
 
           <div className="relative">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 hover:shadow-3xl transition-shadow duration-500">
               <div className="text-center">
                 <div className="text-5xl font-light text-accent-500 mb-4">
-                  4,100
+                  4,200
                 </div>
                 <div className="text-black text-lg mb-2">THB</div>
                 <div className="text-black font-medium text-xl mb-6">

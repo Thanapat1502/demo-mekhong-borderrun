@@ -152,7 +152,7 @@ export default function ImageGallery({
 
               {/* Image Info */}
               <div className="p-3">
-                <h4 className="text-sm font-medium text-gray-800 truncate">
+                <h4 className="text-sm font-medium text-black truncate">
                   {image.name}
                 </h4>
                 {image.size && (
@@ -175,7 +175,9 @@ export default function ImageGallery({
         className="max-h-[90vh]">
         <ModalContent>
           <ModalHeader>
-            <h3 className="text-lg font-semibold">{selectedImage?.name}</h3>
+            <h3 className="text-lg font-semibold text-black">
+              {selectedImage?.name}
+            </h3>
           </ModalHeader>
           <ModalBody className="p-0">
             {selectedImage && (
