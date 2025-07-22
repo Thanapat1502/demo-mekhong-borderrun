@@ -57,25 +57,30 @@ export default function Navigation() {
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${navbarBg}`}
       maxWidth="xl"
       height="80px">
-      <NavbarContent>
+      <NavbarContent className="flex-shrink-0">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
+          className="sm:hidden mr-2"
         />
-        <NavbarBrand>
+        <NavbarBrand className="flex-shrink-0 max-w-none">
           <Link
             as={NextLink}
             href="/"
-            className={`flex items-center gap-3 font-light text-2xl transition-colors duration-300 ${textColor}`}>
+            className={`flex items-center gap-2 font-light transition-colors duration-300 ${textColor}`}>
             <Image
               src="/image/logo/40028.png"
               alt="Mekong Border Run Logo"
-              width={40}
-              height={40}
-              className="object-contain"
+              width={32}
+              height={32}
+              className="object-contain flex-shrink-0"
             />
-            Mekong{" "}
-            <span className="text-accent-500 font-extralight">Border Run</span>
+            <span className="hidden xs:inline text-xl sm:text-2xl">
+              Mekong{" "}
+              <span className="text-accent-500 font-extralight">
+                Border Run
+              </span>
+            </span>
+            <span className="xs:hidden text-lg">Mekong</span>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -99,13 +104,23 @@ export default function Navigation() {
         ))}
       </NavbarContent>
 
-      <NavbarContent justify="end">
-        <NavbarItem>
+      <NavbarContent justify="end" className="flex-shrink-0">
+        <NavbarItem className="hidden xs:flex">
           <Button
             as="a"
             href="tel:+66951029528"
-            className={`font-light rounded-full px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 ${buttonStyle}`}>
-            Call Now
+            className={`font-light rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base ${buttonStyle}`}>
+            <span className="hidden sm:inline">Call Now</span>
+            <span className="sm:hidden">Call</span>
+          </Button>
+        </NavbarItem>
+        <NavbarItem className="xs:hidden">
+          <Button
+            as="a"
+            href="tel:+66951029528"
+            className={`font-light rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-xs ${buttonStyle}`}
+            size="sm">
+            Call
           </Button>
         </NavbarItem>
       </NavbarContent>
