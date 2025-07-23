@@ -199,7 +199,6 @@ export const useContentStore = create<State>((set) => ({
         description: item.description,
         priority: item.priority,
       }));
-
       set({ heroImages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch hero images:", error);

@@ -104,9 +104,14 @@ export class ImageUploadService {
         .from(this.BUCKET_NAME)
         .getPublicUrl(filePath);
 
+      // Normalize the URL to remove double slashes
+      const normalizedUrl = urlData.publicUrl
+        .replace(/\/+/g, "/")
+        .replace(":/", "://");
+
       return {
         success: true,
-        url: urlData.publicUrl,
+        url: normalizedUrl,
         path: filePath,
       };
     } catch (error) {
@@ -184,7 +189,12 @@ export class ImageUploadService {
         .from(this.BUCKET_NAME)
         .getPublicUrl(filePath);
 
-      return data.publicUrl;
+      // Normalize the URL to remove double slashes
+      const normalizedUrl = data.publicUrl
+        .replace(/\/+/g, "/")
+        .replace(":/", "://");
+
+      return normalizedUrl;
     } catch (error) {
       console.error("Error getting public URL:", error);
       return null;

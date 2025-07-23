@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import { Card, CardHeader, CardBody, Button, Avatar } from "@heroui/react";
 import {
   FiPhone,
@@ -6,8 +9,37 @@ import {
   FiMapPin,
   FiClock,
 } from "react-icons/fi";
+import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function ContactInfo() {
+  const {
+    contactInfo,
+    ownerInfo,
+    businessInfo,
+    fetchContactInfo,
+    fetchOwnerInfo,
+    fetchBusinessInfo,
+  } = useContactStore();
+
+  useEffect(() => {
+    fetchContactInfo();
+    fetchOwnerInfo();
+    fetchBusinessInfo();
+  }, [fetchContactInfo, fetchOwnerInfo, fetchBusinessInfo]);
+
+  // Get specific contact info
+  const phoneInfo = contactInfo.find(
+    (info) => info.type === "phone" && info.isPrimary
+  );
+  const whatsappInfo = contactInfo.find((info) => info.type === "whatsapp");
+  const emailInfo = contactInfo.find(
+    (info) => info.type === "email" && info.isPrimary
+  );
+  const addressInfo = contactInfo.find((info) => info.type === "address");
+
+  // Fallback data
+  const defaultPhone = "+66 (0) 95 102 9528";
+  const defaultEmail = "info@mekong-borderrun.com";
   return (
     <Card className="shadow-2xl">
       <CardHeader className="bg-accent-500 text-white">
@@ -16,17 +48,23 @@ export default function ContactInfo() {
       <CardBody className="p-8">
         <div className="flex items-center gap-6 mb-8">
           <Avatar
-            src="/owner-photo.jpg"
-            alt="Mekong Transfer Owner"
+            src={ownerInfo?.avatar || "/owner-photo.jpg"}
+            alt={ownerInfo?.name || "Mekong Transfer Owner"}
             className="w-20 h-20"
-            fallback="MT"
+            fallback={ownerInfo?.name?.charAt(0) || "MT"}
           />
           <div>
             <h3 className="text-xl font-medium text-black">
-              Mekong Border Run
+              {ownerInfo?.name ||
+                businessInfo?.businessName ||
+                "Mekong Border Run"}
             </h3>
-            <p className="text-black">Licensed Tour Operator</p>
-            <p className="text-sm text-black">TAT License No. 21/01279</p>
+            <p className="text-black">
+              {ownerInfo?.title || "Licensed Tour Operator"}
+            </p>
+            <p className="text-sm text-black">
+              {businessInfo?.tatLicense || "TAT License No. 21/01279"}
+            </p>
           </div>
         </div>
 
@@ -37,7 +75,9 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">Phone</h4>
-              <p className="text-accent-600 font-medium">+66 (0) 95 102 9528</p>
+              <p className="text-accent-600 font-medium">
+                {phoneInfo?.value || defaultPhone}
+              </p>
             </div>
           </div>
 
@@ -47,7 +87,9 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">WhatsApp</h4>
-              <p className="text-accent-600 font-medium">+66 (0) 95 102 9528</p>
+              <p className="text-accent-600 font-medium">
+                {whatsappInfo?.value || phoneInfo?.value || defaultPhone}
+              </p>
             </div>
           </div>
 
@@ -67,7 +109,9 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">Email</h4>
-              <p className="text-accent-600 font-medium">prpbee711@gmail.com</p>
+              <p className="text-accent-600 font-medium">
+                {emailInfo?.value || defaultEmail}
+              </p>
             </div>
           </div>
 
@@ -77,7 +121,15 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">Location</h4>
-              <p className="text-black">Chiang Mai, Thailand</p>
+              <p className="text-black">
+                {addressInfo?.value ||
+                  (businessInfo?.address &&
+                  typeof businessInfo.address === "object"
+                    ? `${businessInfo.address.city}, ${businessInfo.address.province}`
+                    : typeof businessInfo?.address === "string"
+                    ? businessInfo.address
+                    : "Chiang Mai, Thailand")}
+              </p>
             </div>
           </div>
 

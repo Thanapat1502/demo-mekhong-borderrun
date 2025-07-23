@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Button, Card, CardBody, CardHeader, Chip } from "@heroui/react";
 import NextLink from "next/link";
 import {
@@ -9,8 +10,43 @@ import {
   FiMapPin,
   FiCoffee,
 } from "react-icons/fi";
+import { usePackageStore } from "@/store/zustand/packageStore";
 
 export default function MainService() {
+  const { packages, fetchPackages, isLoading } = usePackageStore();
+
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
+
+  // Get the main border run package (first one or find by name)
+  const mainPackage =
+    packages.find(
+      (pkg) =>
+        pkg.name.toLowerCase().includes("border") ||
+        pkg.name.toLowerCase().includes("complete")
+    ) || packages[0];
+
+  if (isLoading) {
+    return (
+      <section className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+              <div className="space-y-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-4 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+              <div className="h-96 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
@@ -62,12 +98,21 @@ export default function MainService() {
             <CardBody className="p-8">
               <div className="text-center mb-6">
                 <div className="text-5xl font-light text-accent-600 mb-2">
-                  4,200
+                  {mainPackage?.price?.toLocaleString() || "4,200"}
                 </div>
-                <div className="text-black text-lg mb-4">THB per person</div>
-                <Chip color="warning" variant="flat" className="mb-6">
-                  Special Offer - Limited Time
-                </Chip>
+                <div className="text-black text-lg mb-4">
+                  {mainPackage?.currency || "THB"} per person
+                </div>
+                {mainPackage?.isPopular && (
+                  <Chip color="warning" variant="flat" className="mb-6">
+                    Popular Choice
+                  </Chip>
+                )}
+                {!mainPackage?.isAvailable && (
+                  <Chip color="danger" variant="flat" className="mb-6">
+                    Currently Unavailable
+                  </Chip>
+                )}
               </div>
 
               <div className="space-y-3 mb-8">

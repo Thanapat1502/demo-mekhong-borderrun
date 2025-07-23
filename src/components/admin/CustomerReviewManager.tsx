@@ -180,6 +180,7 @@ export default function CustomerReviewManager() {
         </div>
         <Button
           color="primary"
+          className="bg-accent-500 text-white hover:bg-accent-600"
           startContent={<FiPlus />}
           onPress={() => handleOpenModal()}>
           Add Review
@@ -201,7 +202,7 @@ export default function CustomerReviewManager() {
       {/* Reviews Table */}
       <Card>
         <CardHeader>
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-semibold text-gray-900">
             All Reviews ({reviews.length})
           </h3>
         </CardHeader>
@@ -220,7 +221,7 @@ export default function CustomerReviewManager() {
               {reviews.map((review) => (
                 <TableRow key={review.id}>
                   <TableCell>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-gray-900">
                       <Avatar
                         src={review.avatar || undefined}
                         name={review.name}
@@ -244,7 +245,9 @@ export default function CustomerReviewManager() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <p className="max-w-xs truncate">{review.review}</p>
+                    <p className="max-w-xs truncate text-gray-900">
+                      {review.review}
+                    </p>
                   </TableCell>
                   <TableCell>
                     <Chip size="sm" variant="flat">
@@ -260,7 +263,7 @@ export default function CustomerReviewManager() {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-gray-900">
                     {new Date(review.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell>

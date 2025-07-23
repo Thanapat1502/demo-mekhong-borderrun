@@ -6,7 +6,6 @@ import {
   CardBody,
   CardHeader,
   Button,
-  Input,
   Divider,
   Tabs,
   Tab,
@@ -15,32 +14,25 @@ import {
   FiSettings,
   FiImage,
   FiDollarSign,
-  FiUser,
   FiPhone,
-  FiMail,
-  FiSave,
   FiHome,
-  FiPlus,
   FiMessageSquare,
+  FiPlus,
 } from "react-icons/fi";
 import Link from "next/link";
 import ImageUpload from "@/components/admin/ImageUpload";
 import ImageGallery from "@/components/admin/ImageGallery";
 import ImageMigrationTool from "@/components/admin/ImageMigrationTool";
 import CustomerReviewManager from "@/components/admin/CustomerReviewManager";
+
+import ServicePricingManager from "@/components/admin/ServicePricingManager";
+import AdminDashboard from "@/components/admin/AdminDashboard";
+import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import { useContentStore } from "@/store/zustand/contentStore";
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState("images");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [activeImageCategory, setActiveImageCategory] = useState("hero");
-  const [servicePrice, setServicePrice] = useState("4,100");
-  const [ownerInfo, setOwnerInfo] = useState({
-    name: "Mekong Border Run",
-    phone: "+66 95 102 9528",
-    email: "mekongborderrun@gmail.com",
-    whatsapp: "+66 95 102 9528",
-    line: "@mekongborderrun",
-  });
 
   // Get image data from Zustand stores
   const {
@@ -127,10 +119,11 @@ export default function AdminPage() {
   }, [heroImages, journeyImages, pickupPointImages, galleryImages]);
 
   const menuItems = [
+    { id: "dashboard", label: "Dashboard", icon: FiHome },
     { id: "images", label: "Manage Images", icon: FiImage },
     { id: "reviews", label: "Customer Reviews", icon: FiMessageSquare },
     { id: "pricing", label: "Service Pricing", icon: FiDollarSign },
-    { id: "contact", label: "Owner Info", icon: FiUser },
+    { id: "contact", label: "Contact Info", icon: FiPhone },
     { id: "settings", label: "Settings", icon: FiSettings },
   ];
 
@@ -231,6 +224,8 @@ export default function AdminPage() {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
+            {activeTab === "dashboard" && <AdminDashboard />}
+
             {activeTab === "images" && (
               <Card className="shadow-lg">
                 <CardHeader>
@@ -337,38 +332,7 @@ export default function AdminPage() {
                   </h2>
                 </CardHeader>
                 <CardBody>
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Border Run Service Price (THB)
-                      </label>
-                      <Input
-                        value={servicePrice}
-                        onChange={(e) => setServicePrice(e.target.value)}
-                        placeholder="Enter price"
-                        startContent={<FiDollarSign />}
-                        size="lg"
-                        className="max-w-md"
-                      />
-                    </div>
-                    <Divider />
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-800 mb-2">
-                        Current Pricing Display
-                      </h3>
-                      <div className="text-3xl font-bold text-accent-600">
-                        {servicePrice} THB
-                      </div>
-                      <p className="text-gray-600 text-sm mt-1">
-                        This price will be displayed across the website
-                      </p>
-                    </div>
-                    <Button
-                      className="bg-green-500 text-white hover:bg-green-600"
-                      startContent={<FiSave />}>
-                      Save Pricing
-                    </Button>
-                  </div>
+                  <ServicePricingManager />
                 </CardBody>
               </Card>
             )}
@@ -377,62 +341,11 @@ export default function AdminPage() {
               <Card className="shadow-lg">
                 <CardHeader>
                   <h2 className="text-xl font-semibold text-gray-800">
-                    Owner Contact Information
+                    Contact Information
                   </h2>
                 </CardHeader>
                 <CardBody>
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Input
-                        label="Business Name"
-                        value={ownerInfo.name}
-                        onChange={(e) =>
-                          setOwnerInfo({ ...ownerInfo, name: e.target.value })
-                        }
-                        startContent={<FiUser />}
-                      />
-                      <Input
-                        label="Phone Number"
-                        value={ownerInfo.phone}
-                        onChange={(e) =>
-                          setOwnerInfo({ ...ownerInfo, phone: e.target.value })
-                        }
-                        startContent={<FiPhone />}
-                      />
-                      <Input
-                        label="Email Address"
-                        value={ownerInfo.email}
-                        onChange={(e) =>
-                          setOwnerInfo({ ...ownerInfo, email: e.target.value })
-                        }
-                        startContent={<FiMail />}
-                      />
-                      <Input
-                        label="WhatsApp Number"
-                        value={ownerInfo.whatsapp}
-                        onChange={(e) =>
-                          setOwnerInfo({
-                            ...ownerInfo,
-                            whatsapp: e.target.value,
-                          })
-                        }
-                        startContent={<FiPhone />}
-                      />
-                      <Input
-                        label="LINE ID"
-                        value={ownerInfo.line}
-                        onChange={(e) =>
-                          setOwnerInfo({ ...ownerInfo, line: e.target.value })
-                        }
-                        className="md:col-span-2"
-                      />
-                    </div>
-                    <Button
-                      className="bg-green-500 text-white hover:bg-green-600"
-                      startContent={<FiSave />}>
-                      Save Contact Info
-                    </Button>
-                  </div>
+                  <ContactInfoManager />
                 </CardBody>
               </Card>
             )}
