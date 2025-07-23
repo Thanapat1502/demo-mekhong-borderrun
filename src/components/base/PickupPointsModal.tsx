@@ -10,21 +10,38 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { useContentStore } from "@/store/zustand/contentContent";
+// import { useContentStore } from "@/store/zustand/contentStore";
 import Image from "next/image";
+interface PickupPointImage {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  location: string;
+  description: string;
+  landmark?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+}
+
 interface PickupPointsModalProps {
   title?: string;
   subtitle?: string;
   className?: string;
+  pickupPointImages?: PickupPointImage[];
 }
 
 export default function PickupPointsModal({
   title = "Pickup Points",
   subtitle = "Convenient locations throughout Chiang Mai for your pickup",
   className = "",
+  pickupPointImages = [],
 }: PickupPointsModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { destinations } = useContentStore();
+  // Use props data or fallback to store data
+  const pickupPoints = pickupPointImages;
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [isVisible, setIsVisible] = useState(false);
 
@@ -72,16 +89,16 @@ export default function PickupPointsModal({
                   </CardBody>
                 </Card>
               ))
-            : destinations.map((point, index) => (
+            : pickupPoints.map((point) => (
                 <Card
-                  key={index}
+                  key={point.id}
                   className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                   isPressable
-                  onPress={() => handleImageClick(point.image)}>
+                  onPress={() => handleImageClick(point.src)}>
                   <div className="aspect-video overflow-hidden relative">
                     <Image
-                      src={point.image}
-                      alt={point.name}
+                      src={point.src}
+                      alt={point.alt}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover hover:scale-105 transition-transform duration-300"
@@ -91,9 +108,12 @@ export default function PickupPointsModal({
                   </div>
                   <CardBody className="p-4 text-center">
                     <h3 className="font-medium text-black mb-2">
-                      {point.name}
+                      {point.title}
                     </h3>
                     <p className="text-sm text-black">{point.description}</p>
+                    <p className="text-xs text-gray-600 mt-1">
+                      {point.location}
+                    </p>
                   </CardBody>
                 </Card>
               ))}

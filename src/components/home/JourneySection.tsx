@@ -1,54 +1,46 @@
 import Image from "next/image";
 
-export default function JourneySection() {
-  const journeySteps = [
-    {
-      time: "24h",
-      title: "Book in Advance",
-      desc: "Reserve your spot at least 24 hours before departure for guaranteed availability",
-      step: "01",
-      image: "/image/home/commercial/commercial2.jpg",
-    },
-    {
-      time: "09:30",
-      title: "Departure",
-      desc: "Professional pickup from your accommodation in Chiang Mai",
-      step: "02",
-      image: "/image/home/commercial/commercial1.jpg",
-    },
-    {
-      time: "12:30",
-      title: "Cultural Stop",
-      desc: "Lunch and visit to the magnificent White Temple in Chiang Rai",
-      step: "03",
-      image: "/image/home/commercial/commercial3.jpg",
-    },
-    {
-      time: "15:30",
-      title: "Border Crossing",
-      desc: "Arrive at Chiang Khong and cross to Huay Xai, Laos",
-      step: "04",
-      image: "/image/home/commercial/commercial5.jpg",
-    },
-    {
-      time: "16:00",
-      title: "Return Journey",
-      desc: "Begin comfortable return to Chiang Mai with new entry stamp",
-      step: "05",
-      image: "/image/home/commercial/commercial7.jpeg",
-    },
-  ];
+interface JourneyImage {
+  id: string;
+  src: string;
+  alt: string;
+  step: string;
+  title: string;
+  description: string;
+  time: string;
+}
 
-  // Image collection for the gallery
-  const galleryImages = [
-    "/image/home/commercial/commercial1.jpg",
-    "/image/home/commercial/commercial2.jpg",
-    "/image/home/commercial/commercial4.jpg",
-    "/image/home/commercial/commercial6.jpg",
-    "/image/home/commercial/commercial8.jpg",
-    "/image/home/commercial/commercial9.JPG",
-    "/image/home/commercial/commercial10.jpg",
-  ];
+interface GalleryImage {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  description: string;
+  category: "journey" | "destination" | "service" | "cultural";
+  featured?: boolean;
+  aspectRatio?: "square" | "landscape" | "portrait";
+}
+
+interface JourneySectionProps {
+  journeyImages?: JourneyImage[];
+  galleryImages?: GalleryImage[];
+}
+
+export default function JourneySection({
+  journeyImages = [],
+  galleryImages = [],
+}: JourneySectionProps) {
+  // Sort journey images by step
+  const journeySteps = journeyImages.sort((a, b) =>
+    a.step.localeCompare(b.step)
+  );
+
+  // Use gallery images for display (featured first)
+  const galleryImagesData = galleryImages.sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return 0;
+  });
 
   return (
     <section className="py-20 px-6 bg-white">
@@ -90,7 +82,7 @@ export default function JourneySection() {
                         </h3>
                       </div>
                       <p className="text-gray-600 leading-relaxed">
-                        {step.desc}
+                        {step.description}
                       </p>
                     </div>
                   </div>
@@ -104,15 +96,17 @@ export default function JourneySection() {
             <div className="sticky top-8">
               {/* Image Grid */}
               <div className="grid grid-cols-2 gap-3">
-                {galleryImages.map((imageSrc, index) => (
+                {galleryImagesData.map((imageData, index) => (
                   <div
-                    key={index}
+                    key={imageData.id}
                     className={`relative overflow-hidden rounded-lg bg-gray-100 hover:shadow-lg transition-all duration-300 group cursor-pointer ${
-                      index === 0 ? "col-span-2 aspect-[4/3]" : "aspect-square"
+                      imageData.featured || index === 0
+                        ? "col-span-2 aspect-[4/3]"
+                        : "aspect-square"
                     }`}>
                     <Image
-                      src={imageSrc}
-                      alt={`Journey experience ${index + 1}`}
+                      src={imageData.src}
+                      alt={imageData.alt}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(max-width: 768px) 50vw, 25vw"
@@ -124,6 +118,13 @@ export default function JourneySection() {
                     {/* Image Number */}
                     <div className="absolute top-2 left-2 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {index + 1}
+                    </div>
+
+                    {/* Image Title on Hover */}
+                    <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-black/70 text-white px-2 py-1 rounded text-xs">
+                        {imageData.title}
+                      </div>
                     </div>
                   </div>
                 ))}

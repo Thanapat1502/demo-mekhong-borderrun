@@ -25,6 +25,10 @@ import {
 import Link from "next/link";
 import ImageUpload from "@/components/admin/ImageUpload";
 import ImageGallery from "@/components/admin/ImageGallery";
+import { heroImages } from "@/data/images/heroImage";
+import { journeyImages } from "@/data/images/journeyImage";
+import { pickupPointImages } from "@/data/images/pickupPointImage";
+import { galleryImages } from "@/data/images/gallery";
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("images");
@@ -38,156 +42,36 @@ export default function AdminPage() {
     line: "@mekongborderrun",
   });
 
-  // Sample image data - in real app, this would come from API
+  // Using centralized image data
   const [imageData, setImageData] = useState({
-    hero: [
-      {
-        id: "1",
-        src: "/image/home/other1.jpg",
-        name: "hero-1.jpg",
-        size: "2.3 MB",
-        uploadDate: "2024-01-15",
-      },
-      {
-        id: "2",
-        src: "/image/home/other2.jpg",
-        name: "hero-2.jpg",
-        size: "1.8 MB",
-        uploadDate: "2024-01-15",
-      },
-      {
-        id: "3",
-        src: "/image/home/other3.jpg",
-        name: "hero-3.jpg",
-        size: "2.1 MB",
-        uploadDate: "2024-01-15",
-      },
-    ],
-    journey: [
-      {
-        id: "4",
-        src: "/image/home/commercial/commercial1.jpg",
-        name: "journey-1.jpg",
-        size: "1.5 MB",
-        uploadDate: "2024-01-16",
-      },
-      {
-        id: "5",
-        src: "/image/home/commercial/commercial3.jpg",
-        name: "journey-2.jpg",
-        size: "1.7 MB",
-        uploadDate: "2024-01-16",
-      },
-      {
-        id: "6",
-        src: "/image/home/commercial/commercial5.jpg",
-        name: "journey-3.jpg",
-        size: "1.9 MB",
-        uploadDate: "2024-01-16",
-      },
-      {
-        id: "7",
-        src: "/image/home/commercial/commercial7.jpeg",
-        name: "journey-4.jpeg",
-        size: "2.0 MB",
-        uploadDate: "2024-01-16",
-      },
-    ],
-    pickup: [
-      {
-        id: "8",
-        src: "/image/home/pickup/tha-pae-gate.jpg",
-        name: "tha-pae-gate.jpg",
-        size: "1.2 MB",
-        uploadDate: "2024-01-17",
-      },
-      {
-        id: "9",
-        src: "/image/home/pickup/central.webp",
-        name: "central.webp",
-        size: "800 KB",
-        uploadDate: "2024-01-17",
-      },
-      {
-        id: "10",
-        src: "/image/home/pickup/maya.jpg",
-        name: "maya.jpg",
-        size: "1.1 MB",
-        uploadDate: "2024-01-17",
-      },
-      {
-        id: "11",
-        src: "/image/home/pickup/downtown1.jpg",
-        name: "downtown.jpg",
-        size: "1.3 MB",
-        uploadDate: "2024-01-17",
-      },
-      {
-        id: "12",
-        src: "/image/home/pickup/chiang-mai-gate.webp",
-        name: "chiang-mai-gate.webp",
-        size: "900 KB",
-        uploadDate: "2024-01-17",
-      },
-    ],
-    gallery: [
-      {
-        id: "13",
-        src: "/image/home/commercial/commercial2.jpg",
-        name: "gallery-1.jpg",
-        size: "1.6 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "14",
-        src: "/image/home/commercial/commercial4.jpg",
-        name: "gallery-2.jpg",
-        size: "1.8 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "15",
-        src: "/image/home/commercial/commercial6.jpg",
-        name: "gallery-3.jpg",
-        size: "1.4 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "16",
-        src: "/image/home/commercial/commercial8.jpg",
-        name: "gallery-4.jpg",
-        size: "1.7 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "17",
-        src: "/image/home/commercial/commercial9.JPG",
-        name: "gallery-5.JPG",
-        size: "2.2 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "18",
-        src: "/image/home/commercial/commercial10.jpg",
-        name: "gallery-6.jpg",
-        size: "1.9 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "19",
-        src: "/image/home/white-temple1.jpg",
-        name: "white-temple-1.jpg",
-        size: "2.0 MB",
-        uploadDate: "2024-01-18",
-      },
-      {
-        id: "20",
-        src: "/image/home/white-temple2.jpg",
-        name: "white-temple-2.jpg",
-        size: "1.8 MB",
-        uploadDate: "2024-01-18",
-      },
-    ],
+    hero: heroImages.map((img) => ({
+      id: img.id,
+      src: img.src,
+      name: `${img.id}.jpg`,
+      size: "2.1 MB", // Default size - in real app would come from file metadata
+      uploadDate: "2024-01-15",
+    })),
+    journey: journeyImages.map((img) => ({
+      id: img.id,
+      src: img.src,
+      name: `${img.id}.jpg`,
+      size: "1.8 MB",
+      uploadDate: "2024-01-16",
+    })),
+    pickup: pickupPointImages.map((img) => ({
+      id: img.id,
+      src: img.src,
+      name: `${img.id}.jpg`,
+      size: "1.2 MB",
+      uploadDate: "2024-01-17",
+    })),
+    gallery: galleryImages.map((img) => ({
+      id: img.id,
+      src: img.src,
+      name: `${img.id}.jpg`,
+      size: "1.8 MB",
+      uploadDate: "2024-01-18",
+    })),
   });
 
   const menuItems = [

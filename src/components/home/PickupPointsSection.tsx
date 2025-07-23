@@ -1,11 +1,32 @@
 import PickupPointsModal from "@/components/base/PickupPointsModal";
 
-export default function PickupPointsSection() {
+interface PickupPointImage {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  location: string;
+  description: string;
+  landmark?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+}
+
+interface PickupPointsSectionProps {
+  pickupPointImages?: PickupPointImage[];
+}
+
+export default function PickupPointsSection({
+  pickupPointImages = [],
+}: PickupPointsSectionProps) {
   return (
     <PickupPointsModal
       title="Pickup Points"
       subtitle="Convenient locations throughout Chiang Mai for your pickup"
       className="bg-neutral-50"
+      pickupPointImages={pickupPointImages}
     />
   );
 }

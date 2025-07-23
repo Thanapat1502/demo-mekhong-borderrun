@@ -2,31 +2,25 @@
 
 import { Button } from "@heroui/react";
 import NextLink from "next/link";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
+interface HeroImage {
+  id: string;
+  src: string;
+  alt: string;
+  title?: string;
+  description?: string;
+  priority?: boolean;
+}
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  heroImages?: HeroImage[];
+}
+
+export default function HeroSection({ heroImages = [] }: HeroSectionProps) {
   const [scrollY, setScrollY] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const heroImages = useMemo(
-    () => [
-      {
-        src: "/image/home/other3.jpg",
-        alt: "Mekong Border Run Service - Professional Visa Extension",
-      },
-      {
-        src: "/image/home/other1.jpg",
-        alt: "Chiang Mai to Laos Border Crossing",
-      },
-      {
-        src: "/image/home/other2.jpg",
-        alt: "Comfortable Transportation Service",
-      },
-    ],
-    []
-  );
 
   const handleScroll = useCallback(() => {
     setScrollY(window.scrollY);
@@ -54,7 +48,7 @@ export default function HeroSection() {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [heroImages.length]);
+  }, []); // heroImages is static, no need to include in dependencies
 
   // Images are now handled by Next.js Image component with priority loading
 
@@ -75,7 +69,7 @@ export default function HeroSection() {
               src={image.src}
               alt={image.alt}
               fill
-              priority={index === 0} // Only prioritize first image
+              priority={image.priority || index === 0} // Use priority from data or prioritize first image
               quality={85}
               sizes="100vw"
               className="object-cover"

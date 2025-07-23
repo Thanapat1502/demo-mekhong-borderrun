@@ -1,5 +1,9 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
+import { useEffect } from "react";
+import { useContentStore } from "@/store/zustand/contentStore";
 
 // Dynamic imports for below-the-fold content
 const AboutSection = dynamic(() => import("@/components/home/AboutSection"), {
@@ -39,12 +43,39 @@ const CTASection = dynamic(() => import("@/components/home/CTASection"), {
 });
 
 export default function Home() {
+  const {
+    fetchHeroImages,
+    fetchJourneyImages,
+    fetchGalleryImages,
+    fetchPickupPointImages,
+    heroImages,
+    journeyImages,
+    galleryImages,
+    pickupPointImages,
+  } = useContentStore();
+
+  // Fetch all data on page load
+  useEffect(() => {
+    fetchHeroImages();
+    fetchJourneyImages();
+    fetchGalleryImages();
+    fetchPickupPointImages();
+  }, [
+    fetchHeroImages,
+    fetchJourneyImages,
+    fetchGalleryImages,
+    fetchPickupPointImages,
+  ]);
+
   return (
     <div className="bg-white">
-      <HeroSection />
+      <HeroSection heroImages={heroImages} />
       <AboutSection />
-      <JourneySection />
-      <PickupPointsSection />
+      <JourneySection
+        journeyImages={journeyImages}
+        galleryImages={galleryImages}
+      />
+      <PickupPointsSection pickupPointImages={pickupPointImages} />
       <TestimonialSection />
       <ContactSection />
       <CTASection />
