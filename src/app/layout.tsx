@@ -61,6 +61,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: { url: "/icon.png", type: "image/png" },
+    shortcut: { url: "/favicon.ico", type: "image/x-icon" },
+    // It's good practice to add an apple-icon.png to your /app directory for iOS devices
+    apple: { url: "/apple-icon.png", type: "image/png" },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
