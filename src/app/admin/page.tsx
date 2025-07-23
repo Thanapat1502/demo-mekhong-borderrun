@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -21,14 +21,14 @@ import {
   FiSave,
   FiHome,
   FiPlus,
+  FiMessageSquare,
 } from "react-icons/fi";
 import Link from "next/link";
 import ImageUpload from "@/components/admin/ImageUpload";
 import ImageGallery from "@/components/admin/ImageGallery";
-import { heroImages } from "@/data/images/heroImage";
-import { journeyImages } from "@/data/images/journeyImage";
-import { pickupPointImages } from "@/data/images/pickupPointImage";
-import { galleryImages } from "@/data/images/gallery";
+import ImageMigrationTool from "@/components/admin/ImageMigrationTool";
+import CustomerReviewManager from "@/components/admin/CustomerReviewManager";
+import { useContentStore } from "@/store/zustand/contentStore";
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("images");
@@ -42,40 +42,93 @@ export default function AdminPage() {
     line: "@mekongborderrun",
   });
 
-  // Using centralized image data
-  const [imageData, setImageData] = useState({
-    hero: heroImages.map((img) => ({
-      id: img.id,
-      src: img.src,
-      name: `${img.id}.jpg`,
-      size: "2.1 MB", // Default size - in real app would come from file metadata
-      uploadDate: "2024-01-15",
-    })),
-    journey: journeyImages.map((img) => ({
-      id: img.id,
-      src: img.src,
-      name: `${img.id}.jpg`,
-      size: "1.8 MB",
-      uploadDate: "2024-01-16",
-    })),
-    pickup: pickupPointImages.map((img) => ({
-      id: img.id,
-      src: img.src,
-      name: `${img.id}.jpg`,
-      size: "1.2 MB",
-      uploadDate: "2024-01-17",
-    })),
-    gallery: galleryImages.map((img) => ({
-      id: img.id,
-      src: img.src,
-      name: `${img.id}.jpg`,
-      size: "1.8 MB",
-      uploadDate: "2024-01-18",
-    })),
+  // Get image data from Zustand stores
+  const {
+    heroImages,
+    journeyImages,
+    pickupPointImages,
+    galleryImages,
+    fetchHeroImages,
+    fetchJourneyImages,
+    fetchPickupPointImages,
+    fetchGalleryImages,
+  } = useContentStore();
+
+  // Admin store for CRUD operations will be added later
+
+  // Fetch all data on component mount
+  useEffect(() => {
+    fetchHeroImages();
+    fetchJourneyImages();
+    fetchPickupPointImages();
+    fetchGalleryImages();
+  }, [
+    fetchHeroImages,
+    fetchJourneyImages,
+    fetchPickupPointImages,
+    fetchGalleryImages,
+  ]);
+
+  // Transform data for admin display
+  interface ImageDataItem {
+    id: string;
+    src: string;
+    name: string;
+    size: string;
+    uploadDate: string;
+  }
+
+  interface ImageData {
+    hero: ImageDataItem[];
+    journey: ImageDataItem[];
+    pickup: ImageDataItem[];
+    gallery: ImageDataItem[];
+  }
+
+  const [imageData, setImageData] = useState<ImageData>({
+    hero: [],
+    journey: [],
+    pickup: [],
+    gallery: [],
   });
+
+  // Update image data when store data changes
+  useEffect(() => {
+    setImageData({
+      hero: heroImages.map((img) => ({
+        id: img.id,
+        src: img.src,
+        name: `${img.id}.jpg`,
+        size: "2.1 MB", // Default size - in real app would come from file metadata
+        uploadDate: "2024-01-15",
+      })),
+      journey: journeyImages.map((img) => ({
+        id: img.id,
+        src: img.src,
+        name: `${img.id}.jpg`,
+        size: "1.8 MB",
+        uploadDate: "2024-01-16",
+      })),
+      pickup: pickupPointImages.map((img) => ({
+        id: img.id,
+        src: img.src,
+        name: `${img.id}.jpg`,
+        size: "1.2 MB",
+        uploadDate: "2024-01-17",
+      })),
+      gallery: galleryImages.map((img) => ({
+        id: img.id,
+        src: img.src,
+        name: `${img.id}.jpg`,
+        size: "1.8 MB",
+        uploadDate: "2024-01-18",
+      })),
+    });
+  }, [heroImages, journeyImages, pickupPointImages, galleryImages]);
 
   const menuItems = [
     { id: "images", label: "Manage Images", icon: FiImage },
+    { id: "reviews", label: "Customer Reviews", icon: FiMessageSquare },
     { id: "pricing", label: "Service Pricing", icon: FiDollarSign },
     { id: "contact", label: "Owner Info", icon: FiUser },
     { id: "settings", label: "Settings", icon: FiSettings },
@@ -108,11 +161,11 @@ export default function AdminPage() {
   };
 
   const handleImageDelete = (imageId: string) => {
-    setImageData((prev) => ({
+    setImageData((prev: ImageData) => ({
       ...prev,
       [activeImageCategory]: prev[
-        activeImageCategory as keyof typeof prev
-      ].filter((img) => img.id !== imageId),
+        activeImageCategory as keyof ImageData
+      ].filter((img: ImageDataItem) => img.id !== imageId),
     }));
   };
 
@@ -194,6 +247,13 @@ export default function AdminPage() {
                   </div>
                 </CardHeader>
                 <CardBody>
+                  {/* Image Migration Tool */}
+                  <div className="mb-6">
+                    <ImageMigrationTool />
+                  </div>
+
+                  <Divider className="my-6" />
+
                   {/* Category Tabs */}
                   <Tabs
                     selectedKey={activeImageCategory}
@@ -252,6 +312,19 @@ export default function AdminPage() {
                       </Tab>
                     ))}
                   </Tabs>
+                </CardBody>
+              </Card>
+            )}
+
+            {activeTab === "reviews" && (
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Customer Reviews
+                  </h2>
+                </CardHeader>
+                <CardBody>
+                  <CustomerReviewManager />
                 </CardBody>
               </Card>
             )}

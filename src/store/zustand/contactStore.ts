@@ -1,4 +1,9 @@
 import { create } from "zustand";
+import {
+  contactInfoService,
+  ownerInfoService,
+  businessInfoService,
+} from "@/services/supabaseService";
 
 export interface ContactInfo {
   id: string;
@@ -65,9 +70,9 @@ interface ContactState {
   error: string | null;
 
   // Actions
-  fetchContactInfo: () => void;
-  fetchOwnerInfo: () => void;
-  fetchBusinessInfo: () => void;
+  fetchContactInfo: () => Promise<void>;
+  fetchOwnerInfo: () => Promise<void>;
+  fetchBusinessInfo: () => Promise<void>;
   updateContactInfo: (contactId: string, updates: Partial<ContactInfo>) => void;
   updateOwnerInfo: (updates: Partial<OwnerInfo>) => void;
   updateBusinessInfo: (updates: Partial<BusinessInfo>) => void;
@@ -179,63 +184,76 @@ export const useContactStore = create<ContactState>((set, get) => ({
   error: null,
 
   // Actions
-  fetchContactInfo: () => {
-    set({ isLoading: true, error: null });
+  fetchContactInfo: async () => {
     try {
-      // Simulate API call
-      setTimeout(() => {
-        set({ 
-          contactInfo: mockContactInfo, 
-          isLoading: false 
-        });
-      }, 100);
+      set({ isLoading: true, error: null });
+      const data = await contactInfoService.getPublic();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        type: item.type,
+        label: item.label,
+        value: item.value,
+        isPrimary: item.is_primary,
+        isPublic: item.is_public,
+        description: item.description,
+      }));
+
+      set({ contactInfo: transformedData, isLoading: false });
     } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : "Failed to fetch contact info",
-        isLoading: false 
+      console.error("Failed to fetch contact info:", error);
+      // Fallback to mock data
+      set({
+        contactInfo: mockContactInfo,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch contact info",
       });
     }
   },
 
-  fetchOwnerInfo: () => {
-    set({ isLoading: true, error: null });
+  fetchOwnerInfo: async () => {
     try {
-      // Simulate API call
-      setTimeout(() => {
-        set({ 
-          ownerInfo: mockOwnerInfo, 
-          isLoading: false 
-        });
-      }, 100);
+      set({ isLoading: true, error: null });
+      const data = await ownerInfoService.get();
+      set({ ownerInfo: data, isLoading: false });
     } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : "Failed to fetch owner info",
-        isLoading: false 
+      console.error("Failed to fetch owner info:", error);
+      // Fallback to mock data
+      set({
+        ownerInfo: mockOwnerInfo,
+        isLoading: false,
+        error:
+          error instanceof Error ? error.message : "Failed to fetch owner info",
       });
     }
   },
 
-  fetchBusinessInfo: () => {
-    set({ isLoading: true, error: null });
+  fetchBusinessInfo: async () => {
     try {
-      // Simulate API call
-      setTimeout(() => {
-        set({ 
-          businessInfo: mockBusinessInfo, 
-          isLoading: false 
-        });
-      }, 100);
+      set({ isLoading: true, error: null });
+      const data = await businessInfoService.get();
+      set({ businessInfo: data, isLoading: false });
     } catch (error) {
-      set({ 
-        error: error instanceof Error ? error.message : "Failed to fetch business info",
-        isLoading: false 
+      console.error("Failed to fetch business info:", error);
+      // Fallback to mock data
+      set({
+        businessInfo: mockBusinessInfo,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch business info",
       });
     }
   },
 
   updateContactInfo: (contactId: string, updates: Partial<ContactInfo>) => {
     const { contactInfo } = get();
-    const updatedContacts = contactInfo.map(contact =>
+    const updatedContacts = contactInfo.map((contact) =>
       contact.id === contactId ? { ...contact, ...updates } : contact
     );
     set({ contactInfo: updatedContacts });
@@ -266,7 +284,9 @@ export const useContactStore = create<ContactState>((set, get) => ({
 
   removeContactInfo: (contactId: string) => {
     const { contactInfo } = get();
-    const filteredContacts = contactInfo.filter(contact => contact.id !== contactId);
+    const filteredContacts = contactInfo.filter(
+      (contact) => contact.id !== contactId
+    );
     set({ contactInfo: filteredContacts });
   },
 
@@ -280,29 +300,37 @@ export const useContactStore = create<ContactState>((set, get) => ({
 }));
 
 // Helper functions
-export const getPrimaryContact = (contacts: ContactInfo[], type: ContactInfo["type"]): ContactInfo | undefined => {
-  return contacts.find(contact => contact.type === type && contact.isPrimary);
+export const getPrimaryContact = (
+  contacts: ContactInfo[],
+  type: ContactInfo["type"]
+): ContactInfo | undefined => {
+  return contacts.find((contact) => contact.type === type && contact.isPrimary);
 };
 
 export const getPublicContacts = (contacts: ContactInfo[]): ContactInfo[] => {
-  return contacts.filter(contact => contact.isPublic);
+  return contacts.filter((contact) => contact.isPublic);
 };
 
-export const getContactsByType = (contacts: ContactInfo[], type: ContactInfo["type"]): ContactInfo[] => {
-  return contacts.filter(contact => contact.type === type);
+export const getContactsByType = (
+  contacts: ContactInfo[],
+  type: ContactInfo["type"]
+): ContactInfo[] => {
+  return contacts.filter((contact) => contact.type === type);
 };
 
 export const formatPhoneNumber = (phone: string): string => {
   // Remove any non-digit characters except +
-  const cleaned = phone.replace(/[^\d+]/g, '');
-  
+  const cleaned = phone.replace(/[^\d+]/g, "");
+
   // Format Thai phone numbers
-  if (cleaned.startsWith('+66')) {
+  if (cleaned.startsWith("+66")) {
     const number = cleaned.slice(3);
     if (number.length === 9) {
-      return `+66 ${number.slice(0, 2)} ${number.slice(2, 5)} ${number.slice(5)}`;
+      return `+66 ${number.slice(0, 2)} ${number.slice(2, 5)} ${number.slice(
+        5
+      )}`;
     }
   }
-  
+
   return phone;
 };

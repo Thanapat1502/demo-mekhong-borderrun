@@ -48,7 +48,7 @@ export default function HeroSection({ heroImages = [] }: HeroSectionProps) {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []); // heroImages is static, no need to include in dependencies
+  }, [heroImages.length]);
 
   // Images are now handled by Next.js Image component with priority loading
 

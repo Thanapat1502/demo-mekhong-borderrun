@@ -1,9 +1,18 @@
 import { create } from "zustand";
-import { galleryImages as commercial } from "@/data/images/gallery";
-import { journeyImages as journey } from "@/data/images/journeyImage";
-import { pickupPointImages as pickup } from "@/data/images/pickupPointImage";
-import { heroImages as banner } from "@/data/images/heroImage";
-import { customerReviews as reviews } from "@/data/images/userReview";
+import {
+  heroImagesService,
+  journeyImagesService,
+  pickupPointImagesService,
+  galleryImagesService,
+  customerReviewsService,
+} from "@/services/supabaseService";
+
+// Fallback data imports (for offline/development mode)
+import { galleryImages as fallbackGallery } from "@/data/images/gallery";
+import { journeyImages as fallbackJourney } from "@/data/images/journeyImage";
+import { pickupPointImages as fallbackPickup } from "@/data/images/pickupPointImage";
+import { heroImages as fallbackHero } from "@/data/images/heroImage";
+import { customerReviews as fallbackReviews } from "@/data/images/userReview";
 
 interface HeroImage {
   id: string;
@@ -61,11 +70,15 @@ type State = {
   galleryImages: GalleryImage[];
   heroImages: HeroImage[];
   customerReviews: CustomerReviews[];
-  fetchPickupPointImages: () => void;
-  fetchJourneyImages: () => void;
-  fetchGalleryImages: () => void;
-  fetchHeroImages: () => void;
-  fetchCustomerReviews: () => void;
+  isLoading: boolean;
+  error: string | null;
+  fetchPickupPointImages: () => Promise<void>;
+  fetchJourneyImages: () => Promise<void>;
+  fetchGalleryImages: () => Promise<void>;
+  fetchHeroImages: () => Promise<void>;
+  fetchCustomerReviews: () => Promise<void>;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
 };
 
 export const useContentStore = create<State>((set) => ({
@@ -74,19 +87,170 @@ export const useContentStore = create<State>((set) => ({
   galleryImages: [],
   heroImages: [],
   customerReviews: [],
-  fetchPickupPointImages: () => {
-    set({ pickupPointImages: pickup });
+  isLoading: false,
+  error: null,
+
+  fetchPickupPointImages: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await pickupPointImagesService.getAll();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        src: item.src,
+        alt: item.alt,
+        title: item.title,
+        location: item.location,
+        description: item.description,
+        landmark: item.landmark,
+        coordinates: item.coordinates,
+      }));
+
+      set({ pickupPointImages: transformedData, isLoading: false });
+    } catch (error) {
+      console.error("Failed to fetch pickup point images:", error);
+      // Fallback to local data
+      set({
+        pickupPointImages: fallbackPickup,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch pickup point images",
+      });
+    }
   },
-  fetchJourneyImages: () => {
-    set({ journeyImages: journey });
+
+  fetchJourneyImages: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await journeyImagesService.getAll();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        src: item.src,
+        alt: item.alt,
+        step: item.step,
+        title: item.title,
+        description: item.description,
+        time: item.time,
+      }));
+
+      set({ journeyImages: transformedData, isLoading: false });
+    } catch (error) {
+      console.error("Failed to fetch journey images:", error);
+      // Fallback to local data
+      set({
+        journeyImages: fallbackJourney,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch journey images",
+      });
+    }
   },
-  fetchGalleryImages: () => {
-    set({ galleryImages: commercial });
+
+  fetchGalleryImages: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await galleryImagesService.getAll();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        src: item.src,
+        alt: item.alt,
+        title: item.title,
+        description: item.description,
+        category: item.category,
+        featured: item.featured,
+        aspectRatio: item.aspect_ratio,
+      }));
+
+      set({ galleryImages: transformedData, isLoading: false });
+    } catch (error) {
+      console.error("Failed to fetch gallery images:", error);
+      // Fallback to local data
+      set({
+        galleryImages: fallbackGallery,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch gallery images",
+      });
+    }
   },
-  fetchHeroImages: () => {
-    set({ heroImages: banner });
+
+  fetchHeroImages: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await heroImagesService.getAll();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        src: item.src,
+        alt: item.alt,
+        title: item.title,
+        description: item.description,
+        priority: item.priority,
+      }));
+
+      set({ heroImages: transformedData, isLoading: false });
+    } catch (error) {
+      console.error("Failed to fetch hero images:", error);
+      // Fallback to local data
+      set({
+        heroImages: fallbackHero,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch hero images",
+      });
+    }
   },
-  fetchCustomerReviews: () => {
-    set({ customerReviews: reviews });
+
+  fetchCustomerReviews: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const data = await customerReviewsService.getAll();
+
+      // Transform database data to match interface
+      const transformedData = data.map((item) => ({
+        id: item.id,
+        name: item.name,
+        country: item.country,
+        avatar: item.avatar,
+        rating: item.rating,
+        review: item.review,
+        date: item.date,
+      }));
+
+      set({ customerReviews: transformedData, isLoading: false });
+    } catch (error) {
+      console.error("Failed to fetch customer reviews:", error);
+      // Fallback to local data
+      set({
+        customerReviews: fallbackReviews,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch customer reviews",
+      });
+    }
+  },
+
+  setLoading: (loading: boolean) => {
+    set({ isLoading: loading });
+  },
+
+  setError: (error: string | null) => {
+    set({ error });
   },
 }));
