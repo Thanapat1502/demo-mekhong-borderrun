@@ -11,9 +11,9 @@ export default function Contact() {
       <ContactHero />
 
       {/* Contact Information & Form */}
-      <section className="py-24 px-6">
+      <section className="py-12 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <ContactInfo />
             <ContactForm />
           </div>

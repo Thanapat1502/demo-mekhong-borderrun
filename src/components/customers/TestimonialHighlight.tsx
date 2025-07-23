@@ -2,7 +2,7 @@ import { Card, CardBody, Avatar } from "@heroui/react";
 
 export default function TestimonialHighlight() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-12 px-6">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-2xl bg-gradient-to-r from-accent-50 to-neutral-50">
           <CardBody className="p-16 text-center">

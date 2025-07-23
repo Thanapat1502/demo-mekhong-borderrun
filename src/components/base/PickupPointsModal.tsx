@@ -70,9 +70,9 @@ export default function PickupPointsModal({
   }, []);
 
   return (
-    <section id="pickup-points-section" className={`py-24 px-6 ${className}`}>
+    <section id="pickup-points-section" className={`py-12 px-6 ${className}`}>
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-4xl font-light text-black mb-6">{title}</h2>
           <p className="text-lg text-black">{subtitle}</p>
         </div>

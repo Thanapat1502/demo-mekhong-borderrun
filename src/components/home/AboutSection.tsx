@@ -6,9 +6,9 @@ import { FiCheck } from "react-icons/fi";
 
 export default function AboutSection() {
   return (
-    <section className="py-24 px-6 bg-neutral-50">
+    <section className="py-12 px-6 bg-neutral-50">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="animate-slide-up">
             <h2 className="text-4xl md:text-5xl font-light text-black mb-8 leading-tight">
               Professional Border

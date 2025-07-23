@@ -49,7 +49,7 @@ export default function ContactInfo() {
         <div className="flex items-center gap-6 mb-8">
           <Avatar
             src={ownerInfo?.avatar || "/owner-photo.jpg"}
-            alt={ownerInfo?.name || "Mekong Transfer Owner"}
+            alt={ownerInfo?.name || "Mekong Transfer"}
             className="w-20 h-20"
             fallback={ownerInfo?.name?.charAt(0) || "MT"}
           />

@@ -4,9 +4,9 @@ import { FiTruck, FiUser, FiCoffee, FiFileText } from "react-icons/fi";
 
 export default function WhatsIncluded() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-12 px-6">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-light text-black text-center mb-16">
+        <h2 className="text-4xl font-light text-black text-center mb-8">
           What&apos;s Included
         </h2>
 

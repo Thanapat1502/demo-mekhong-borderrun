@@ -4,12 +4,12 @@ import NextLink from "next/link";
 
 export default function ServicesCTA() {
   return (
-    <section className="py-24 px-6 bg-primary-800">
+    <section className="py-12 px-6 bg-primary-800">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl font-light text-white mb-8">
           Ready to Book Your Border Run?
         </h2>
-        <p className="text-xl text-primary-200 mb-12">
+        <p className="text-xl text-primary-200 mb-8">
           Contact us today to secure your spot on our next departure
         </p>
         <div className="flex flex-col sm:flex-row gap-6 justify-center">

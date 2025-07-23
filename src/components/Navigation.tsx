@@ -37,6 +37,11 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   // For non-home pages, always use white background
   const navbarBg = scrolled
     ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
@@ -81,7 +86,7 @@ export default function Navigation() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-12" justify="center">
+      <NavbarContent className="hidden sm:flex gap-8" justify="center">
         {menuItems.map((item) => (
           <NavbarItem key={item.href}>
             <Link

@@ -5,13 +5,13 @@ import NextLink from "next/link";
 
 export default function CTASection() {
   return (
-    <section className="py-24 px-6 bg-primary-900">
+    <section className="py-12 px-6 bg-primary-900">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-light text-white mb-8 leading-tight">
           Ready for Your
           <span className="block text-accent-400">Border Run?</span>
         </h2>
-        <p className="text-xl text-primary-200 mb-12 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl text-primary-200 mb-8 max-w-2xl mx-auto leading-relaxed">
           Join hundreds of satisfied travelers who trust us with their visa
           extension needs
         </p>

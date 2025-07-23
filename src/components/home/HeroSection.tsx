@@ -99,7 +99,7 @@ export default function HeroSection({ heroImages = [] }: HeroSectionProps) {
               </span>
             </h1>
             <p
-              className="text-xl md:text-2xl font-light mb-12 max-w-3xl mx-auto leading-relaxed opacity-90 animate-slide-up"
+              className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto leading-relaxed opacity-90 animate-slide-up"
               style={{ animationDelay: "0.4s" }}>
               Extend your stay in Thailand with our trusted one-day border run
               trip from Chiang Mai to Laos.

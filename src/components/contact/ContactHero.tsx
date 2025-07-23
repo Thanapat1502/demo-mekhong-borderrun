@@ -18,7 +18,7 @@ export default function ContactHero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto text-center px-6 py-32">
+      <div className="relative z-10 max-w-4xl mx-auto text-center px-6 py-14">
         <h1 className="text-5xl md:text-6xl font-light text-white mb-8 leading-tight">
           Contact Us
         </h1>

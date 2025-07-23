@@ -3,9 +3,9 @@ import { Avatar } from "@heroui/react";
 
 export default function TestimonialSection() {
   return (
-    <section className="py-24 px-6 bg-gradient-to-br from-accent-50 to-neutral-50">
+    <section className="py-12 px-6 bg-gradient-to-br from-accent-50 to-neutral-50">
       <div className="max-w-4xl mx-auto text-center">
-        <div className="mb-12">
+        <div className="mb-8">
           <div className="text-6xl text-accent-200 mb-6">&quot;</div>
           <p className="text-2xl md:text-3xl font-light text-black leading-relaxed mb-8 italic">
             Exceptional service from start to finish. Professional, punctual,

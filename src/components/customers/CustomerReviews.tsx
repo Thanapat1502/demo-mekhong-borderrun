@@ -15,9 +15,9 @@ export default function CustomerReviews(props: {
 }) {
   const { customerReviews } = props;
   return (
-    <section className="py-24 px-6 bg-neutral-50">
+    <section className="py-12 px-6 bg-neutral-50">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-4xl font-light text-black mb-6">
             Customer Reviews
           </h2>

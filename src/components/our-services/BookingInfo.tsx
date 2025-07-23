@@ -5,9 +5,9 @@ import { FiBookOpen, FiInfo } from "react-icons/fi";
 
 export default function BookingInfo() {
   return (
-    <section className="py-24 px-6 bg-neutral-50">
+    <section className="py-12 px-6 bg-neutral-50">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-light text-black text-center mb-16">
+        <h2 className="text-4xl font-light text-black text-center mb-8">
           Booking Information
         </h2>
 

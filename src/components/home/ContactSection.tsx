@@ -2,9 +2,9 @@ import { FiPhone, FiMessageCircle, FiMail } from "react-icons/fi";
 
 export default function ContactSection() {
   return (
-    <section className="py-16 px-6 bg-primary-800">
+    <section className="py-12 px-6 bg-primary-800">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-3xl font-light text-white mb-6">Get In Touch</h2>
           <p className="text-primary-200">
             Multiple ways to reach us for your convenience
