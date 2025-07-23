@@ -9,7 +9,6 @@ import {
   FaLine,
   FaComments,
   FaTimes,
-  FaCog,
 } from "react-icons/fa";
 
 /**
@@ -76,16 +75,6 @@ export default function FloatingContactButton({
       textColor: "text-white",
       target: "_blank",
       borderColor: "border-green-400",
-    },
-    {
-      icon: FaCog,
-      label: "Admin",
-      sublabel: "Management",
-      href: "/admin",
-      bgColor:
-        "bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800",
-      textColor: "text-white",
-      borderColor: "border-gray-600",
     },
   ];
 

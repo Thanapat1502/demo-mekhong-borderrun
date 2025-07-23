@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingContactButton from "@/components/base/FloatingContactButton";
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Mekong Border Run",
   },
   description:
-    "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension. Licensed TAT operator with 4,100 THB all-inclusive service. Book your one-day trip today!",
+    "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension. Licensed TAT operator offering an all-inclusive service at a reasonable price. Book your one-day trip today!",
   keywords: [
     "border run",
     "visa extension",
@@ -66,14 +67,14 @@ export const metadata: Metadata = {
     url: siteUrl,
     title: "Mekong Border Run - Professional Visa Extension Service",
     description:
-      "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator. 4,100 THB all-inclusive service.",
+      "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with a licensed TAT operator. All-inclusive service at a reasonable price.",
     siteName: "Mekong Border Run",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/image/seo/seo.png",
         width: 1200,
         height: 630,
-        alt: "Mekong Border Run - Visa Extension Service",
+        alt: "Mekong Border Run - Professional Visa Extension Service from Chiang Mai to Laos",
       },
     ],
   },
@@ -82,7 +83,7 @@ export const metadata: Metadata = {
     title: "Mekong Border Run - Professional Visa Extension Service",
     description:
       "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator.",
-    images: ["/og-image.jpg"],
+    images: ["/image/seo/seo.png"],
     creator: "@mekongborderrun",
   },
   robots: {
@@ -135,10 +136,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <Navigation />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-          <FloatingContactButton />
+          <AuthProvider>
+            <Navigation />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+            <FloatingContactButton />
+          </AuthProvider>
         </Providers>
       </body>
     </html>

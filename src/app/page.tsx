@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
 import { useEffect } from "react";
 import { useContentStore } from "@/store/zustand/contentStore";
+import { heroImages } from "@/data/images/heroImage";
 
 // Dynamic imports for below-the-fold content
 const AboutSection = dynamic(() => import("@/components/home/AboutSection"), {
@@ -44,11 +45,11 @@ const CTASection = dynamic(() => import("@/components/home/CTASection"), {
 
 export default function Home() {
   const {
-    fetchHeroImages,
+    // fetchHeroImages,
     fetchJourneyImages,
     fetchGalleryImages,
     fetchPickupPointImages,
-    heroImages,
+    // heroImages,
     journeyImages,
     galleryImages,
     pickupPointImages,
@@ -56,12 +57,12 @@ export default function Home() {
 
   // Fetch all data on page load
   useEffect(() => {
-    fetchHeroImages();
+    // fetchHeroImages();
     fetchJourneyImages();
     fetchGalleryImages();
     fetchPickupPointImages();
   }, [
-    fetchHeroImages,
+    // fetchHeroImages,
     fetchJourneyImages,
     fetchGalleryImages,
     fetchPickupPointImages,
