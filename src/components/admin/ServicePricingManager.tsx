@@ -9,29 +9,94 @@ import {
   Input,
   Divider,
 } from "@heroui/react";
-import { FiSave, FiDollarSign } from "react-icons/fi";
-import { usePackageStore } from "@/store/zustand/packageStore";
+import { FiSave, FiDollarSign, FiEdit, FiX } from "react-icons/fi";
+import { supabase, TABLES, ServicePackageRow } from "@/lib/supabase";
 
 export default function ServicePricingManager() {
-  const { packages, fetchPackages } = usePackageStore();
+  const [packages, setPackages] = useState<ServicePackageRow[]>([]);
+  const [editingPackage, setEditingPackage] =
+    useState<ServicePackageRow | null>(null);
   const [price, setPrice] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  // Fetch packages from Supabase
+  const fetchPackages = async () => {
+    setIsLoading(true);
+    try {
+      console.log("Fetching service packages...");
+      const { data, error } = await supabase
+        .from(TABLES.SERVICE_PACKAGES)
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      console.log("Service packages result:", { data, error });
+
+      if (error) {
+        console.error("Service packages error:", error);
+        // If table doesn't exist, create mock data
+        if (error.code === "42P01") {
+          console.log("Service packages table doesn't exist, using mock data");
+          const mockPackage = {
+            id: "mock-1",
+            name: "Border Run Service",
+            price: 1500,
+            currency: "THB",
+            description: "Professional border run service to Myanmar",
+            features: [
+              "Professional driver",
+              "All documentation",
+              "Same day return",
+            ],
+            duration: "1 day",
+            max_passengers: 4,
+            is_popular: true,
+            is_available: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          setPackages([mockPackage]);
+          setIsLoading(false);
+          return;
+        }
+        throw error;
+      }
+      setPackages(data || []);
+    } catch (err) {
+      setError(`Failed to fetch packages: ${err}`);
+      console.error("Error fetching packages:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPackages();
-  }, [fetchPackages]);
+  }, []);
 
-  useEffect(() => {
-    // Set the current price from the first package
-    if (packages.length > 0) {
-      setPrice(packages[0].price.toString());
-    }
-  }, [packages]);
+  const handleEdit = (pkg: ServicePackageRow) => {
+    setEditingPackage(pkg);
+    setPrice(pkg.price.toString());
+    setName(pkg.name);
+    setDescription(pkg.description);
+  };
+
+  const handleCancel = () => {
+    setEditingPackage(null);
+    setPrice("");
+    setName("");
+    setDescription("");
+    setError("");
+  };
 
   const handleSave = async () => {
-    setIsLoading(true);
+    if (!editingPackage) return;
+
+    setIsSaving(true);
     setError("");
     setSuccessMessage("");
 
@@ -42,14 +107,38 @@ export default function ServicePricingManager() {
         return;
       }
 
-      // For now, just show success message
-      // In a real implementation, you would update the package price via API
-      setSuccessMessage("Price updated successfully!");
+      if (!name.trim()) {
+        setError("Package name is required");
+        return;
+      }
+      console.log("check for id", editingPackage.id);
+
+      const { error } = await supabase
+        .from(TABLES.SERVICE_PACKAGES)
+        .update({
+          price: numericPrice,
+          name: name.trim(),
+          description: description.trim(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", editingPackage.id);
+
+      if (error) {
+        console.error("Update error:", error);
+        throw error;
+      }
+
+      setSuccessMessage("Package updated successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
-    } catch {
-      setError("Failed to update price");
+
+      // Refresh packages and reset form
+      await fetchPackages();
+      handleCancel();
+    } catch (err) {
+      setError(`Failed to update package: ${err}`);
+      console.error("Error updating package:", err);
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -70,12 +159,22 @@ export default function ServicePricingManager() {
       )}
 
       {/* Current Package Info */}
-      {currentPackage && (
+      {currentPackage && !editingPackage && (
         <Card>
           <CardHeader>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Current Service Package
-            </h3>
+            <div className="flex justify-between items-center w-full">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Current Service Package
+              </h3>
+              <Button
+                color="primary"
+                variant="flat"
+                startContent={<FiEdit />}
+                onPress={() => handleEdit(currentPackage)}
+                size="sm">
+                Edit
+              </Button>
+            </div>
           </CardHeader>
           <CardBody className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -109,51 +208,102 @@ export default function ServicePricingManager() {
         </Card>
       )}
 
-      {/* Price Editor */}
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold text-gray-900">
-            Update Service Price
-          </h3>
-        </CardHeader>
-        <CardBody className="space-y-6">
-          <div className="max-w-md">
+      {/* Edit Package Form */}
+      {editingPackage && (
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center w-full">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Edit Service Package
+              </h3>
+              <Button
+                color="danger"
+                variant="flat"
+                startContent={<FiX />}
+                onPress={handleCancel}
+                size="sm">
+                Cancel
+              </Button>
+            </div>
+          </CardHeader>
+          <CardBody className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Package Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter package name"
+                required
+                size="lg"
+              />
+
+              <Input
+                label="Service Price (THB)"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter price"
+                startContent={<FiDollarSign className="text-gray-400" />}
+                type="number"
+                min="0"
+                step="1"
+                required
+                size="lg"
+              />
+            </div>
+
             <Input
-              label="Service Price (THB)"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="Enter new price"
-              startContent={<FiDollarSign className="text-gray-400" />}
-              type="number"
-              min="0"
-              step="1"
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter package description"
               size="lg"
             />
-          </div>
 
-          <Divider />
+            <Divider />
 
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="font-medium text-gray-800 mb-2">Price Preview</h4>
-            <div className="text-3xl font-bold text-accent-600">
-              {price ? parseFloat(price).toLocaleString() : "0"} THB
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-medium text-gray-800 mb-2">Price Preview</h4>
+              <div className="text-3xl font-bold text-accent-600">
+                {price ? parseFloat(price).toLocaleString() : "0"} THB
+              </div>
+              <p className="text-gray-600 text-base mt-1">
+                This price will be displayed across the website
+              </p>
             </div>
-            <p className="text-gray-600 text-base mt-1">
-              This price will be displayed across the website
-            </p>
-          </div>
 
-          <Button
-            color="primary"
-            size="lg"
-            startContent={<FiSave />}
-            onPress={handleSave}
-            isLoading={isLoading}
-            className="w-full md:w-auto">
-            Save Price
-          </Button>
-        </CardBody>
-      </Card>
+            <div className="flex gap-3">
+              <Button
+                color="primary"
+                size="lg"
+                startContent={<FiSave />}
+                onPress={handleSave}
+                isLoading={isSaving}
+                className="flex-1">
+                Save Changes
+              </Button>
+
+              <Button
+                color="default"
+                variant="bordered"
+                size="lg"
+                startContent={<FiX />}
+                onPress={handleCancel}
+                disabled={isSaving}>
+                Cancel
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+      )}
+
+      {/* Loading State */}
+      {isLoading && (
+        <Card>
+          <CardBody className="text-center py-8">
+            <p className="text-gray-600">Loading packages...</p>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 }

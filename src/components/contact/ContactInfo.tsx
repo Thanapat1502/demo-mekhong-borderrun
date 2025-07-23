@@ -75,9 +75,11 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">Phone</h4>
-              <p className="text-accent-600 font-medium">
+              <a
+                href={`tel:${phoneInfo?.value || defaultPhone}`}
+                className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
                 {phoneInfo?.value || defaultPhone}
-              </p>
+              </a>
             </div>
           </div>
 
@@ -87,9 +89,17 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">WhatsApp</h4>
-              <p className="text-accent-600 font-medium">
+              <a
+                href={`https://wa.me/${(
+                  whatsappInfo?.value ||
+                  phoneInfo?.value ||
+                  defaultPhone
+                ).replace(/[^0-9]/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
                 {whatsappInfo?.value || phoneInfo?.value || defaultPhone}
-              </p>
+              </a>
             </div>
           </div>
 
@@ -99,7 +109,13 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">LINE</h4>
-              <p className="text-accent-600 font-medium">ID: 25171107</p>
+              <a
+                href="https://line.me/ti/p/~25171107"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
+                ID: 25171107
+              </a>
             </div>
           </div>
 
@@ -109,9 +125,11 @@ export default function ContactInfo() {
             </div>
             <div>
               <h4 className="font-medium text-black">Email</h4>
-              <p className="text-accent-600 font-medium">
+              <a
+                href={`mailto:${emailInfo?.value || defaultEmail}`}
+                className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
                 {emailInfo?.value || defaultEmail}
-              </p>
+              </a>
             </div>
           </div>
 

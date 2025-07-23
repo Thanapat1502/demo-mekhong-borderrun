@@ -18,10 +18,11 @@ export const TABLES = {
   GALLERY_IMAGES: "gallery_images",
   CUSTOMER_REVIEWS: "customer_reviews",
   SERVICE_PACKAGES: "service_packages",
-  PRICING_TIERS: "pricing_tiers",
   CONTACT_INFO: "contact_info",
   OWNER_INFO: "owner_info",
   BUSINESS_INFO: "business_info",
+  CONTACT_REQUESTS: "contact_requests",
+  WEBSITE_ANALYTICS: "website_analytics",
 } as const;
 
 // Database types (these should match your Supabase schema)
@@ -415,6 +416,87 @@ export interface Database {
           updated_at?: string;
         };
       };
+      contact_requests: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          phone: string | null;
+          message: string;
+          service_type: string | null;
+          preferred_date: string | null;
+          number_of_people: number | null;
+          status: "new" | "contacted" | "confirmed" | "completed" | "cancelled";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          phone?: string | null;
+          message: string;
+          service_type?: string | null;
+          preferred_date?: string | null;
+          number_of_people?: number | null;
+          status?:
+            | "new"
+            | "contacted"
+            | "confirmed"
+            | "completed"
+            | "cancelled";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          email?: string;
+          phone?: string | null;
+          message?: string;
+          service_type?: string | null;
+          preferred_date?: string | null;
+          number_of_people?: number | null;
+          status?:
+            | "new"
+            | "contacted"
+            | "confirmed"
+            | "completed"
+            | "cancelled";
+          updated_at?: string;
+        };
+      };
+      website_analytics: {
+        Row: {
+          id: string;
+          date: string;
+          page_views: number;
+          unique_visitors: number;
+          contact_form_submissions: number;
+          booking_inquiries: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          date: string;
+          page_views?: number;
+          unique_visitors?: number;
+          contact_form_submissions?: number;
+          booking_inquiries?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          date?: string;
+          page_views?: number;
+          unique_visitors?: number;
+          contact_form_submissions?: number;
+          booking_inquiries?: number;
+          updated_at?: string;
+        };
+      };
     };
   };
 }
@@ -445,3 +527,7 @@ export type ContactInfoRow =
 export type OwnerInfoRow = Database["public"]["Tables"]["owner_info"]["Row"];
 export type BusinessInfoRow =
   Database["public"]["Tables"]["business_info"]["Row"];
+export type ContactRequestRow =
+  Database["public"]["Tables"]["contact_requests"]["Row"];
+export type WebsiteAnalyticsRow =
+  Database["public"]["Tables"]["website_analytics"]["Row"];

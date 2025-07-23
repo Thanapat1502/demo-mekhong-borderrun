@@ -10,34 +10,133 @@ import {
   Avatar,
   Divider,
 } from "@heroui/react";
-import { FiSave, FiUser } from "react-icons/fi";
-import SupabaseImageUpload from "./SupabaseImageUpload";
+import { FiSave, FiUser, FiEdit, FiX } from "react-icons/fi";
+import { supabase, TABLES, ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
 
 export default function ContactInfoManager() {
+  const [contactInfo, setContactInfo] = useState<ContactInfoRow[]>([]);
+  const [ownerInfo, setOwnerInfo] = useState<OwnerInfoRow | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  // Form states
   const [guideName, setGuideName] = useState<string>("");
-  const [guideImage, setGuideImage] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [whatsapp, setWhatsapp] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const [error, setError] = useState<string>("");
 
-  // Load current data on component mount
+  // Fetch data from Supabase
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      // Fetch contact info
+      const { data: contactData, error: contactError } = await supabase
+        .from(TABLES.CONTACT_INFO)
+        .select("*")
+        .eq("is_public", true);
+
+      if (contactError) {
+        console.error("Contact info error:", contactError);
+        if (contactError.code === "42P01") {
+          console.log("Contact info table doesn't exist, using mock data");
+          setContactInfo([]);
+        } else {
+          throw contactError;
+        }
+      } else {
+        setContactInfo(contactData || []);
+      }
+
+      // Fetch owner info
+      const { data: ownerData, error: ownerError } = await supabase
+        .from(TABLES.OWNER_INFO)
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (
+        ownerError &&
+        ownerError.code !== "PGRST116" &&
+        ownerError.code !== "42P01"
+      ) {
+        throw ownerError;
+      }
+
+      // Use mock data if table doesn't exist
+      if (ownerError && ownerError.code === "42P01") {
+        console.log("Owner info table doesn't exist, using mock data");
+        const mockOwnerData = {
+          id: "mock-owner-1",
+          name: "Mekong Border Run Guide",
+          title: "Licensed Tour Operator",
+          email: "info@mekong-borderrun.com",
+          phone: "+66 (0) 95 102 9528",
+          whatsapp: "+66 (0) 95 102 9528",
+          line: null,
+          avatar: null,
+          bio: null,
+          experience: null,
+          languages: null,
+          certifications: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setOwnerInfo(mockOwnerData);
+        setGuideName(mockOwnerData.name);
+        setPhone(mockOwnerData.phone);
+        setEmail(mockOwnerData.email);
+        setWhatsapp(mockOwnerData.whatsapp || "");
+        setAddress("Chiang Mai, Thailand");
+      } else if (ownerData) {
+        setOwnerInfo(ownerData);
+        setGuideName(ownerData.name);
+        setPhone(ownerData.phone);
+        setEmail(ownerData.email);
+        setWhatsapp(ownerData.whatsapp || "");
+
+        // Set address from contact info
+        const addressInfo = contactData?.find(
+          (info) => info.type === "address"
+        );
+        setAddress(addressInfo?.value || "");
+      }
+    } catch (err) {
+      setError("Failed to fetch contact information");
+      console.error("Error fetching data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // For now, set default values
-    // In a real implementation, you would fetch from API
-    setGuideName("Mekong Border Run Guide");
-    setGuideImage("/owner-photo.jpg");
-    setPhone("+66 (0) 95 102 9528");
-    setEmail("info@mekong-borderrun.com");
-    setWhatsapp("+66 (0) 95 102 9528");
-    setAddress("Chiang Mai, Thailand");
+    fetchData();
   }, []);
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    setError("");
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setError("");
+    // Reset form values
+    if (ownerInfo) {
+      setGuideName(ownerInfo.name);
+      setPhone(ownerInfo.phone);
+      setEmail(ownerInfo.email);
+      setWhatsapp(ownerInfo.whatsapp || "");
+    }
+    const addressInfo = contactInfo.find((info) => info.type === "address");
+    setAddress(addressInfo?.value || "");
+  };
+
   const handleSave = async () => {
-    setIsLoading(true);
+    setIsSaving(true);
     setError("");
     setSuccessMessage("");
 
@@ -55,10 +154,6 @@ export default function ContactInfoManager() {
         setError("Email address is required");
         return;
       }
-      if (!address.trim()) {
-        setError("Address is required");
-        return;
-      }
 
       // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,23 +162,92 @@ export default function ContactInfoManager() {
         return;
       }
 
-      // For now, just show success message
-      // In a real implementation, you would save to API
+      // Check if this is mock data
+      if (ownerInfo && ownerInfo.id === "mock-owner-1") {
+        console.log("Updating mock owner data");
+        // Update the local state for mock data
+        const updatedOwnerInfo = {
+          ...ownerInfo,
+          name: guideName.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          whatsapp: whatsapp.trim() || null,
+          updated_at: new Date().toISOString(),
+        };
+        setOwnerInfo(updatedOwnerInfo);
+        setSuccessMessage(
+          "Contact information updated successfully! (Note: Using mock data - Supabase tables don't exist)"
+        );
+        setTimeout(() => setSuccessMessage(""), 5000);
+        setIsEditing(false);
+        return;
+      }
+
+      // Update or create owner info
+      if (ownerInfo) {
+        const { error: ownerError } = await supabase
+          .from(TABLES.OWNER_INFO)
+          .update({
+            name: guideName.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            whatsapp: whatsapp.trim() || null,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", ownerInfo.id);
+
+        if (ownerError) throw ownerError;
+      } else {
+        const { error: ownerError } = await supabase
+          .from(TABLES.OWNER_INFO)
+          .insert({
+            name: guideName.trim(),
+            title: "Licensed Tour Operator",
+            phone: phone.trim(),
+            email: email.trim(),
+            whatsapp: whatsapp.trim() || null,
+          });
+
+        if (ownerError) throw ownerError;
+      }
+
+      // Update address in contact info
+      const addressInfo = contactInfo.find((info) => info.type === "address");
+      if (addressInfo) {
+        const { error: addressError } = await supabase
+          .from(TABLES.CONTACT_INFO)
+          .update({
+            value: address.trim(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", addressInfo.id);
+
+        if (addressError) throw addressError;
+      } else if (address.trim()) {
+        const { error: addressError } = await supabase
+          .from(TABLES.CONTACT_INFO)
+          .insert({
+            type: "address",
+            label: "Business Address",
+            value: address.trim(),
+            is_public: true,
+          });
+
+        if (addressError) throw addressError;
+      }
+
       setSuccessMessage("Contact information updated successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
-    } catch {
+
+      // Refresh data and exit edit mode
+      await fetchData();
+      setIsEditing(false);
+    } catch (err) {
       setError("Failed to update contact information");
+      console.error("Error updating data:", err);
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
-  };
-
-  const handleImageUpload = (url: string) => {
-    setGuideImage(url);
-  };
-
-  const handleImageRemove = () => {
-    setGuideImage("");
   };
 
   return (
@@ -91,259 +255,180 @@ export default function ContactInfoManager() {
       {/* Success/Error Messages */}
       {successMessage && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-green-600">{successMessage}</p>
+          <p className="text-green-600 font-medium">{successMessage}</p>
         </div>
       )}
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600">{error}</p>
+          <p className="text-red-600 font-medium">{error}</p>
         </div>
       )}
 
       {/* Guide Information */}
       <Card>
         <CardHeader className="flex gap-3">
-          <FiUser className="text-2xl" />
-          <div className="flex flex-col">
-            <p className="text-base font-semibold">Guide Information</p>
-            <p className="text-baseall text-default-500">
-              Manage guide profile displayed on contact page
-            </p>
+          <FiUser className="text-2xl text-primary-600" />
+          <div className="flex flex-col flex-1">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-md font-semibold text-gray-900">
+                  Guide Information
+                </p>
+                <p className="text-base text-default-500">
+                  Manage guide profile and contact details
+                </p>
+              </div>
+              {!isEditing && (
+                <Button
+                  color="primary"
+                  variant="flat"
+                  startContent={<FiEdit />}
+                  onPress={handleEdit}
+                  size="sm">
+                  Edit
+                </Button>
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardBody className="space-y-6">
-          {/* Guide Photo Section */}
-          <div className="flex flex-col items-center space-y-4">
-            <Avatar
-              src={guideImage || "/owner-photo.jpg"}
-              alt={guideName || "Guide"}
-              className="w-32 h-32"
-              fallback={<FiUser size={48} />}
-            />
-            <div className="w-full max-w-md">
-              <label className="block text-base font-medium mb-2">
-                Guide Photo
-              </label>
-              <SupabaseImageUpload
-                currentImageUrl={guideImage}
-                category="owner"
-                onImageUploaded={handleImageUpload}
-                onImageRemoved={handleImageRemove}
-              />
-              <p className="text-base text-gray-500 mt-2">
-                This photo will be displayed on the contact page. Recommended
-                size: 400x400px
-              </p>
-            </div>
-          </div>
-
-          <Divider />
-
-          {/* Guide Name Section */}
-          <div className="space-y-4">
-            <div className="max-w-md">
-              <Input
-                label="Guide Name"
-                value={guideName}
-                onChange={(e) => setGuideName(e.target.value)}
-                placeholder="Enter guide name"
-                required
-                size="lg"
-                description="This name will be displayed on the contact page"
-              />
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg max-w-md">
-              <h4 className="font-medium text-gray-800 mb-2">Preview</h4>
-              <div className="flex items-center gap-3">
+          {!isEditing ? (
+            // Display Mode
+            <div className="space-y-4">
+              <div className="flex items-center gap-6">
                 <Avatar
-                  src={guideImage || "/owner-photo.jpg"}
-                  alt={guideName || "Guide"}
-                  className="w-12 h-12"
-                  fallback={<FiUser size={20} />}
+                  src={ownerInfo?.avatar || "/owner-photo.jpg"}
+                  alt={ownerInfo?.name || "Guide"}
+                  className="w-20 h-20"
+                  fallback={<FiUser size={32} />}
                 />
                 <div>
-                  <p className="font-medium text-gray-900">
-                    {guideName || "Guide Name"}
-                  </p>
+                  <h3 className="text-xl font-medium text-gray-900">
+                    {ownerInfo?.name || "Guide Name"}
+                  </h3>
+                  <p className="text-gray-700">Licensed Tour Operator</p>
                   <p className="text-base text-gray-600">
-                    Licensed Tour Operator
+                    TAT License No. 21/01279
                   </p>
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <p className="text-gray-900">
+                    {ownerInfo?.phone || "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <p className="text-gray-900">
+                    {ownerInfo?.email || "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-1">
+                    WhatsApp
+                  </label>
+                  <p className="text-gray-900">
+                    {ownerInfo?.whatsapp || "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-1">
+                    Address
+                  </label>
+                  <p className="text-gray-900">{address || "Not set"}</p>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            // Edit Mode
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Guide Name"
+                  value={guideName}
+                  onChange={(e) => setGuideName(e.target.value)}
+                  placeholder="Enter guide name"
+                  required
+                  size="lg"
+                />
 
-          <Divider />
+                <Input
+                  label="Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+66 (0) 95 102 9528"
+                  required
+                  size="lg"
+                />
 
-          {/* Contact Information Section */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-gray-900">
-              Contact Details
-            </h4>
+                <Input
+                  label="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="info@example.com"
+                  type="email"
+                  required
+                  size="lg"
+                />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+66 (0) 95 102 9528"
-                required
-                description="Primary phone number for contact"
-              />
-
-              <Input
-                label="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="info@example.com"
-                type="email"
-                required
-                description="Primary email for inquiries"
-              />
-
-              <Input
-                label="WhatsApp Number"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="+66 (0) 95 102 9528"
-                description="WhatsApp contact number (optional)"
-              />
+                <Input
+                  label="WhatsApp Number"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value)}
+                  placeholder="+66 (0) 95 102 9528"
+                  size="lg"
+                />
+              </div>
 
               <Input
                 label="Business Address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Chiang Mai, Thailand"
-                required
-                description="Business location"
+                size="lg"
               />
-            </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h5 className="font-medium text-gray-800 mb-3">
-                Contact Preview
-              </h5>
-              <div className="space-y-2 text-base">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Phone:</span>
-                  <span className="text-gray-700">{phone || "Not set"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Email:</span>
-                  <span className="text-gray-700">{email || "Not set"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">WhatsApp:</span>
-                  <span className="text-gray-700">{whatsapp || "Not set"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Address:</span>
-                  <span className="text-gray-700">{address || "Not set"}</span>
-                </div>
+              <div className="flex gap-3">
+                <Button
+                  color="primary"
+                  size="lg"
+                  startContent={<FiSave />}
+                  onPress={handleSave}
+                  isLoading={isSaving}
+                  className="flex-1">
+                  Save Changes
+                </Button>
+
+                <Button
+                  color="default"
+                  variant="bordered"
+                  size="lg"
+                  startContent={<FiX />}
+                  onPress={handleCancel}
+                  disabled={isSaving}>
+                  Cancel
+                </Button>
               </div>
             </div>
-          </div>
-
-          <Divider />
-
-          {/* Save Button */}
-          <div>
-            <Button
-              color="primary"
-              size="lg"
-              startContent={<FiSave />}
-              onPress={handleSave}
-              isLoading={isLoading}
-              className="w-full md:w-auto">
-              Save Contact Information
-            </Button>
-          </div>
+          )}
         </CardBody>
       </Card>
 
-      {/* Current Contact Display */}
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold text-gray-900">
-            Current Contact Display
-          </h3>
-        </CardHeader>
-        <CardBody>
-          <div className="bg-white border rounded-lg p-6">
-            {/* Guide Info Section */}
-            <div className="flex items-center gap-6 mb-6">
-              <Avatar
-                src={guideImage || "/owner-photo.jpg"}
-                alt={guideName || "Guide"}
-                className="w-20 h-20"
-                fallback={<FiUser size={32} />}
-              />
-              <div>
-                <h3 className="text-xl font-medium text-black">
-                  {guideName || "Mekong Border Run"}
-                </h3>
-                <p className="text-black">Licensed Tour Operator</p>
-                <p className="text-base text-black">TAT License No. 21/01279</p>
-              </div>
-            </div>
-
-            {/* Contact Details Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-base">📞</span>
-                </div>
-                <div>
-                  <h4 className="font-medium text-black">Phone</h4>
-                  <p className="text-accent-600 font-medium">
-                    {phone || "Not set"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-base">💬</span>
-                </div>
-                <div>
-                  <h4 className="font-medium text-black">WhatsApp</h4>
-                  <p className="text-accent-600 font-medium">
-                    {whatsapp || "Not set"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-base">✉️</span>
-                </div>
-                <div>
-                  <h4 className="font-medium text-black">Email</h4>
-                  <p className="text-accent-600 font-medium">
-                    {email || "Not set"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-base">📍</span>
-                </div>
-                <div>
-                  <h4 className="font-medium text-black">Location</h4>
-                  <p className="text-black">{address || "Not set"}</p>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-base text-gray-600 border-t pt-4">
-              This is how your contact information will appear on the contact
-              page.
-            </p>
-          </div>
-        </CardBody>
-      </Card>
+      {/* Loading State */}
+      {isLoading && (
+        <Card>
+          <CardBody className="text-center py-8">
+            <p className="text-gray-600">Loading contact information...</p>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 }

@@ -1,410 +1,336 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
   CardHeader,
-  Progress,
-  Chip,
-  Avatar,
   Button,
+  Tabs,
+  Tab,
+  Chip,
 } from "@heroui/react";
 import {
   FiUsers,
-  FiMessageSquare,
-  FiImage,
-  FiPackage,
-  FiTrendingUp,
   FiMail,
-  FiPhone,
-  FiStar,
-  FiMapPin,
+  FiTrendingUp,
+  FiEye,
+  FiMessageSquare,
+  FiDollarSign,
+  FiSettings,
 } from "react-icons/fi";
-import { useContentStore } from "@/store/zustand/contentStore";
-import { useReviewStore } from "@/store/zustand/reviewStore";
-import { usePackageStore } from "@/store/zustand/packageStore";
-import { useContactStore } from "@/store/zustand/contactStore";
+import { supabase, TABLES, ContactRequestRow } from "@/lib/supabase";
+import ServicePricingManager from "./ServicePricingManager";
+import ContactInfoManager from "./ContactInfoManager";
 
 interface DashboardStats {
-  totalImages: number;
-  totalReviews: number;
-  totalPackages: number;
-  averageRating: number;
-  recentActivity: ActivityItem[];
-  popularPackage: string;
-  contactRequests: number;
-}
-
-interface ActivityItem {
-  id: string;
-  type: "review" | "image" | "package" | "contact";
-  title: string;
-  description: string;
-  timestamp: string;
-  icon: React.ReactNode;
+  totalRequests: number;
+  newRequests: number;
+  monthlyVisitors: number;
+  monthlyInquiries: number;
+  conversionRate: number;
 }
 
 export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState<DashboardStats>({
-    totalImages: 0,
-    totalReviews: 0,
-    totalPackages: 0,
-    averageRating: 0,
-    recentActivity: [],
-    popularPackage: "",
-    contactRequests: 0,
+    totalRequests: 0,
+    newRequests: 0,
+    monthlyVisitors: 0,
+    monthlyInquiries: 0,
+    conversionRate: 0,
   });
+  const [recentRequests, setRecentRequests] = useState<ContactRequestRow[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>("");
 
-  const {
-    heroImages,
-    journeyImages,
-    pickupPointImages,
-    galleryImages,
-    fetchHeroImages,
-    fetchJourneyImages,
-    fetchPickupPointImages,
-    fetchGalleryImages,
-  } = useContentStore();
+  // Fetch dashboard data
+  const fetchDashboardData = async () => {
+    setIsLoading(true);
+    try {
+      // Fetch contact requests
+      const { data: requests, error: requestsError } = await supabase
+        .from(TABLES.CONTACT_REQUESTS)
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  const { reviews, fetchReviews } = useReviewStore();
-  const { packages, fetchPackages } = usePackageStore();
-  const { ownerInfo, fetchContactInfo, fetchOwnerInfo } = useContactStore();
+      if (requestsError) {
+        console.error("Contact requests error:", requestsError);
+        // If table doesn't exist, use mock data
+        if (requestsError.code === "42P01") {
+          console.log("Contact requests table doesn't exist, using mock data");
+          setStats({
+            totalRequests: 0,
+            newRequests: 0,
+            monthlyVisitors: 150,
+            monthlyInquiries: 0,
+            conversionRate: 0,
+          });
+          setRecentRequests([]);
+          setIsLoading(false);
+          return;
+        }
+        throw requestsError;
+      }
+
+      // Calculate stats
+      const totalRequests = requests?.length || 0;
+      const newRequests =
+        requests?.filter((r) => r.status === "new").length || 0;
+      const monthlyVisitors = 150; // Mock data for now
+      const monthlyInquiries =
+        requests?.filter((r) => {
+          const requestDate = new Date(r.created_at);
+          const currentDate = new Date();
+          return (
+            requestDate.getMonth() === currentDate.getMonth() &&
+            requestDate.getFullYear() === currentDate.getFullYear()
+          );
+        }).length || 0;
+
+      const conversionRate =
+        monthlyVisitors > 0 ? (monthlyInquiries / monthlyVisitors) * 100 : 0;
+
+      setStats({
+        totalRequests,
+        newRequests,
+        monthlyVisitors,
+        monthlyInquiries,
+        conversionRate,
+      });
+
+      setRecentRequests(requests?.slice(0, 5) || []);
+    } catch (err) {
+      setError("Failed to fetch dashboard data");
+      console.error("Error fetching dashboard data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Fetch all data
-    fetchHeroImages();
-    fetchJourneyImages();
-    fetchPickupPointImages();
-    fetchGalleryImages();
-    fetchReviews();
-    fetchPackages();
-    fetchContactInfo();
-    fetchOwnerInfo();
-  }, [
-    fetchHeroImages,
-    fetchJourneyImages,
-    fetchPickupPointImages,
-    fetchGalleryImages,
-    fetchReviews,
-    fetchPackages,
-    fetchContactInfo,
-    fetchOwnerInfo,
-  ]);
+    fetchDashboardData();
+  }, []);
 
-  useEffect(() => {
-    // Calculate stats
-    const totalImages =
-      heroImages.length +
-      journeyImages.length +
-      pickupPointImages.length +
-      galleryImages.length;
-    const totalReviews = reviews.length;
-    const totalPackages = packages.length;
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "new":
+        return "danger";
+      case "contacted":
+        return "warning";
+      case "confirmed":
+        return "primary";
+      case "completed":
+        return "success";
+      case "cancelled":
+        return "default";
+      default:
+        return "default";
+    }
+  };
 
-    const averageRating =
-      reviews.length > 0
-        ? reviews.reduce((sum, review) => sum + review.rating, 0) /
-          reviews.length
-        : 0;
-
-    const popularPackage =
-      packages.find((pkg) => pkg.isPopular)?.name ||
-      packages[0]?.name ||
-      "Border Run Service";
-
-    // Generate recent activity
-    const recentActivity: ActivityItem[] = [
-      {
-        id: "1",
-        type: "review",
-        title: "New Customer Review",
-        description: `${reviews[0]?.name || "Anonymous"} left a ${
-          reviews[0]?.rating || 5
-        }-star review`,
-        timestamp: "2 hours ago",
-        icon: <FiStar className="text-yellow-500" />,
-      },
-      {
-        id: "2",
-        type: "image",
-        title: "Images Updated",
-        description: `${totalImages} images are currently active`,
-        timestamp: "1 day ago",
-        icon: <FiImage className="text-blue-500" />,
-      },
-      {
-        id: "3",
-        type: "package",
-        title: "Package Pricing",
-        description: `${totalPackages} service packages available`,
-        timestamp: "2 days ago",
-        icon: <FiPackage className="text-green-500" />,
-      },
-      {
-        id: "4",
-        type: "contact",
-        title: "Contact Information",
-        description: "Owner profile and contact details updated",
-        timestamp: "3 days ago",
-        icon: <FiPhone className="text-purple-500" />,
-      },
-    ];
-
-    setStats({
-      totalImages,
-      totalReviews,
-      totalPackages,
-      averageRating,
-      recentActivity,
-      popularPackage,
-      contactRequests: Math.floor(Math.random() * 15) + 5, // Simulated
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
-  }, [
-    heroImages,
-    journeyImages,
-    pickupPointImages,
-    galleryImages,
-    reviews,
-    packages,
-  ]);
-
-  const statCards = [
-    {
-      title: "Total Images",
-      value: stats.totalImages,
-      icon: <FiImage className="text-blue-500" size={24} />,
-      color: "bg-blue-50",
-      change: "+12%",
-      changeType: "positive" as const,
-    },
-    {
-      title: "Customer Reviews",
-      value: stats.totalReviews,
-      icon: <FiMessageSquare className="text-green-500" size={24} />,
-      color: "bg-green-50",
-      change: "+8%",
-      changeType: "positive" as const,
-    },
-    {
-      title: "Service Packages",
-      value: stats.totalPackages,
-      icon: <FiPackage className="text-purple-500" size={24} />,
-      color: "bg-purple-50",
-      change: "0%",
-      changeType: "positive" as const,
-    },
-    {
-      title: "Average Rating",
-      value: stats.averageRating.toFixed(1),
-      icon: <FiStar className="text-yellow-500" size={24} />,
-      color: "bg-yellow-50",
-      change: "+0.2",
-      changeType: "positive" as const,
-    },
-  ];
+  };
 
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
-      <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <CardBody className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold mb-2">
-                Welcome back, {ownerInfo?.name || "Admin"}!
-              </h1>
-              <p className="text-blue-100">
-                Here&apos;s what&apos;s happening with your Mekong Border Run
-                business today.
-              </p>
-            </div>
-            <Avatar
-              src={ownerInfo?.avatar || "/owner-photo.jpg"}
-              alt={ownerInfo?.name || "Admin"}
-              className="w-16 h-16"
-              fallback={<FiUsers size={24} />}
-            />
-          </div>
-        </CardBody>
-      </Card>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((stat, index) => (
-          <Card key={index} className="shadow-lg">
-            <CardBody className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg ${stat.color}`}>
-                  {stat.icon}
-                </div>
-                <Chip
-                  size="sm"
-                  color={
-                    stat.changeType === "positive"
-                      ? "success"
-                      : stat.changeType === "negative"
-                      ? "danger"
-                      : "default"
-                  }
-                  variant="flat">
-                  {stat.change}
-                </Chip>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-base text-gray-600">{stat.title}</p>
-              </div>
-            </CardBody>
-          </Card>
-        ))}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p className="text-gray-600">Manage your border run service</p>
+        </div>
+        <Button
+          color="primary"
+          variant="flat"
+          startContent={<FiSettings />}
+          onPress={() => setActiveTab("settings")}>
+          Settings
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <Card className="shadow-lg">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <FiTrendingUp className="text-blue-500" />
-              <h3 className="text-lg font-semibold">Recent Activity</h3>
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 font-medium">{error}</p>
+        </div>
+      )}
+
+      <Tabs
+        selectedKey={activeTab}
+        onSelectionChange={(key) => setActiveTab(key as string)}
+        color="primary"
+        variant="underlined"
+        classNames={{
+          tabList:
+            "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+          cursor: "w-full bg-primary-500",
+          tab: "max-w-fit px-0 h-12",
+          tabContent: "group-data-[selected=true]:text-primary-600",
+        }}>
+        <Tab
+          key="overview"
+          title={
+            <div className="flex items-center space-x-2">
+              <FiTrendingUp />
+              <span>Business Overview</span>
             </div>
-          </CardHeader>
-          <CardBody>
-            <div className="space-y-4">
-              {stats.recentActivity.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50">
-                  <div className="p-2 rounded-full bg-gray-100">
-                    {activity.icon}
+          }>
+          <div className="space-y-6 mt-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardBody className="flex flex-row items-center space-x-4">
+                  <div className="p-3 bg-blue-100 rounded-full">
+                    <FiUsers className="text-blue-600" size={24} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">
-                      {activity.title}
-                    </h4>
-                    <p className="text-base text-gray-600">
-                      {activity.description}
-                    </p>
-                    <p className="text-base text-gray-400 mt-1">
-                      {activity.timestamp}
+                  <div>
+                    <p className="text-sm text-gray-600">Total Requests</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.totalRequests}
                     </p>
                   </div>
+                </CardBody>
+              </Card>
+
+              <Card>
+                <CardBody className="flex flex-row items-center space-x-4">
+                  <div className="p-3 bg-red-100 rounded-full">
+                    <FiMail className="text-red-600" size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">New Requests</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.newRequests}
+                    </p>
+                  </div>
+                </CardBody>
+              </Card>
+
+              <Card>
+                <CardBody className="flex flex-row items-center space-x-4">
+                  <div className="p-3 bg-green-100 rounded-full">
+                    <FiEye className="text-green-600" size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Monthly Visitors</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.monthlyVisitors}
+                    </p>
+                  </div>
+                </CardBody>
+              </Card>
+
+              <Card>
+                <CardBody className="flex flex-row items-center space-x-4">
+                  <div className="p-3 bg-purple-100 rounded-full">
+                    <FiTrendingUp className="text-purple-600" size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Conversion Rate</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stats.conversionRate.toFixed(1)}%
+                    </p>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
+
+            {/* Recent Contact Requests */}
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center w-full">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Recent Contact Requests
+                  </h3>
+                  <Chip color="primary" variant="flat" size="sm">
+                    {recentRequests.length} requests
+                  </Chip>
                 </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
-
-        {/* Business Overview */}
-        <Card className="shadow-lg">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <FiMapPin className="text-green-500" />
-              <h3 className="text-lg font-semibold">Business Overview</h3>
-            </div>
-          </CardHeader>
-          <CardBody className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-              <div>
-                <p className="font-medium text-green-900">Popular Package</p>
-                <p className="text-base text-green-700">{stats.popularPackage}</p>
-              </div>
-              <FiPackage className="text-green-600" size={24} />
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-              <div>
-                <p className="font-medium text-blue-900">Contact Requests</p>
-                <p className="text-base text-blue-700">This month</p>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-blue-600">
-                  {stats.contactRequests}
-                </p>
-                <FiMail className="text-blue-600 ml-auto" size={20} />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between text-base">
-                <span>Customer Satisfaction</span>
-                <span>{(stats.averageRating * 20).toFixed(0)}%</span>
-              </div>
-              <Progress
-                value={stats.averageRating * 20}
-                color="success"
-                className="max-w-full"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between text-base">
-                <span>Content Completeness</span>
-                <span>
-                  {Math.min(
-                    100,
-                    (stats.totalImages +
-                      stats.totalReviews +
-                      stats.totalPackages) *
-                      5
-                  )}
-                  %
-                </span>
-              </div>
-              <Progress
-                value={Math.min(
-                  100,
-                  (stats.totalImages +
-                    stats.totalReviews +
-                    stats.totalPackages) *
-                    5
+              </CardHeader>
+              <CardBody>
+                {isLoading ? (
+                  <p className="text-gray-600 text-center py-4">
+                    Loading requests...
+                  </p>
+                ) : recentRequests.length === 0 ? (
+                  <p className="text-gray-600 text-center py-4">
+                    No contact requests yet
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {recentRequests.map((request) => (
+                      <div
+                        key={request.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="font-medium text-gray-900">
+                              {request.name}
+                            </h4>
+                            <Chip
+                              color={getStatusColor(request.status)}
+                              size="sm"
+                              variant="flat">
+                              {request.status}
+                            </Chip>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-1">
+                            {request.email}
+                          </p>
+                          <p className="text-sm text-gray-500 line-clamp-2">
+                            {request.message}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500">
+                            {formatDate(request.created_at)}
+                          </p>
+                          {request.number_of_people && (
+                            <p className="text-sm text-gray-600">
+                              {request.number_of_people} people
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
-                color="primary"
-                className="max-w-full"
-              />
-            </div>
-          </CardBody>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <h3 className="text-lg font-semibold">Quick Actions</h3>
-        </CardHeader>
-        <CardBody>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button
-              variant="flat"
-              color="primary"
-              startContent={<FiImage />}
-              className="h-16">
-              Manage Images
-            </Button>
-            <Button
-              variant="flat"
-              color="success"
-              startContent={<FiMessageSquare />}
-              className="h-16">
-              View Reviews
-            </Button>
-            <Button
-              variant="flat"
-              color="warning"
-              startContent={<FiPackage />}
-              className="h-16">
-              Edit Packages
-            </Button>
-            <Button
-              variant="flat"
-              color="secondary"
-              startContent={<FiUsers />}
-              className="h-16">
-              Owner Profile
-            </Button>
+              </CardBody>
+            </Card>
           </div>
-        </CardBody>
-      </Card>
+        </Tab>
+
+        <Tab
+          key="pricing"
+          title={
+            <div className="flex items-center space-x-2">
+              <FiDollarSign />
+              <span>Service Pricing</span>
+            </div>
+          }>
+          <div className="mt-6">
+            <ServicePricingManager />
+          </div>
+        </Tab>
+
+        <Tab
+          key="contact"
+          title={
+            <div className="flex items-center space-x-2">
+              <FiMessageSquare />
+              <span>Contact Info</span>
+            </div>
+          }>
+          <div className="mt-6">
+            <ContactInfoManager />
+          </div>
+        </Tab>
+      </Tabs>
     </div>
   );
 }

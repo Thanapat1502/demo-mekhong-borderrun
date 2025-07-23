@@ -27,6 +27,12 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const isAdmin = pathname.startsWith("/admin");
+
+  // Close menu when pathname changes (page switch)
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,23 +43,21 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
   // For non-home pages, always use white background
-  const navbarBg = scrolled
-    ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
-    : "bg-transparent";
+  const navbarBg =
+    isAdmin || scrolled
+      ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
+      : "bg-transparent";
 
-  const textColor = scrolled ? "text-primary-800" : "text-white";
-  const buttonStyle = scrolled
-    ? "bg-accent-500 text-white hover:bg-accent-600"
-    : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm";
+  const textColor = isAdmin || scrolled ? "text-primary-800" : "text-white";
+  const buttonStyle =
+    isAdmin || scrolled
+      ? "bg-accent-500 text-white hover:bg-accent-600"
+      : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm";
 
   return (
     <Navbar
+      isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${navbarBg}`}
       maxWidth="xl"
@@ -75,13 +79,16 @@ export default function Navigation() {
               height={32}
               className="object-contain flex-shrink-0"
             />
-            <span className="hidden xs:inline text-xl sm:text-2xl">
+            <span
+              className={`hidden xs:inline text-xl sm:text-2xl font-semibold ${textColor}`}>
               Mekong{" "}
               <span className="text-accent-500 font-extralight">
                 Border Run
               </span>
             </span>
-            <span className="xs:hidden text-lg">Mekong</span>
+            <span className={`xs:hidden text-lg font-semibold ${textColor}`}>
+              Mekong
+            </span>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -95,7 +102,7 @@ export default function Navigation() {
               className={`font-light text-lg transition-all duration-300 ${
                 pathname === item.href
                   ? "text-accent-500 border-b-2 border-accent-500"
-                  : scrolled
+                  : isAdmin || scrolled
                   ? "text-primary-700 hover:text-accent-600"
                   : "text-white hover:text-accent-300"
               }`}>
@@ -110,7 +117,7 @@ export default function Navigation() {
           <Button
             as="a"
             href="tel:+66951029528"
-            className={`font-light rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base sm:text-base ${buttonStyle}`}>
+            className={`font-medium rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base sm:text-base text-white ${buttonStyle}`}>
             <span className="hidden sm:inline">Call Now</span>
             <span className="sm:hidden">Call</span>
           </Button>
@@ -119,7 +126,7 @@ export default function Navigation() {
           <Button
             as="a"
             href="tel:+66951029528"
-            className={`font-light rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base ${buttonStyle}`}
+            className={`font-medium rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base text-white ${buttonStyle}`}
             size="sm">
             Call
           </Button>

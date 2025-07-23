@@ -90,7 +90,7 @@ export default function FloatingContactButton({
         }`}>
         <div className="bg-primary-800 rounded-2xl shadow-2xl border border-primary-700 p-4 min-w-[240px]">
           {/* Bubble Arrow */}
-          <div className="absolute bottom-0 left-6 transform translate-y-full">
+          <div className="absolute bottom-0 left-6 sm:left-6 sm:right-auto transform translate-y-full">
             <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800"></div>
             <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800 absolute -top-px"></div>
           </div>
