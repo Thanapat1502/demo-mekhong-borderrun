@@ -84,7 +84,7 @@ export default function LoginForm() {
               <h2 className="text-2xl font-semibold text-gray-900">
                 Welcome Back
               </h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 text-base mt-1">
                 Sign in to access the admin panel
               </p>
             </div>
@@ -94,7 +94,7 @@ export default function LoginForm() {
             {/* Error Message */}
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">{error}</p>
+                <p className="text-red-600 text-base">{error}</p>
               </div>
             )}
 
@@ -149,7 +149,7 @@ export default function LoginForm() {
 
             {/* Additional Info */}
             <div className="text-center">
-              <p className="text-xs text-gray-500">
+              <p className="text-base text-gray-500">
                 For security purposes, only authorized administrators can access
                 this panel.
               </p>
@@ -159,7 +159,7 @@ export default function LoginForm() {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">
+          <p className="text-base text-gray-500">
             © 2024 Mekong Border Run. All rights reserved.
           </p>
         </div>

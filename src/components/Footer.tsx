@@ -27,7 +27,7 @@ export default function Footer() {
               Professional border run service from Chiang Mai to Laos border.
               Licensed and reliable.
             </p>
-            <p className="text-sm text-gray-500">TAT License No. 21/01279</p>
+            <p className="text-base text-gray-500">TAT License No. 21/01279</p>
           </div>
 
           <div>
@@ -94,10 +94,10 @@ export default function Footer() {
         <Divider className="my-8" />
 
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-base">
             © 2024 Mekong Border Run. All rights reserved.
           </p>
-          <p className="text-gray-500 text-sm mt-2 md:mt-0">
+          <p className="text-gray-500 text-base mt-2 md:mt-0">
             Licensed Tour Operator - TAT License No. 21/01279
           </p>
         </div>

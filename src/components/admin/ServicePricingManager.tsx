@@ -80,7 +80,7 @@ export default function ServicePricingManager() {
           <CardBody className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
+                <label className="block text-base font-medium text-gray-600 mb-1">
                   Package Name
                 </label>
                 <p className="text-lg font-medium text-gray-900">
@@ -88,7 +88,7 @@ export default function ServicePricingManager() {
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-base font-medium text-gray-700 mb-1">
                   Current Price
                 </label>
                 <p className="text-2xl font-bold text-accent-600">
@@ -99,7 +99,7 @@ export default function ServicePricingManager() {
             </div>
             {currentPackage.description && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-base font-medium text-gray-700 mb-1">
                   Description
                 </label>
                 <p className="text-gray-600">{currentPackage.description}</p>
@@ -138,7 +138,7 @@ export default function ServicePricingManager() {
             <div className="text-3xl font-bold text-accent-600">
               {price ? parseFloat(price).toLocaleString() : "0"} THB
             </div>
-            <p className="text-gray-600 text-sm mt-1">
+            <p className="text-gray-600 text-base mt-1">
               This price will be displayed across the website
             </p>
           </div>

@@ -213,7 +213,7 @@ export default function ImageMigrationTool() {
       <CardBody className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-2">Image Migration Tool</h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 text-base">
             Migrate local images to Supabase Storage. This will upload your local images 
             to Supabase and update the database records to use the new URLs.
           </p>
@@ -223,22 +223,22 @@ export default function ImageMigrationTool() {
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center p-3 bg-blue-50 rounded-lg">
             <div className="text-2xl font-bold text-blue-600">{localImages.length}</div>
-            <div className="text-sm text-blue-600">Local Images</div>
+            <div className="text-base text-blue-600">Local Images</div>
           </div>
           <div className="text-center p-3 bg-green-50 rounded-lg">
             <div className="text-2xl font-bold text-green-600">{successCount}</div>
-            <div className="text-sm text-green-600">Migrated</div>
+            <div className="text-base text-green-600">Migrated</div>
           </div>
           <div className="text-center p-3 bg-red-50 rounded-lg">
             <div className="text-2xl font-bold text-red-600">{errorCount}</div>
-            <div className="text-sm text-red-600">Errors</div>
+            <div className="text-base text-red-600">Errors</div>
           </div>
         </div>
 
         {/* Progress */}
         {isRunning && (
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-base">
               <span>Migration Progress</span>
               <span>{Math.round(progress)}%</span>
             </div>
@@ -266,7 +266,7 @@ export default function ImageMigrationTool() {
               {results.map((result) => (
                 <div
                   key={result.id}
-                  className={`flex items-center gap-2 p-2 rounded text-sm ${
+                  className={`flex items-center gap-2 p-2 rounded text-base ${
                     result.status === "success"
                       ? "bg-green-50 text-green-700"
                       : result.status === "error"
@@ -281,10 +281,10 @@ export default function ImageMigrationTool() {
                   <div className="flex-1 min-w-0">
                     <div className="truncate">{result.originalUrl}</div>
                     {result.error && (
-                      <div className="text-xs text-red-600 mt-1">{result.error}</div>
+                      <div className="text-base text-red-600 mt-1">{result.error}</div>
                     )}
                     {result.newUrl && (
-                      <div className="text-xs text-green-600 mt-1 truncate">→ {result.newUrl}</div>
+                      <div className="text-base text-green-600 mt-1 truncate">→ {result.newUrl}</div>
                     )}
                   </div>
                 </div>

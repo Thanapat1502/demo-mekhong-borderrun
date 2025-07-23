@@ -194,7 +194,7 @@ export default function AdminPage() {
 
               <div className="flex items-center gap-3">
                 {/* User Info */}
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-base text-gray-600">
                   <FiUser />
                   <span>{user?.email}</span>
                 </div>
@@ -294,7 +294,7 @@ export default function AdminPage() {
                       classNames={{
                         tabList: "bg-gray-100 p-1 rounded-xl",
                         cursor: "bg-accent-500",
-                        tab: "px-4 py-2 text-sm font-medium",
+                        tab: "px-4 py-2 text-base font-medium",
                         tabContent: "group-data-[selected=true]:text-white",
                       }}>
                       {imageCategories.map((category) => (
@@ -303,7 +303,7 @@ export default function AdminPage() {
                           title={
                             <div className="flex items-center gap-2">
                               <span>{category.label}</span>
-                              <span className="group-data-[selected=true]:bg-white/20 group-data-[selected=true]:text-white bg-gray-200 text-gray-600 px-2 py-1 rounded-full text-xs">
+                              <span className="group-data-[selected=true]:bg-white/20 group-data-[selected=true]:text-white bg-gray-200 text-gray-600 px-2 py-1 rounded-full text-base">
                                 {category.count}
                               </span>
                             </div>

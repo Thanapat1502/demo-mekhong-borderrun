@@ -109,13 +109,13 @@ export default function FloatingContactButton({
                     animationDelay: isOpen ? `${index * 50}ms` : "0ms",
                   }}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center text-primary-800 flex-shrink-0 group-hover:scale-110 transition-all duration-200">
-                    <IconComponent className="text-sm font-bold text-accent-400" />
+                    <IconComponent className="text-base font-bold text-accent-400" />
                   </div>
                   <div className="flex flex-col items-start flex-1 min-w-0">
-                    <span className="font-medium text-sm text-accent-400 group-hover:text-accent-300 leading-tight transition-colors duration-200">
+                    <span className="font-medium text-base text-accent-400 group-hover:text-accent-300 leading-tight transition-colors duration-200">
                       {option.label}
                     </span>
-                    <span className="text-xs text-accent-400/70 group-hover:text-accent-300/70 leading-tight truncate w-full transition-colors duration-200">
+                    <span className="text-base text-accent-400/70 group-hover:text-accent-300/70 leading-tight truncate w-full transition-colors duration-200">
                       {option.sublabel}
                     </span>
                   </div>

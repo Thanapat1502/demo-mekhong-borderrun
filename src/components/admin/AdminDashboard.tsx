@@ -253,7 +253,7 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-sm text-gray-600">{stat.title}</p>
+                <p className="text-base text-gray-600">{stat.title}</p>
               </div>
             </CardBody>
           </Card>
@@ -282,10 +282,10 @@ export default function AdminDashboard() {
                     <h4 className="font-medium text-gray-900">
                       {activity.title}
                     </h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-base text-gray-600">
                       {activity.description}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-base text-gray-400 mt-1">
                       {activity.timestamp}
                     </p>
                   </div>
@@ -307,7 +307,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
                 <p className="font-medium text-green-900">Popular Package</p>
-                <p className="text-sm text-green-700">{stats.popularPackage}</p>
+                <p className="text-base text-green-700">{stats.popularPackage}</p>
               </div>
               <FiPackage className="text-green-600" size={24} />
             </div>
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
               <div>
                 <p className="font-medium text-blue-900">Contact Requests</p>
-                <p className="text-sm text-blue-700">This month</p>
+                <p className="text-base text-blue-700">This month</p>
               </div>
               <div className="text-right">
                 <p className="text-2xl font-bold text-blue-600">
@@ -326,7 +326,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-base">
                 <span>Customer Satisfaction</span>
                 <span>{(stats.averageRating * 20).toFixed(0)}%</span>
               </div>
@@ -338,7 +338,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-base">
                 <span>Content Completeness</span>
                 <span>
                   {Math.min(

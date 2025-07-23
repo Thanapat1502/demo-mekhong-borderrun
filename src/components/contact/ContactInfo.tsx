@@ -62,7 +62,7 @@ export default function ContactInfo() {
             <p className="text-black">
               {ownerInfo?.title || "Licensed Tour Operator"}
             </p>
-            <p className="text-sm text-black">
+            <p className="text-base text-black">
               {businessInfo?.tatLicense || "TAT License No. 21/01279"}
             </p>
           </div>

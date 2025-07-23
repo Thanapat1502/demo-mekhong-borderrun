@@ -27,7 +27,6 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,17 +38,14 @@ export default function Navigation() {
   }, []);
 
   // For non-home pages, always use white background
-  const navbarBg = !isHomePage
-    ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
-    : scrolled
+  const navbarBg = scrolled
     ? "bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm"
     : "bg-transparent";
 
-  const textColor = !isHomePage || scrolled ? "text-primary-800" : "text-white";
-  const buttonStyle =
-    !isHomePage || scrolled
-      ? "bg-accent-500 text-white hover:bg-accent-600"
-      : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm";
+  const textColor = scrolled ? "text-primary-800" : "text-white";
+  const buttonStyle = scrolled
+    ? "bg-accent-500 text-white hover:bg-accent-600"
+    : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm";
 
   return (
     <Navbar
@@ -60,7 +56,7 @@ export default function Navigation() {
       <NavbarContent className="flex-shrink-0">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden mr-2"
+          className={`sm:hidden mr-2 ${textColor}`}
         />
         <NavbarBrand className="flex-shrink-0 max-w-none">
           <Link
@@ -94,7 +90,7 @@ export default function Navigation() {
               className={`font-light text-lg transition-all duration-300 ${
                 pathname === item.href
                   ? "text-accent-500 border-b-2 border-accent-500"
-                  : !isHomePage || scrolled
+                  : scrolled
                   ? "text-primary-700 hover:text-accent-600"
                   : "text-white hover:text-accent-300"
               }`}>
@@ -109,7 +105,7 @@ export default function Navigation() {
           <Button
             as="a"
             href="tel:+66951029528"
-            className={`font-light rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base ${buttonStyle}`}>
+            className={`font-light rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base sm:text-base ${buttonStyle}`}>
             <span className="hidden sm:inline">Call Now</span>
             <span className="sm:hidden">Call</span>
           </Button>
@@ -118,7 +114,7 @@ export default function Navigation() {
           <Button
             as="a"
             href="tel:+66951029528"
-            className={`font-light rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-xs ${buttonStyle}`}
+            className={`font-light rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base ${buttonStyle}`}
             size="sm">
             Call
           </Button>

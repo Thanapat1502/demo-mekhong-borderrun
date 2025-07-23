@@ -230,7 +230,7 @@ export default function CustomerReviewManager() {
                       />
                       <div>
                         <p className="font-medium">{review.name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-base text-gray-500">
                           {review.country}
                         </p>
                       </div>
@@ -239,7 +239,7 @@ export default function CustomerReviewManager() {
                   <TableCell>
                     <div className="flex items-center gap-1">
                       {renderStars(review.rating)}
-                      <span className="ml-1 text-sm text-gray-600">
+                      <span className="ml-1 text-base text-gray-600">
                         ({review.rating})
                       </span>
                     </div>
@@ -386,7 +386,7 @@ export default function CustomerReviewManager() {
               />
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-base font-medium mb-2">
                   Customer Avatar
                 </label>
                 <SupabaseImageUpload

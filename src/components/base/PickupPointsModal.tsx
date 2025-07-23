@@ -110,8 +110,8 @@ export default function PickupPointsModal({
                     <h3 className="font-medium text-black mb-2">
                       {point.title}
                     </h3>
-                    <p className="text-sm text-black">{point.description}</p>
-                    <p className="text-xs text-gray-600 mt-1">
+                    <p className="text-base text-black">{point.description}</p>
+                    <p className="text-base text-gray-600 mt-1">
                       {point.location}
                     </p>
                   </CardBody>

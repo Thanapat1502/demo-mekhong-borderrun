@@ -105,8 +105,8 @@ export default function ContactInfoManager() {
         <CardHeader className="flex gap-3">
           <FiUser className="text-2xl" />
           <div className="flex flex-col">
-            <p className="text-md font-semibold">Guide Information</p>
-            <p className="text-small text-default-500">
+            <p className="text-base font-semibold">Guide Information</p>
+            <p className="text-baseall text-default-500">
               Manage guide profile displayed on contact page
             </p>
           </div>
@@ -121,7 +121,7 @@ export default function ContactInfoManager() {
               fallback={<FiUser size={48} />}
             />
             <div className="w-full max-w-md">
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-base font-medium mb-2">
                 Guide Photo
               </label>
               <SupabaseImageUpload
@@ -130,7 +130,7 @@ export default function ContactInfoManager() {
                 onImageUploaded={handleImageUpload}
                 onImageRemoved={handleImageRemove}
               />
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-base text-gray-500 mt-2">
                 This photo will be displayed on the contact page. Recommended
                 size: 400x400px
               </p>
@@ -166,7 +166,7 @@ export default function ContactInfoManager() {
                   <p className="font-medium text-gray-900">
                     {guideName || "Guide Name"}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-base text-gray-600">
                     Licensed Tour Operator
                   </p>
                 </div>
@@ -224,7 +224,7 @@ export default function ContactInfoManager() {
               <h5 className="font-medium text-gray-800 mb-3">
                 Contact Preview
               </h5>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-2 text-base">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Phone:</span>
                   <span className="text-gray-700">{phone || "Not set"}</span>
@@ -284,7 +284,7 @@ export default function ContactInfoManager() {
                   {guideName || "Mekong Border Run"}
                 </h3>
                 <p className="text-black">Licensed Tour Operator</p>
-                <p className="text-sm text-black">TAT License No. 21/01279</p>
+                <p className="text-base text-black">TAT License No. 21/01279</p>
               </div>
             </div>
 
@@ -292,7 +292,7 @@ export default function ContactInfoManager() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-sm">📞</span>
+                  <span className="text-accent-600 text-base">📞</span>
                 </div>
                 <div>
                   <h4 className="font-medium text-black">Phone</h4>
@@ -304,7 +304,7 @@ export default function ContactInfoManager() {
 
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-sm">💬</span>
+                  <span className="text-accent-600 text-base">💬</span>
                 </div>
                 <div>
                   <h4 className="font-medium text-black">WhatsApp</h4>
@@ -316,7 +316,7 @@ export default function ContactInfoManager() {
 
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-sm">✉️</span>
+                  <span className="text-accent-600 text-base">✉️</span>
                 </div>
                 <div>
                   <h4 className="font-medium text-black">Email</h4>
@@ -328,7 +328,7 @@ export default function ContactInfoManager() {
 
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
-                  <span className="text-accent-600 text-sm">📍</span>
+                  <span className="text-accent-600 text-base">📍</span>
                 </div>
                 <div>
                   <h4 className="font-medium text-black">Location</h4>
@@ -337,7 +337,7 @@ export default function ContactInfoManager() {
               </div>
             </div>
 
-            <p className="text-sm text-gray-600 border-t pt-4">
+            <p className="text-base text-gray-600 border-t pt-4">
               This is how your contact information will appear on the contact
               page.
             </p>

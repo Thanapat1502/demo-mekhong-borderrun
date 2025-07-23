@@ -146,7 +146,7 @@ export default function TestSupabase() {
                 </div>
 
                 {result.data && (
-                  <div className="mt-3 p-3 bg-gray-100 rounded text-sm">
+                  <div className="mt-3 p-3 bg-gray-100 rounded text-base">
                     <pre className="whitespace-pre-wrap">
                       {JSON.stringify(result.data, null, 2)}
                     </pre>
@@ -158,7 +158,7 @@ export default function TestSupabase() {
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold text-blue-900 mb-2">Next Steps:</h3>
-            <ul className="text-blue-800 space-y-1 text-sm">
+            <ul className="text-blue-800 space-y-1 text-base">
               <li>
                 • If all tests pass: Your Supabase integration is working! 🎉
               </li>

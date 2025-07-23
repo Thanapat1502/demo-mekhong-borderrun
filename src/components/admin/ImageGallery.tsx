@@ -162,14 +162,14 @@ export default function ImageGallery({
 
               {/* Image Info */}
               <div className="p-3">
-                <h4 className="text-sm font-medium text-black truncate">
+                <h4 className="text-base font-medium text-black truncate">
                   {image.name}
                 </h4>
                 {image.size && (
-                  <p className="text-xs text-gray-500 mt-1">{image.size}</p>
+                  <p className="text-base text-gray-500 mt-1">{image.size}</p>
                 )}
                 {image.uploadDate && (
-                  <p className="text-xs text-gray-500">{image.uploadDate}</p>
+                  <p className="text-base text-gray-500">{image.uploadDate}</p>
                 )}
               </div>
             </CardBody>

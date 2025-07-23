@@ -102,7 +102,7 @@ export default function ImageUpload({
               <h3 className="text-lg font-medium text-gray-800 mb-2">
                 Drop images here or click to upload
               </h3>
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-gray-600 text-base mb-4">
                 Supports JPG, PNG, WebP up to 10MB each
               </p>
               <input
@@ -149,7 +149,7 @@ export default function ImageUpload({
                   onPress={() => removeFile(index)}>
                   <FiX />
                 </Button>
-                <p className="text-xs text-gray-600 mt-1 truncate">
+                <p className="text-base text-gray-600 mt-1 truncate">
                   {file.name}
                 </p>
               </div>

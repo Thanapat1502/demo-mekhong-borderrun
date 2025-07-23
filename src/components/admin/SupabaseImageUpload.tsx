@@ -130,7 +130,7 @@ export default function SupabaseImageUpload({
           `}>
           <FiImage className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <p className="text-gray-600 mb-2">Click to upload image</p>
-          <p className="text-sm text-gray-500">PNG, JPG, WEBP up to 5MB</p>
+          <p className="text-base text-gray-500">PNG, JPG, WEBP up to 5MB</p>
         </div>
       )}
 
@@ -163,7 +163,7 @@ export default function SupabaseImageUpload({
       {/* Upload Progress */}
       {uploadProgress && (
         <div className="space-y-2">
-          <div className="flex justify-between text-sm text-gray-600">
+          <div className="flex justify-between text-base text-gray-600">
             <span>Uploading...</span>
             <span>{Math.round(uploadProgress.percentage)}%</span>
           </div>
@@ -179,7 +179,7 @@ export default function SupabaseImageUpload({
       {/* Error Message */}
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600 text-sm">{error}</p>
+          <p className="text-red-600 text-base">{error}</p>
         </div>
       )}
 

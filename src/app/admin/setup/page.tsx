@@ -78,7 +78,7 @@ export default function AdminSetupPage() {
               <h2 className="text-xl font-semibold text-gray-900">
                 Admin User Setup
               </h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 text-base mt-1">
                 Create the admin user for the management panel
               </p>
             </div>
@@ -90,7 +90,7 @@ export default function AdminSetupPage() {
               <h3 className="font-medium text-gray-900 mb-3">
                 Admin Credentials
               </h3>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-2 text-base">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Email:</span>
                   <span className="font-mono text-gray-900">{ADMIN_EMAIL}</span>
@@ -120,7 +120,7 @@ export default function AdminSetupPage() {
                   )}
                   {setupStatus === "error" && <FiX className="text-red-600" />}
                   <p
-                    className={`text-sm ${
+                    className={`text-base ${
                       setupStatus === "success"
                         ? "text-green-600"
                         : setupStatus === "error"
@@ -149,7 +149,7 @@ export default function AdminSetupPage() {
             {/* Instructions */}
             <div className="text-center space-y-3">
               <h4 className="font-medium text-gray-900">Next Steps</h4>
-              <div className="text-sm text-gray-600 space-y-1">
+              <div className="text-base text-gray-600 space-y-1">
                 <p>1. Click &quot;Create Admin User&quot; above</p>
                 <p>
                   2. Go to{" "}
@@ -163,7 +163,7 @@ export default function AdminSetupPage() {
 
             {/* Security Note */}
             <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg">
-              <p className="text-xs text-yellow-800">
+              <p className="text-base text-yellow-800">
                 <strong>Security Note:</strong> This setup page should be
                 removed or protected in production. The admin credentials are
                 displayed here for initial setup only.
@@ -174,7 +174,7 @@ export default function AdminSetupPage() {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">
+          <p className="text-base text-gray-500">
             © 2024 Mekong Border Run. All rights reserved.
           </p>
         </div>

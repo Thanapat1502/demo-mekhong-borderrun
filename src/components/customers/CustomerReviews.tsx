@@ -40,7 +40,7 @@ export default function CustomerReviews(props: {
                   />
                   <div>
                     <h3 className="font-medium text-black">{review.name}</h3>
-                    <p className="text-sm text-black">{review.country}</p>
+                    <p className="text-base text-black">{review.country}</p>
                   </div>
                 </div>
 
@@ -58,7 +58,7 @@ export default function CustomerReviews(props: {
                   &quot;{review.review}&quot;
                 </p>
 
-                <div className="text-sm text-black">
+                <div className="text-base text-black">
                   {new Date(review.date).toLocaleDateString()}
                 </div>
               </CardBody>
