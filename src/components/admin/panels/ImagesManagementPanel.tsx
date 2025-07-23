@@ -21,8 +21,8 @@ interface ImageDataItem {
   id: string;
   src: string;
   name: string;
-  size: string;
-  uploadDate: string;
+  size?: string;
+  uploadDate?: string;
 }
 
 interface ImageData {
@@ -91,7 +91,7 @@ export default function ImagesManagementPanel() {
         uploadDate: "2024-01-18",
       })),
     });
-  }, [heroImages, journeyImages, pickupPointImages, galleryImages]);
+  }, [journeyImages, pickupPointImages, galleryImages]);
 
   const imageCategories = [
     { id: "hero", label: "Hero Images", count: imageData.hero.length },
@@ -106,8 +106,8 @@ export default function ImagesManagementPanel() {
     // TODO: Implement actual upload logic
   };
 
-  const handleImageEdit = (imageId: string) => {
-    console.log("Editing image:", imageId);
+  const handleImageEdit = (image: ImageDataItem) => {
+    console.log("Editing image:", image);
     // TODO: Implement edit functionality
   };
 
@@ -116,8 +116,8 @@ export default function ImagesManagementPanel() {
     // TODO: Implement delete functionality
   };
 
-  const handleImageView = (imageId: string) => {
-    console.log("Viewing image:", imageId);
+  const handleImageView = (image: ImageDataItem) => {
+    console.log("Viewing image:", image);
     // TODO: Implement view functionality
   };
 
@@ -125,9 +125,7 @@ export default function ImagesManagementPanel() {
     <Card className="shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Manage Images
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800">Manage Images</h2>
           <Button
             className="bg-accent-500 text-white hover:bg-accent-600"
             startContent={<FiPlus />}
@@ -147,9 +145,7 @@ export default function ImagesManagementPanel() {
         {/* Category Tabs */}
         <Tabs
           selectedKey={activeImageCategory}
-          onSelectionChange={(key) =>
-            setActiveImageCategory(key as string)
-          }
+          onSelectionChange={(key) => setActiveImageCategory(key as string)}
           className="mb-6"
           color="primary"
           variant="solid"
@@ -189,9 +185,7 @@ export default function ImagesManagementPanel() {
                   </h3>
                   <ImageGallery
                     images={
-                      imageData[
-                        activeImageCategory as keyof typeof imageData
-                      ]
+                      imageData[activeImageCategory as keyof typeof imageData]
                     }
                     onEdit={handleImageEdit}
                     onDelete={handleImageDelete}

@@ -83,16 +83,15 @@ export default function FloatingContactButton({
       className={`fixed bottom-6 right-6 sm:bottom-6 sm:right-6 z-50 ${className}`}>
       {/* Bubble Window Menu */}
       <div
-        className={`mb-4 transition-all duration-500 transform ${
+        className={`absolute bottom-full right-0 mb-4 transition-all duration-500 transform ${
           isOpen
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 translate-y-4 scale-95 pointer-events-none"
         }`}>
-        <div className="bg-primary-800 rounded-2xl shadow-2xl border border-primary-700 p-4 min-w-[240px]">
+        <div className="bg-primary-800 rounded-2xl shadow-2xl border border-primary-700 p-4 min-w-[240px] relative">
           {/* Bubble Arrow */}
-          <div className="absolute bottom-0 left-6 sm:left-6 sm:right-auto transform translate-y-full">
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800"></div>
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary-800 absolute -top-px"></div>
+          <div className="absolute top-full right-6 transform">
+            <div className="w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary-800"></div>
           </div>
 
           {/* Contact Options */}

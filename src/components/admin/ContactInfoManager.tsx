@@ -8,7 +8,6 @@ import {
   Button,
   Input,
   Avatar,
-  Divider,
 } from "@heroui/react";
 import { FiSave, FiUser, FiEdit, FiX } from "react-icons/fi";
 import { supabase, TABLES, ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
