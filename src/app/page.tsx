@@ -55,10 +55,13 @@ const ContactSection = dynamic(
   }
 );
 
-const CTASection = dynamic(() => import("@/components/home/CTASection"), {
-  loading: () => <LoadingPlaceholder height="h-32" />,
-  ssr: false,
-});
+const SharedCTASection = dynamic(
+  () => import("@/components/shared/SharedCTASection"),
+  {
+    loading: () => <LoadingPlaceholder height="h-32" />,
+    ssr: false,
+  }
+);
 
 // Custom hook for intersection observer
 const useIntersectionObserver = (threshold = 0.1) => {
@@ -174,7 +177,12 @@ export default function Home() {
 
       {/* CTA Section - Lazy load */}
       <LazySection fallback={<LoadingPlaceholder height="h-32" />}>
-        <CTASection />
+        <SharedCTASection
+          subtitle="Join hundreds of satisfied travelers who trust us with their visa extension needs"
+          backgroundColor="bg-primary-900">
+          Ready for Your
+          <span className="block text-accent-400">Border Run?</span>
+        </SharedCTASection>
       </LazySection>
     </div>
   );

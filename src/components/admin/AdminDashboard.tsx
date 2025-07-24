@@ -20,6 +20,10 @@ import {
   FiSettings,
 } from "react-icons/fi";
 import { supabase, TABLES, ContactRequestRow } from "@/lib/supabase";
+import StatusDropdown, {
+  DEFAULT_CONTACT_STATUS_OPTIONS,
+  useStatusManager,
+} from "@/components/admin/StatusDropdown";
 import ServicePricingManager from "./ServicePricingManager";
 import ContactInfoManager from "./ContactInfoManager";
 
@@ -43,6 +47,31 @@ export default function AdminDashboard() {
   const [recentRequests, setRecentRequests] = useState<ContactRequestRow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
+
+  // Status manager for handling status updates
+  const { updateStatus, isLoading: isStatusLoading } = useStatusManager(
+    {},
+    async (requestId: string, newStatus: string) => {
+      const { error } = await supabase
+        .from(TABLES.CONTACT_REQUESTS)
+        .update({
+          status: newStatus,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", requestId);
+
+      if (error) throw error;
+
+      // Update local state
+      setRecentRequests((prev) =>
+        prev.map((request) =>
+          request.id === requestId
+            ? { ...request, status: newStatus as ContactRequestRow["status"] }
+            : request
+        )
+      );
+    }
+  );
 
   // Fetch dashboard data
   const fetchDashboardData = async () => {
@@ -123,66 +152,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchDashboardData();
   }, []);
-
-  const getStatusColor = (status: string, createdAt: string) => {
-    // Check if request is new (created within 3 days)
-    const requestDate = new Date(createdAt);
-    const currentDate = new Date();
-    const daysDifference =
-      (currentDate.getTime() - requestDate.getTime()) / (1000 * 3600 * 24);
-
-    if (daysDifference <= 3 && status === "new") {
-      return "danger"; // New status for recent requests
-    }
-
-    switch (status) {
-      case "new":
-        return "warning"; // Older new requests
-      case "contacted":
-        return "primary";
-      case "confirmed":
-        return "success";
-      case "completed":
-        return "success";
-      case "cancelled":
-        return "default";
-      default:
-        return "default";
-    }
-  };
-
-  const getStatusLabel = (status: string, createdAt: string) => {
-    const requestDate = new Date(createdAt);
-    const currentDate = new Date();
-    const daysDifference =
-      (currentDate.getTime() - requestDate.getTime()) / (1000 * 3600 * 24);
-
-    if (daysDifference <= 3 && status === "new") {
-      return "new"; // Show as "new" for recent requests
-    }
-
-    return status;
-  };
-
-  const updateRequestStatus = async (requestId: string, newStatus: string) => {
-    try {
-      const { error } = await supabase
-        .from(TABLES.CONTACT_REQUESTS)
-        .update({
-          status: newStatus,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", requestId);
-
-      if (error) throw error;
-
-      // Refresh the data
-      await fetchDashboardData();
-    } catch (err) {
-      console.error("Error updating status:", err);
-      setError("Failed to update request status");
-    }
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -327,18 +296,17 @@ export default function AdminDashboard() {
                             <h4 className="font-medium text-gray-900">
                               {request.name}
                             </h4>
-                            <Chip
-                              color={getStatusColor(
-                                request.status,
-                                request.created_at
-                              )}
+                            <StatusDropdown
+                              className="text-gray-700"
+                              currentStatus={request.status}
+                              statusOptions={DEFAULT_CONTACT_STATUS_OPTIONS}
+                              onStatusChange={(newStatus) =>
+                                updateStatus(request.id, newStatus)
+                              }
+                              isLoading={isStatusLoading(request.id)}
                               size="sm"
-                              variant="flat">
-                              {getStatusLabel(
-                                request.status,
-                                request.created_at
-                              )}
-                            </Chip>
+                              showCurrentAsChip={true}
+                            />
                           </div>
                           <p className="text-sm text-gray-600 mb-1">
                             {request.email}
@@ -356,46 +324,6 @@ export default function AdminDashboard() {
                           <p className="text-sm text-gray-500">
                             {formatDate(request.created_at)}
                           </p>
-                          {request.number_of_people && (
-                            <p className="text-sm text-gray-600">
-                              {request.number_of_people} people
-                            </p>
-                          )}
-                          <div className="flex gap-1 justify-end">
-                            {request.status !== "confirmed" && (
-                              <Button
-                                size="sm"
-                                color="success"
-                                variant="flat"
-                                onPress={() =>
-                                  updateRequestStatus(request.id, "confirmed")
-                                }>
-                                Confirm
-                              </Button>
-                            )}
-                            {request.status !== "completed" && (
-                              <Button
-                                size="sm"
-                                color="primary"
-                                variant="flat"
-                                onPress={() =>
-                                  updateRequestStatus(request.id, "completed")
-                                }>
-                                Complete
-                              </Button>
-                            )}
-                            {request.status !== "cancelled" && (
-                              <Button
-                                size="sm"
-                                color="danger"
-                                variant="flat"
-                                onPress={() =>
-                                  updateRequestStatus(request.id, "cancelled")
-                                }>
-                                Cancel
-                              </Button>
-                            )}
-                          </div>
                         </div>
                       </div>
                     ))}

@@ -5,16 +5,17 @@ import CustomerStats from "@/components/customers/CustomerStats";
 import CustomerReviews from "@/components/customers/CustomerReviews";
 import TestimonialHighlight from "@/components/customers/TestimonialHighlight";
 import WhyChooseUs from "@/components/customers/WhyChooseUs";
-import CustomersCTA from "@/components/customers/CustomersCTA";
+import SharedCTASection from "@/components/shared/SharedCTASection";
 import { useReviewStore } from "@/store/zustand/reviewStore";
 
 export default function Customers() {
-  const { reviews, fetchReviews } = useReviewStore();
+  const { reviews, highlight, fetchReviews, fetchHighlight } = useReviewStore();
 
   // Fetch customer reviews data on page load
   useEffect(() => {
     fetchReviews();
-  }, [fetchReviews]);
+    fetchHighlight(); // Fetch highlight review (first customer)
+  }, [fetchReviews, fetchHighlight]);
 
   // Transform reviews to match CustomerReviews component interface
   const transformedReviews = reviews.map((review) => ({
@@ -32,9 +33,14 @@ export default function Customers() {
       <CustomersHero />
       <CustomerStats />
       <CustomerReviews customerReviews={transformedReviews} />
-      <TestimonialHighlight />
+      <TestimonialHighlight item={highlight || undefined} />
       <WhyChooseUs />
-      <CustomersCTA />
+      <SharedCTASection
+        subtitle="Experience the same professional service that our customers love"
+        primaryButtonText="Book Your Trip"
+        backgroundColor="bg-primary-800">
+        Join Our Happy Customers
+      </SharedCTASection>
     </div>
   );
 }

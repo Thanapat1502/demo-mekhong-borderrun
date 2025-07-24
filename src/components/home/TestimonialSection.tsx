@@ -1,5 +1,5 @@
 "use client";
-import { Avatar } from "@heroui/react";
+// import { Avatar } from "@heroui/react";
 
 export default function TestimonialSection() {
   return (
@@ -11,8 +11,9 @@ export default function TestimonialSection() {
             Exceptional service from start to finish. Professional, punctual,
             and completely stress-free experience.
           </p>
+          <div className="text-6xl text-accent-200 mb-6">&quot;</div>
           <div className="flex items-center justify-center gap-4">
-            <Avatar
+            {/* <Avatar
               src="https://i.pravatar.cc/150?img=15"
               alt="Customer"
               className="w-16 h-16"
@@ -20,7 +21,7 @@ export default function TestimonialSection() {
             <div className="text-left">
               <div className="font-medium text-black">Michael Chang</div>
               <div className="text-black">Digital Nomad</div>
-            </div>
+            </div> */}
           </div>
         </div>
 

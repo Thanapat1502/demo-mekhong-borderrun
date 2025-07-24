@@ -1,7 +1,8 @@
 import { Button } from "@heroui/react";
 import NextLink from "next/link";
-
+import { useContactStore } from "@/store/zustand/contactStore";
 export default function CustomersCTA() {
+  const { ownerInfo } = useContactStore();
   return (
     <section className="py-12 px-6 bg-primary-800">
       <div className="max-w-4xl mx-auto text-center">
@@ -16,17 +17,15 @@ export default function CustomersCTA() {
             as={NextLink}
             href="/contact"
             size="lg"
-            className="bg-accent-500 text-white hover:bg-accent-600 px-12 py-4 text-lg font-light rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-accent-500 text-white hover:bg-accent-600 px-12 py-4 text-lg font-light rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
             Book Your Trip
           </Button>
           <Button
             as="a"
-            href="tel:+66951029528"
+            href={`tel:${ownerInfo?.phone?.replace(/\s/g, "")}`}
             variant="bordered"
             size="lg"
-            className="border-2 border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-white px-12 py-4 text-lg font-light rounded-full transition-all duration-300"
-          >
+            className="border-2 border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-white px-12 py-4 text-lg font-light rounded-full transition-all duration-300">
             Call Now
           </Button>
         </div>

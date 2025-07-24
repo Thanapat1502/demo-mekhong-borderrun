@@ -3,7 +3,7 @@ import { customerReviewsService } from "@/services/supabaseService";
 import type { CustomerReviewRow } from "@/lib/supabase";
 
 // Transform database row to display format
-interface Review {
+export interface Review {
   id: number;
   name: string;
   avatar: string;
@@ -20,12 +20,14 @@ interface Review {
 interface ReviewState {
   reviews: Review[];
   featuredReviews: Review[];
+  highlight: Review | null;
   isLoading: boolean;
   error: string | null;
 
   // Actions
   fetchReviews: () => Promise<void>;
   fetchFeaturedReviews: () => Promise<void>;
+  fetchHighlight: () => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
 }
@@ -93,6 +95,7 @@ const mockReviews: Review[] = [
 export const useReviewStore = create<ReviewState>((set) => ({
   reviews: [],
   featuredReviews: [],
+  highlight: null,
   isLoading: false,
   error: null,
 
@@ -171,6 +174,46 @@ export const useReviewStore = create<ReviewState>((set) => ({
           error instanceof Error
             ? error.message
             : "Failed to fetch featured reviews",
+      });
+    }
+  },
+
+  fetchHighlight: async () => {
+    try {
+      // Fetch the first customer from Supabase
+      set({ isLoading: true, error: null });
+
+      const data = await customerReviewsService.getHighlight();
+
+      const transformedReview: Review = {
+        id: data.id,
+        name: data.name,
+        avatar: data.avatar,
+        country: data.country,
+        rating: data.rating,
+        review: data.review,
+        date: data.date,
+        verified: data.verified,
+        trip_date: data.trip_date,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+
+      set({
+        highlight: transformedReview,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error("Failed to fetch highlight review:", error);
+      // Fallback to first mock review
+      const highlightMockReview = mockReviews[0];
+      set({
+        highlight: highlightMockReview,
+        isLoading: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch highlight review",
       });
     }
   },

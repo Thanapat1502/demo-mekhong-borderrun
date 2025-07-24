@@ -365,6 +365,23 @@ export const customerReviewsService = {
     }
   },
 
+  async getHighlight() {
+    try {
+      const { data, error } = await supabase
+        .from(TABLES.CUSTOMER_REVIEWS)
+        .select("*")
+        .eq("verified", true)
+        .order("rating", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      throw new Error(handleSupabaseError(error));
+    }
+  },
+
   async create(
     review: Omit<CustomerReviewRow, "id" | "created_at" | "updated_at">
   ) {

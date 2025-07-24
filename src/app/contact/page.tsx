@@ -4,6 +4,7 @@ import ContactHero from "@/components/contact/ContactHero";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactForm from "@/components/contact/ContactForm";
 import ContactFAQ from "@/components/contact/ContactFAQ";
+import SharedCTASection from "@/components/shared/SharedCTASection";
 import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function Contact() {
@@ -23,6 +24,14 @@ export default function Contact() {
       </section>
 
       <ContactFAQ phone={ownerInfo?.phone || "+66 (0) 95 102 9528"} />
+
+      <SharedCTASection
+        subtitle="Get in touch with us today and let us handle your visa extension needs"
+        primaryButtonText="Send Message"
+        primaryButtonHref="#contact-form"
+        backgroundColor="bg-primary-800">
+        Ready to Get Started?
+      </SharedCTASection>
     </div>
   );
 }
