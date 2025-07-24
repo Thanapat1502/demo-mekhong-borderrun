@@ -1,6 +1,7 @@
 import { Card, CardBody } from "@heroui/react";
 
-export default function ContactFAQ() {
+export default function ContactFAQ(props: { phone: string }) {
+  const { phone } = props;
   return (
     <section className="py-12 px-6 bg-neutral-50">
       <div className="max-w-4xl mx-auto">
@@ -15,9 +16,9 @@ export default function ContactFAQ() {
                 How do I book a trip?
               </h3>
               <p className="text-black">
-                You can book by calling us at +66 95 102 9528, sending a
+                {`You can book by calling us at ${phone}, sending a
                 WhatsApp message, or using the contact form above. We recommend
-                booking at least 1 day in advance.
+                booking at least 1 day in advance.`}
               </p>
             </CardBody>
           </Card>
@@ -28,9 +29,8 @@ export default function ContactFAQ() {
                 What should I bring?
               </h3>
               <p className="text-black">
-                Bring your passport (valid for 6+ months), passport photos, cash
-                for Laos visa if needed, and comfortable clothing for the
-                journey.
+                Bring your passport, passport photos, cash for Laos visa if
+                needed, and comfortable clothing for the journey.
               </p>
             </CardBody>
           </Card>

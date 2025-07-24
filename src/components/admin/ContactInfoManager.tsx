@@ -10,11 +10,12 @@ import {
   Avatar,
 } from "@heroui/react";
 import { FiSave, FiUser, FiEdit, FiX, FiCamera } from "react-icons/fi";
-import { supabase, TABLES, ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
+import { ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
 import {
-  uploadOwnerImageComplete,
-  OwnerImageData,
-} from "@/lib/categorized-image-storage";
+  fetchContactData,
+  saveContactInfo,
+  ContactFormData,
+} from "@/services/contactInfoService";
 
 export default function ContactInfoManager() {
   const [contactInfo, setContactInfo] = useState<ContactInfoRow[]>([]);
@@ -34,71 +35,34 @@ export default function ContactInfoManager() {
   const [line, setLine] = useState<string>("");
   const [ownerImageFile, setOwnerImageFile] = useState<File | null>(null);
   const [ownerImagePreview, setOwnerImagePreview] = useState<string>("");
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
-  // Fetch data from Supabase
+  // Fetch data using the service
   const fetchData = async () => {
+    console.log("fetchData called");
     setIsLoading(true);
     try {
-      // Fetch contact info
-      const { data: contactData, error: contactError } = await supabase
-        .from(TABLES.CONTACT_INFO)
-        .select("*")
-        .eq("is_public", true);
+      const result = await fetchContactData();
 
-      if (contactError) {
-        console.error("Contact info error:", contactError);
-        if (contactError.code === "42P01") {
-          console.log("Contact info table doesn't exist, using mock data");
-          setContactInfo([]);
-        } else {
-          throw contactError;
-        }
-      } else {
-        setContactInfo(contactData || []);
+      if (!result.success) {
+        setError(result.error || "Failed to fetch contact information");
+        return;
       }
 
-      // Fetch owner info
-      const { data: ownerData, error: ownerError } = await supabase
-        .from(TABLES.OWNER_INFO)
-        .select("*")
-        .limit(1)
-        .single();
+      const { contactInfo: contactData, ownerInfo: ownerData } =
+        result.data || {};
 
-      if (
-        ownerError &&
-        ownerError.code !== "PGRST116" &&
-        ownerError.code !== "42P01"
-      ) {
-        throw ownerError;
-      }
+      setContactInfo(contactData || []);
 
-      // Use mock data if table doesn't exist
-      if (ownerError && ownerError.code === "42P01") {
-        console.log("Owner info table doesn't exist, using mock data");
-        const mockOwnerData = {
-          id: "mock-owner-1",
-          name: "Mekong Border Run Guide",
-          title: "Licensed Tour Operator",
-          email: "info@mekong-borderrun.com",
-          phone: "+66 (0) 95 102 9528",
-          whatsapp: "+66 (0) 95 102 9528",
-          line: null,
-          avatar: null,
-          bio: null,
-          experience: null,
-          languages: null,
-          certifications: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        setOwnerInfo(mockOwnerData);
-        setGuideName(mockOwnerData.name);
-        setPhone(mockOwnerData.phone);
-        setEmail(mockOwnerData.email);
-        setWhatsapp(mockOwnerData.whatsapp || "");
+      // Set form values based on fetched data
+      if (!ownerData) {
+        // No owner data, use defaults
+        setOwnerInfo(null);
+        setGuideName("Mekong Border Run Guide");
+        setPhone("+66 (0) 95 102 9528");
+        setEmail("info@mekong-borderrun.com");
+        setWhatsapp("+66 (0) 95 102 9528");
         setAddress("Chiang Mai, Thailand");
-      } else if (ownerData) {
+      } else {
         setOwnerInfo(ownerData);
         setGuideName(ownerData.name);
         setPhone(ownerData.phone);
@@ -108,7 +72,7 @@ export default function ContactInfoManager() {
 
         // Set address from contact info
         const addressInfo = contactData?.find(
-          (info) => info.type === "address"
+          (info: ContactInfoRow) => info.type === "address"
         );
         setAddress(addressInfo?.value || "");
       }
@@ -178,7 +142,7 @@ export default function ContactInfoManager() {
   };
 
   const handleSave = async () => {
-    console.log("handleSave called_____________________________________-");
+    console.log("handleSave called");
     setIsSaving(true);
     setError("");
     setSuccessMessage("");
@@ -205,121 +169,22 @@ export default function ContactInfoManager() {
         return;
       }
 
-      // Handle image upload if a new image is selected
-      let avatarUrl = ownerInfo?.avatar || null;
-      if (ownerImageFile) {
-        setIsUploadingImage(true);
-        try {
-          const ownerImageData: OwnerImageData = {
-            title: `${guideName.trim()} Profile`,
-            alt: `Profile image for ${guideName.trim()}`,
-            description: `Profile image for ${guideName.trim()}`,
-            owner_name: guideName.trim(),
-            position: "Guide/Owner",
-          };
+      // Prepare form data
+      const formData: ContactFormData = {
+        guideName: guideName.trim(),
+        phone: phone.trim(),
+        email: email.trim(),
+        whatsapp: whatsapp.trim(),
+        line: line.trim(),
+        address: address.trim(),
+      };
 
-          const uploadResult = await uploadOwnerImageComplete(
-            ownerImageFile,
-            ownerImageData
-          );
+      // Call the service to save all data
+      const result = await saveContactInfo(formData, ownerImageFile, ownerInfo);
 
-          if (uploadResult.success && uploadResult.url) {
-            avatarUrl = uploadResult.url;
-          } else {
-            throw new Error(uploadResult.error || "Failed to upload image");
-          }
-        } catch (uploadError) {
-          console.error("Image upload error:", uploadError);
-          setError("Failed to upload image. Please try again.");
-          return;
-        } finally {
-          setIsUploadingImage(false);
-        }
-      }
-
-      // Update or create owner info
-      if (ownerInfo) {
-        const { error: ownerError } = await supabase
-          .from(TABLES.OWNER_INFO)
-          .update({
-            name: guideName.trim(),
-            phone: phone.trim(),
-            email: email.trim(),
-            whatsapp: whatsapp.trim() || null,
-            line: line.trim() || null,
-            avatar: avatarUrl,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", ownerInfo.id);
-
-        if (ownerError) throw ownerError;
-      } else {
-        const { error: ownerError } = await supabase
-          .from(TABLES.OWNER_INFO)
-          .insert({
-            name: guideName.trim(),
-            title: "Licensed Tour Operator",
-            phone: phone.trim(),
-            email: email.trim(),
-            whatsapp: whatsapp.trim() || null,
-            line: line.trim() || null,
-            avatar: avatarUrl,
-          });
-
-        if (ownerError) throw ownerError;
-      }
-
-      // Update contact_info table with individual records
-      const contactUpdates = [
-        { type: "phone", value: phone.trim() },
-        { type: "email", value: email.trim() },
-        { type: "whatsapp", value: whatsapp.trim() },
-        { type: "line", value: line.trim() },
-        { type: "address", value: address.trim() },
-      ];
-      console.log("Update contact I");
-
-      // Update each contact info record
-      for (const contact of contactUpdates) {
-        if (contact.value) {
-          console.log("Update contact II in loop");
-          // Only update if value is not empty
-          // Check if record exists
-          const { data: existingRecord } = await supabase
-            .from(TABLES.CONTACT_INFO)
-            .select("type")
-            .eq("type", contact.type)
-            .single();
-
-          if (existingRecord) {
-            // Update existing record
-            const { error: updateError } = await supabase
-              .from(TABLES.CONTACT_INFO)
-              .update({
-                value: contact.value,
-                updated_at: new Date().toISOString(),
-              })
-              .eq("type", existingRecord.type);
-
-            if (updateError) {
-              console.error(`Error updating ${contact.type}:`, updateError);
-            }
-          } else {
-            // Create new record
-            const { error: insertError } = await supabase
-              .from(TABLES.CONTACT_INFO)
-              .insert({
-                type: contact.type,
-                value: contact.value,
-                is_public: true,
-                is_primary: true,
-              });
-
-            if (insertError) {
-              console.error(`Error inserting ${contact.type}:`, insertError);
-            }
-          }
-        }
+      if (!result.success) {
+        setError(result.error || "Failed to save contact information");
+        return;
       }
 
       setSuccessMessage("Contact information updated successfully!");
@@ -483,7 +348,7 @@ export default function ContactInfoManager() {
                         htmlFor="owner-image-upload"
                         startContent={<FiCamera />}
                         className="cursor-pointer text-white bg-accent-600"
-                        isDisabled={isUploadingImage}>
+                        isDisabled={isSaving}>
                         {ownerImageFile ? "Change Image" : "Upload Image"}
                       </Button>
                       {ownerImageFile && (
@@ -499,10 +364,8 @@ export default function ContactInfoManager() {
                         </Button>
                       )}
                     </div>
-                    {isUploadingImage && (
-                      <p className="text-sm text-blue-600 mt-2">
-                        Uploading image...
-                      </p>
+                    {isSaving && (
+                      <p className="text-sm text-blue-600 mt-2">Saving...</p>
                     )}
                   </div>
                 </div>

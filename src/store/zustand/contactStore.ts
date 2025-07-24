@@ -23,6 +23,7 @@ export interface OwnerInfo {
   phone: string;
   whatsapp?: string;
   line?: string;
+  address?: string;
   avatar?: string;
   bio?: string;
   experience?: string;

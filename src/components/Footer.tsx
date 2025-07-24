@@ -5,19 +5,16 @@ import NextLink from "next/link";
 import { FiPhone, FiMail, FiMapPin, FiClock } from "react-icons/fi";
 import Image from "next/image";
 import { useWebConfigStore } from "@/store/zustand/webConfigStore";
-import {
-  useContactStore,
-  getPrimaryContact,
-} from "@/store/zustand/contactStore";
+import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function Footer() {
   const { config } = useWebConfigStore();
-  const { contactInfo, businessInfo } = useContactStore();
+  const { businessInfo, ownerInfo } = useContactStore();
 
   // Get primary contact information
-  const primaryPhone = getPrimaryContact(contactInfo, "phone");
-  const primaryEmail = getPrimaryContact(contactInfo, "email");
-  const primaryAddress = getPrimaryContact(contactInfo, "address");
+  const primaryPhone = ownerInfo?.phone;
+  const primaryEmail = ownerInfo?.email;
+  const primaryAddress = ownerInfo?.address;
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
@@ -33,9 +30,7 @@ export default function Footer() {
                 className="object-contain"
               />
               <h3 className="font-bold text-xl text-accent-500">
-                {businessInfo?.businessName ||
-                  config.website_title ||
-                  "Mekong Border Run"}
+                {"Mekong Border Run"}
               </h3>
             </div>
             <p className="text-gray-600 mb-4">
@@ -84,9 +79,9 @@ export default function Footer() {
                 <div className="flex items-center gap-3">
                   <FiPhone className="text-accent-500" size={16} />
                   <a
-                    href={`tel:${primaryPhone.value.replace(/\s/g, "")}`}
+                    href={`tel:${primaryPhone.replace(/\s/g, "")}`}
                     className="text-gray-600 hover:text-accent-500 transition-colors">
-                    {primaryPhone.value}
+                    {primaryPhone}
                   </a>
                 </div>
               )}
@@ -94,16 +89,16 @@ export default function Footer() {
                 <div className="flex items-center gap-3">
                   <FiMail className="text-accent-500" size={16} />
                   <a
-                    href={`mailto:${primaryEmail.value}`}
+                    href={`mailto:${primaryEmail}`}
                     className="text-gray-600 hover:text-accent-500 transition-colors">
-                    {primaryEmail.value}
+                    {primaryEmail || "prpbee711@gmail.com"}
                   </a>
                 </div>
               )}
               {primaryAddress && (
                 <div className="flex items-center gap-3">
                   <FiMapPin className="text-accent-500" size={16} />
-                  <span className="text-gray-600">{primaryAddress.value}</span>
+                  <span className="text-gray-600">{primaryAddress}</span>
                 </div>
               )}
               <div className="flex items-center gap-3">

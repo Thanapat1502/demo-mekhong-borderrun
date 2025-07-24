@@ -4,8 +4,10 @@ import ContactHero from "@/components/contact/ContactHero";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactForm from "@/components/contact/ContactForm";
 import ContactFAQ from "@/components/contact/ContactFAQ";
+import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function Contact() {
+  const { ownerInfo } = useContactStore();
   return (
     <div className="bg-white min-h-screen">
       <ContactHero />
@@ -20,7 +22,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <ContactFAQ />
+      <ContactFAQ phone={ownerInfo?.phone || "+66 (0) 95 102 9528"} />
     </div>
   );
 }
