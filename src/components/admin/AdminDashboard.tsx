@@ -62,7 +62,7 @@ export default function AdminDashboard() {
           setStats({
             totalRequests: 0,
             newRequests: 0,
-            monthlyVisitors: 150,
+            monthlyVisitors: 0,
             monthlyInquiries: 0,
             conversionRate: 0,
           });
@@ -75,9 +75,19 @@ export default function AdminDashboard() {
 
       // Calculate stats
       const totalRequests = requests?.length || 0;
+
+      // Count new requests (created within 3 days)
       const newRequests =
-        requests?.filter((r) => r.status === "new").length || 0;
-      const monthlyVisitors = 150; // Mock data for now
+        requests?.filter((r) => {
+          const requestDate = new Date(r.created_at);
+          const currentDate = new Date();
+          const daysDifference =
+            (currentDate.getTime() - requestDate.getTime()) /
+            (1000 * 3600 * 24);
+          return daysDifference <= 3 && r.status === "new";
+        }).length || 0;
+
+      // Use real data instead of mock numbers
       const monthlyInquiries =
         requests?.filter((r) => {
           const requestDate = new Date(r.created_at);
@@ -88,6 +98,8 @@ export default function AdminDashboard() {
           );
         }).length || 0;
 
+      // Set monthly visitors to 0 if no real data available
+      const monthlyVisitors = 0; // Real visitor tracking would need analytics integration
       const conversionRate =
         monthlyVisitors > 0 ? (monthlyInquiries / monthlyVisitors) * 100 : 0;
 
@@ -112,20 +124,63 @@ export default function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string, createdAt: string) => {
+    // Check if request is new (created within 3 days)
+    const requestDate = new Date(createdAt);
+    const currentDate = new Date();
+    const daysDifference =
+      (currentDate.getTime() - requestDate.getTime()) / (1000 * 3600 * 24);
+
+    if (daysDifference <= 3 && status === "new") {
+      return "danger"; // New status for recent requests
+    }
+
     switch (status) {
       case "new":
-        return "danger";
+        return "warning"; // Older new requests
       case "contacted":
-        return "warning";
-      case "confirmed":
         return "primary";
+      case "confirmed":
+        return "success";
       case "completed":
         return "success";
       case "cancelled":
         return "default";
       default:
         return "default";
+    }
+  };
+
+  const getStatusLabel = (status: string, createdAt: string) => {
+    const requestDate = new Date(createdAt);
+    const currentDate = new Date();
+    const daysDifference =
+      (currentDate.getTime() - requestDate.getTime()) / (1000 * 3600 * 24);
+
+    if (daysDifference <= 3 && status === "new") {
+      return "new"; // Show as "new" for recent requests
+    }
+
+    return status;
+  };
+
+  const updateRequestStatus = async (requestId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from(TABLES.CONTACT_REQUESTS)
+        .update({
+          status: newStatus,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", requestId);
+
+      if (error) throw error;
+
+      // Refresh the data
+      await fetchDashboardData();
+    } catch (err) {
+      console.error("Error updating status:", err);
+      setError("Failed to update request status");
     }
   };
 
@@ -273,20 +328,31 @@ export default function AdminDashboard() {
                               {request.name}
                             </h4>
                             <Chip
-                              color={getStatusColor(request.status)}
+                              color={getStatusColor(
+                                request.status,
+                                request.created_at
+                              )}
                               size="sm"
                               variant="flat">
-                              {request.status}
+                              {getStatusLabel(
+                                request.status,
+                                request.created_at
+                              )}
                             </Chip>
                           </div>
                           <p className="text-sm text-gray-600 mb-1">
                             {request.email}
                           </p>
+                          {request.phone && (
+                            <p className="text-sm text-gray-600 mb-1">
+                              {request.phone}
+                            </p>
+                          )}
                           <p className="text-sm text-gray-500 line-clamp-2">
                             {request.message}
                           </p>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right space-y-2">
                           <p className="text-sm text-gray-500">
                             {formatDate(request.created_at)}
                           </p>
@@ -295,6 +361,41 @@ export default function AdminDashboard() {
                               {request.number_of_people} people
                             </p>
                           )}
+                          <div className="flex gap-1 justify-end">
+                            {request.status !== "confirmed" && (
+                              <Button
+                                size="sm"
+                                color="success"
+                                variant="flat"
+                                onPress={() =>
+                                  updateRequestStatus(request.id, "confirmed")
+                                }>
+                                Confirm
+                              </Button>
+                            )}
+                            {request.status !== "completed" && (
+                              <Button
+                                size="sm"
+                                color="primary"
+                                variant="flat"
+                                onPress={() =>
+                                  updateRequestStatus(request.id, "completed")
+                                }>
+                                Complete
+                              </Button>
+                            )}
+                            {request.status !== "cancelled" && (
+                              <Button
+                                size="sm"
+                                color="danger"
+                                variant="flat"
+                                onPress={() =>
+                                  updateRequestStatus(request.id, "cancelled")
+                                }>
+                                Cancel
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}

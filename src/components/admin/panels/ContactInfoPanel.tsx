@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-} from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
 
 export default function ContactInfoPanel() {

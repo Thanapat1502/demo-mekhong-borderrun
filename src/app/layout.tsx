@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import FloatingContactButton from "@/components/base/FloatingContactButton";
 import WebConfigProvider from "@/components/providers/WebConfigProvider";
 import ContactProvider from "@/components/providers/ContactProvider";
-import PerformanceOptimizer from "@/components/optimized/PerformanceOptimizer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -163,12 +162,10 @@ export default function RootLayout({
           <AuthProvider>
             <WebConfigProvider>
               <ContactProvider>
-                <PerformanceOptimizer>
-                  <Navigation />
-                  <main className="min-h-screen">{children}</main>
-                  <Footer />
-                  <FloatingContactButton />
-                </PerformanceOptimizer>
+                <Navigation />
+                <main className="min-h-screen">{children}</main>
+                <Footer />
+                <FloatingContactButton />
               </ContactProvider>
             </WebConfigProvider>
           </AuthProvider>

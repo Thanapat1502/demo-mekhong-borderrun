@@ -130,6 +130,7 @@ export default function ContactInfoManager() {
   };
 
   const handleCancel = () => {
+    console.log("handleCancel called_____________________________________-");
     setIsEditing(false);
     setError("");
     // Reset form values
@@ -177,6 +178,7 @@ export default function ContactInfoManager() {
   };
 
   const handleSave = async () => {
+    console.log("handleSave called_____________________________________-");
     setIsSaving(true);
     setError("");
     setSuccessMessage("");
@@ -260,35 +262,64 @@ export default function ContactInfoManager() {
             phone: phone.trim(),
             email: email.trim(),
             whatsapp: whatsapp.trim() || null,
+            line: line.trim() || null,
             avatar: avatarUrl,
           });
 
         if (ownerError) throw ownerError;
       }
 
-      // Update address in contact info
-      const addressInfo = contactInfo.find((info) => info.type === "address");
-      if (addressInfo) {
-        const { error: addressError } = await supabase
-          .from(TABLES.CONTACT_INFO)
-          .update({
-            value: address.trim(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", addressInfo.id);
+      // Update contact_info table with individual records
+      const contactUpdates = [
+        { type: "phone", value: phone.trim() },
+        { type: "email", value: email.trim() },
+        { type: "whatsapp", value: whatsapp.trim() },
+        { type: "line", value: line.trim() },
+        { type: "address", value: address.trim() },
+      ];
+      console.log("Update contact I");
 
-        if (addressError) throw addressError;
-      } else if (address.trim()) {
-        const { error: addressError } = await supabase
-          .from(TABLES.CONTACT_INFO)
-          .insert({
-            type: "address",
-            label: "Business Address",
-            value: address.trim(),
-            is_public: true,
-          });
+      // Update each contact info record
+      for (const contact of contactUpdates) {
+        if (contact.value) {
+          console.log("Update contact II in loop");
+          // Only update if value is not empty
+          // Check if record exists
+          const { data: existingRecord } = await supabase
+            .from(TABLES.CONTACT_INFO)
+            .select("type")
+            .eq("type", contact.type)
+            .single();
 
-        if (addressError) throw addressError;
+          if (existingRecord) {
+            // Update existing record
+            const { error: updateError } = await supabase
+              .from(TABLES.CONTACT_INFO)
+              .update({
+                value: contact.value,
+                updated_at: new Date().toISOString(),
+              })
+              .eq("type", existingRecord.type);
+
+            if (updateError) {
+              console.error(`Error updating ${contact.type}:`, updateError);
+            }
+          } else {
+            // Create new record
+            const { error: insertError } = await supabase
+              .from(TABLES.CONTACT_INFO)
+              .insert({
+                type: contact.type,
+                value: contact.value,
+                is_public: true,
+                is_primary: true,
+              });
+
+            if (insertError) {
+              console.error(`Error inserting ${contact.type}:`, insertError);
+            }
+          }
+        }
       }
 
       setSuccessMessage("Contact information updated successfully!");
@@ -395,6 +426,14 @@ export default function ContactInfoManager() {
                   </label>
                   <p className="text-gray-900">
                     {ownerInfo?.whatsapp || "Not set"}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-1">
+                    LINE ID
+                  </label>
+                  <p className="text-gray-900">
+                    {ownerInfo?.line || "Not set"}
                   </p>
                 </div>
                 <div>
