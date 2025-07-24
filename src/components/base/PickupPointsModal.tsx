@@ -19,6 +19,7 @@ interface PickupPointImage {
   title: string;
   location: string;
   description: string;
+  google_map_url?: string;
   landmark?: string;
   coordinates?: {
     lat: number;
@@ -45,9 +46,15 @@ export default function PickupPointsModal({
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleImageClick = (image: string) => {
-    setSelectedImage(image);
-    onOpen();
+  const handleImageClick = (pickupPoint: PickupPointImage) => {
+    // If Google Map URL is available, open it in a new tab
+    if (pickupPoint.google_map_url) {
+      window.open(pickupPoint.google_map_url, "_blank");
+    } else {
+      // Fallback: show image modal if no Google Map URL
+      setSelectedImage(pickupPoint.src);
+      onOpen();
+    }
   };
 
   useEffect(() => {
@@ -94,7 +101,7 @@ export default function PickupPointsModal({
                   key={point.id}
                   className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                   isPressable
-                  onPress={() => handleImageClick(point.src)}>
+                  onPress={() => handleImageClick(point)}>
                   <div className="aspect-video overflow-hidden relative">
                     <Image
                       src={point.src}

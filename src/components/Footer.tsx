@@ -4,8 +4,21 @@ import { Divider, Link } from "@heroui/react";
 import NextLink from "next/link";
 import { FiPhone, FiMail, FiMapPin, FiClock } from "react-icons/fi";
 import Image from "next/image";
+import { useWebConfigStore } from "@/store/zustand/webConfigStore";
+import {
+  useContactStore,
+  getPrimaryContact,
+} from "@/store/zustand/contactStore";
 
 export default function Footer() {
+  const { config } = useWebConfigStore();
+  const { contactInfo, businessInfo } = useContactStore();
+
+  // Get primary contact information
+  const primaryPhone = getPrimaryContact(contactInfo, "phone");
+  const primaryEmail = getPrimaryContact(contactInfo, "email");
+  const primaryAddress = getPrimaryContact(contactInfo, "address");
+
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <div className="max-w-6xl mx-auto px-6 py-12">
@@ -20,14 +33,18 @@ export default function Footer() {
                 className="object-contain"
               />
               <h3 className="font-bold text-xl text-accent-500">
-                Mekong Border Run
+                {businessInfo?.businessName ||
+                  config.website_title ||
+                  "Mekong Border Run"}
               </h3>
             </div>
             <p className="text-gray-600 mb-4">
-              Professional border run service from Chiang Mai to Laos border.
-              Licensed and reliable.
+              {config.website_description ||
+                "Professional border run service from Chiang Mai to Laos border. Licensed and reliable."}
             </p>
-            <p className="text-base text-gray-500">TAT License No. 21/01279</p>
+            <p className="text-base text-gray-500">
+              {businessInfo?.tatLicense || "TAT License No. 21/01279"}
+            </p>
           </div>
 
           <div>
@@ -63,29 +80,37 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-800 mb-4">Contact Info</h4>
             <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <FiPhone className="text-accent-500" size={16} />
-                <a
-                  href="tel:+66951029528"
-                  className="text-gray-600 hover:text-accent-500 transition-colors">
-                  +66 95 102 9528
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <FiMail className="text-accent-500" size={16} />
-                <a
-                  href="mailto:prpbee711@gmail.com"
-                  className="text-gray-600 hover:text-accent-500 transition-colors">
-                  prpbee711@gmail.com
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <FiMapPin className="text-accent-500" size={16} />
-                <span className="text-gray-600">Chiang Mai, Thailand</span>
-              </div>
+              {primaryPhone && (
+                <div className="flex items-center gap-3">
+                  <FiPhone className="text-accent-500" size={16} />
+                  <a
+                    href={`tel:${primaryPhone.value.replace(/\s/g, "")}`}
+                    className="text-gray-600 hover:text-accent-500 transition-colors">
+                    {primaryPhone.value}
+                  </a>
+                </div>
+              )}
+              {primaryEmail && (
+                <div className="flex items-center gap-3">
+                  <FiMail className="text-accent-500" size={16} />
+                  <a
+                    href={`mailto:${primaryEmail.value}`}
+                    className="text-gray-600 hover:text-accent-500 transition-colors">
+                    {primaryEmail.value}
+                  </a>
+                </div>
+              )}
+              {primaryAddress && (
+                <div className="flex items-center gap-3">
+                  <FiMapPin className="text-accent-500" size={16} />
+                  <span className="text-gray-600">{primaryAddress.value}</span>
+                </div>
+              )}
               <div className="flex items-center gap-3">
                 <FiClock className="text-accent-500" size={16} />
-                <span className="text-gray-600">Daily Departure: 09:30 AM</span>
+                <span className="text-gray-600">
+                  Business Hours: {config.business_hours || "9:00 AM - 6:00 PM"}
+                </span>
               </div>
             </div>
           </div>
@@ -95,10 +120,15 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-base">
-            © 2024 Mekong Border Run. All rights reserved.
+            © 2024{" "}
+            {businessInfo?.businessName ||
+              config.website_title ||
+              "Mekong Border Run"}
+            . All rights reserved.
           </p>
           <p className="text-gray-500 text-base mt-2 md:mt-0">
-            Licensed Tour Operator - TAT License No. 21/01279
+            Licensed Tour Operator -{" "}
+            {businessInfo?.tatLicense || "TAT License No. 21/01279"}
           </p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from "./supabase";
 
 export interface ImageUploadResult {
   success: boolean;
@@ -7,20 +7,57 @@ export interface ImageUploadResult {
   path?: string;
 }
 
-export interface PickupPointImageData {
+// Image categories
+export type ImageCategory = "public" | "customer" | "owner";
+
+// Generic image data interface
+export interface BaseImageData {
   title: string;
   alt: string;
-  location: string;
   description: string;
+}
+
+// Pickup point specific data (public category)
+export interface PickupPointImageData extends BaseImageData {
+  location: string;
   google_map_url?: string;
 }
 
+// Customer image data
+export interface CustomerImageData extends BaseImageData {
+  customer_name?: string;
+  review_id?: string;
+}
+
+// Owner image data
+export interface OwnerImageData extends BaseImageData {
+  owner_name?: string;
+  position?: string;
+}
+
+// Update interfaces
 export interface PickupPointImageUpdate {
   title?: string;
   alt?: string;
   location?: string;
   description?: string;
   google_map_url?: string;
+}
+
+export interface CustomerImageUpdate {
+  title?: string;
+  alt?: string;
+  description?: string;
+  customer_name?: string;
+  review_id?: string;
+}
+
+export interface OwnerImageUpdate {
+  title?: string;
+  alt?: string;
+  description?: string;
+  owner_name?: string;
+  position?: string;
 }
 
 /**
@@ -33,9 +70,12 @@ export async function uploadImageToSupabase(
   file: File,
   bucket: string = "images"
 ): Promise<ImageUploadResult> {
+  console.log("bucket I");
   try {
+    console.log("bucket II");
     // Validate file type
     if (!file.type.startsWith("image/")) {
+      console.log("bucket xII file type fail");
       return {
         success: false,
         error: "File must be an image",
@@ -58,14 +98,16 @@ export async function uploadImageToSupabase(
       .substring(2)}.${fileExt}`;
 
     // Upload file to Supabase Storage (directly to bucket root)
+    console.log("bucket III before upload");
     const { error } = await supabase.storage
       .from(bucket)
       .upload(fileName, file, {
         cacheControl: "3600",
-        upsert: false,
+        upsert: true,
       });
 
     if (error) {
+      console.log("bucket xIII before upload fail");
       console.error("Supabase upload error:", error);
       return {
         success: false,
@@ -73,18 +115,20 @@ export async function uploadImageToSupabase(
       };
     }
 
+    console.log("bucket IV get public url");
     // Get public URL
     const { data: urlData } = supabase.storage
       .from(bucket)
       .getPublicUrl(fileName);
 
+    console.log("bucket V done");
     return {
       success: true,
       url: urlData.publicUrl,
       path: fileName,
     };
-
   } catch (error) {
+    console.log("bucket x error on catch");
     console.error("Upload error:", error);
     return {
       success: false,
@@ -104,9 +148,7 @@ export async function deleteImageFromSupabase(
   bucket: string = "images"
 ): Promise<boolean> {
   try {
-    const { error } = await supabase.storage
-      .from(bucket)
-      .remove([path]);
+    const { error } = await supabase.storage.from(bucket).remove([path]);
 
     if (error) {
       console.error("Supabase delete error:", error);
@@ -132,35 +174,37 @@ export async function savePickupPointImage(
 ): Promise<{ success: boolean; id?: string; error?: string }> {
   try {
     const { data, error } = await supabase
-      .from('pickup_point_images')
-      .insert([{
-        src: imageUrl,
-        alt: imageData.alt,
-        title: imageData.title,
-        location: imageData.location,
-        description: imageData.description,
-        google_map_url: imageData.google_map_url || null,
-      }])
-      .select('id')
+      .from("pickup_point_images")
+      .insert([
+        {
+          src: imageUrl,
+          alt: imageData.alt,
+          title: imageData.title,
+          location: imageData.location,
+          description: imageData.description,
+          google_map_url: imageData.google_map_url || null,
+        },
+      ])
+      .select("id")
       .single();
 
     if (error) {
-      console.error('Database insert error:', error);
+      console.error("Database insert error:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
 
     return {
       success: true,
-      id: data.id
+      id: data.id,
     };
   } catch (error) {
-    console.error('Save pickup point image error:', error);
+    console.error("Save pickup point image error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 }
@@ -175,23 +219,25 @@ export async function updatePickupPointImage(
   id: string,
   updateData: PickupPointImageUpdate
 ): Promise<boolean> {
+  console.log("III");
   try {
     const { error } = await supabase
-      .from('pickup_point_images')
+      .from("pickup_point_images")
       .update({
         ...updateData,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      console.error('Database update error:', error);
+      console.error("Database update error:", error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Update pickup point image error:', error);
+    console.log("xIII");
+    console.error("Update pickup point image error:", error);
     return false;
   }
 }
@@ -201,23 +247,21 @@ export async function updatePickupPointImage(
  * @param id - Image ID
  * @returns Promise<boolean>
  */
-export async function deletePickupPointImage(
-  id: string
-): Promise<boolean> {
+export async function deletePickupPointImage(id: string): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from('pickup_point_images')
+      .from("pickup_point_images")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      console.error('Database delete error:', error);
+      console.error("Database delete error:", error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Delete pickup point image error:', error);
+    console.error("Delete pickup point image error:", error);
     return false;
   }
 }
@@ -232,50 +276,54 @@ export async function deletePickupPointImage(
 export async function uploadPickupPointImageComplete(
   file: File,
   imageData: PickupPointImageData,
-  bucket: string = 'images'
+  bucket: string = "images"
 ): Promise<{
   success: boolean;
   id?: string;
   url?: string;
   error?: string;
 }> {
+  console.log("upl III inside upload");
   try {
+    console.log("upl IV");
     // Upload file to storage
-    const uploadResult = await uploadImageToSupabase(file, bucket);
-    
+    const uploadResult = await uploadImageToSupabase(file, bucket); //BROKE
+
     if (!uploadResult.success) {
+      console.log("upl xIV");
       return {
         success: false,
-        error: uploadResult.error
+        error: uploadResult.error,
       };
     }
 
+    console.log("upl V save meta");
     // Save metadata to database
     const saveResult = await savePickupPointImage(imageData, uploadResult.url!);
 
     if (!saveResult.success) {
+      console.log("upl xV save meta fail");
       // Cleanup: delete uploaded file if metadata save failed
       if (uploadResult.path) {
         await deleteImageFromSupabase(uploadResult.path, bucket);
       }
-      
+
       return {
         success: false,
-        error: saveResult.error
+        error: saveResult.error,
       };
     }
 
     return {
       success: true,
       id: saveResult.id,
-      url: uploadResult.url
+      url: uploadResult.url,
     };
-
   } catch (error) {
-    console.error('Complete upload error:', error);
+    console.error("Complete upload error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 }
@@ -290,20 +338,19 @@ export async function uploadPickupPointImageComplete(
 export async function deletePickupPointImageComplete(
   id: string,
   imagePath: string,
-  bucket: string = 'images'
+  bucket: string = "images"
 ): Promise<boolean> {
   try {
     // Delete from database first
     const metadataDeleted = await deletePickupPointImage(id);
-    
+
     // Delete from storage (don't need to check result as metadata deletion is more critical)
     await deleteImageFromSupabase(imagePath, bucket);
 
     // Return true if metadata was deleted successfully
     return metadataDeleted;
-
   } catch (error) {
-    console.error('Complete delete error:', error);
+    console.error("Complete delete error:", error);
     return false;
   }
 }

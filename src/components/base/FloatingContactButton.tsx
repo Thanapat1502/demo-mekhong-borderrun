@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@heroui/react";
 import {
   FaEnvelope,
@@ -10,6 +10,10 @@ import {
   FaComments,
   FaTimes,
 } from "react-icons/fa";
+import {
+  useContactStore,
+  getPrimaryContact,
+} from "@/store/zustand/contactStore";
 
 /**
  * FloatingContactButton - A reusable floating contact button component
@@ -32,51 +36,88 @@ export default function FloatingContactButton({
   className = "",
 }: FloatingContactButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { contactInfo } = useContactStore();
 
-  const contactOptions = [
-    {
-      icon: FaEnvelope,
-      label: "Email Us",
-      sublabel: "mekongborderrun@gmail.com",
-      href: "mailto:mekongborderrun@gmail.com",
-      bgColor:
-        "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700",
-      textColor: "text-white",
-      borderColor: "border-blue-500",
-    },
-    {
-      icon: FaPhone,
-      label: "Call Now",
-      sublabel: "+66 95 102 9528",
-      href: "tel:+66951029528",
-      bgColor:
-        "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700",
-      textColor: "text-white",
-      borderColor: "border-green-500",
-    },
-    {
-      icon: FaWhatsapp,
-      label: "WhatsApp",
-      sublabel: "Quick Response",
-      href: "https://wa.me/66951029528",
-      bgColor:
-        "bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800",
-      textColor: "text-white",
-      target: "_blank",
-      borderColor: "border-green-600",
-    },
-    {
-      icon: FaLine,
-      label: "LINE Chat",
-      sublabel: "@mekongborderrun",
-      href: "https://line.me/ti/p/~@mekongborderrun",
-      bgColor:
-        "bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600",
-      textColor: "text-white",
-      target: "_blank",
-      borderColor: "border-green-400",
-    },
-  ];
+  // Get contact information from store
+  const primaryPhone = getPrimaryContact(contactInfo, "phone");
+  const primaryEmail = getPrimaryContact(contactInfo, "email");
+  const whatsappContact =
+    contactInfo.find(
+      (contact) => contact.type === "whatsapp" && contact.isPrimary
+    ) || contactInfo.find((contact) => contact.type === "whatsapp");
+  const lineContact =
+    contactInfo.find(
+      (contact) => contact.type === "line" && contact.isPrimary
+    ) || contactInfo.find((contact) => contact.type === "line");
+
+  const contactOptions = useMemo(() => {
+    const options = [];
+
+    // Email option
+    if (primaryEmail) {
+      options.push({
+        icon: FaEnvelope,
+        label: "Email Us",
+        sublabel: primaryEmail.value,
+        href: `mailto:${primaryEmail.value}`,
+        bgColor:
+          "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700",
+        textColor: "text-white",
+        borderColor: "border-blue-500",
+      });
+    }
+
+    // Phone option
+    if (primaryPhone) {
+      options.push({
+        icon: FaPhone,
+        label: "Call Now",
+        sublabel: primaryPhone.value,
+        href: `tel:${primaryPhone.value.replace(/\s/g, "")}`,
+        bgColor:
+          "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700",
+        textColor: "text-white",
+        borderColor: "border-green-500",
+      });
+    }
+
+    // WhatsApp option
+    if (whatsappContact) {
+      const whatsappNumber = whatsappContact.value
+        .replace(/\s/g, "")
+        .replace(/^\+/, "");
+      options.push({
+        icon: FaWhatsapp,
+        label: "WhatsApp",
+        sublabel: "Quick Response",
+        href: `https://wa.me/${whatsappNumber}`,
+        bgColor:
+          "bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800",
+        textColor: "text-white",
+        target: "_blank",
+        borderColor: "border-green-600",
+      });
+    }
+
+    // LINE option
+    if (lineContact) {
+      options.push({
+        icon: FaLine,
+        label: "LINE Chat",
+        sublabel: lineContact.value,
+        href: lineContact.value.startsWith("http")
+          ? lineContact.value
+          : `https://line.me/ti/p/~${lineContact.value}`,
+        bgColor:
+          "bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600",
+        textColor: "text-white",
+        target: "_blank",
+        borderColor: "border-green-400",
+      });
+    }
+
+    return options;
+  }, [primaryEmail, primaryPhone, whatsappContact, lineContact]);
 
   return (
     <div

@@ -16,9 +16,14 @@ interface HeroImage {
 
 interface HeroSectionProps {
   heroImages?: HeroImage[];
+  subtitle?: string;
 }
 
-export default function HeroSection({ heroImages = [] }: HeroSectionProps) {
+export default function HeroSection({
+  heroImages = [],
+  subtitle = `Extend your stay in Thailand with our trusted one-day border run
+              trip from Chiang Mai to Laos.`,
+}: HeroSectionProps) {
   const [scrollY, setScrollY] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -101,8 +106,7 @@ export default function HeroSection({ heroImages = [] }: HeroSectionProps) {
             <p
               className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto leading-relaxed opacity-90 animate-slide-up"
               style={{ animationDelay: "0.4s" }}>
-              Extend your stay in Thailand with our trusted one-day border run
-              trip from Chiang Mai to Laos.
+              {subtitle}
             </p>
             <div
               className="flex flex-col sm:flex-row gap-6 justify-center animate-slide-up"

@@ -11,7 +11,10 @@ import {
 } from "@heroui/react";
 import { FiSave, FiUser, FiEdit, FiX, FiCamera } from "react-icons/fi";
 import { supabase, TABLES, ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
-import { uploadImageComplete } from "@/lib/supabase-storage";
+import {
+  uploadOwnerImageComplete,
+  OwnerImageData,
+} from "@/lib/categorized-image-storage";
 
 export default function ContactInfoManager() {
   const [contactInfo, setContactInfo] = useState<ContactInfoRow[]>([]);
@@ -28,6 +31,7 @@ export default function ContactInfoManager() {
   const [email, setEmail] = useState<string>("");
   const [whatsapp, setWhatsapp] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [line, setLine] = useState<string>("");
   const [ownerImageFile, setOwnerImageFile] = useState<File | null>(null);
   const [ownerImagePreview, setOwnerImagePreview] = useState<string>("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -100,6 +104,7 @@ export default function ContactInfoManager() {
         setPhone(ownerData.phone);
         setEmail(ownerData.email);
         setWhatsapp(ownerData.whatsapp || "");
+        setLine(ownerData.line || "");
 
         // Set address from contact info
         const addressInfo = contactData?.find(
@@ -203,18 +208,17 @@ export default function ContactInfoManager() {
       if (ownerImageFile) {
         setIsUploadingImage(true);
         try {
-          const uploadResult = await uploadImageComplete(
+          const ownerImageData: OwnerImageData = {
+            title: `${guideName.trim()} Profile`,
+            alt: `Profile image for ${guideName.trim()}`,
+            description: `Profile image for ${guideName.trim()}`,
+            owner_name: guideName.trim(),
+            position: "Guide/Owner",
+          };
+
+          const uploadResult = await uploadOwnerImageComplete(
             ownerImageFile,
-            {
-              name: `owner-${guideName
-                .trim()
-                .toLowerCase()
-                .replace(/\s+/g, "-")}`,
-              description: `Profile image for ${guideName.trim()}`,
-            },
-            {
-              bucket: "images",
-            }
+            ownerImageData
           );
 
           if (uploadResult.success && uploadResult.url) {
@@ -231,28 +235,6 @@ export default function ContactInfoManager() {
         }
       }
 
-      // Check if this is mock data
-      if (ownerInfo && ownerInfo.id === "mock-owner-1") {
-        console.log("Updating mock owner data");
-        // Update the local state for mock data
-        const updatedOwnerInfo = {
-          ...ownerInfo,
-          name: guideName.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
-          whatsapp: whatsapp.trim() || null,
-          avatar: avatarUrl,
-          updated_at: new Date().toISOString(),
-        };
-        setOwnerInfo(updatedOwnerInfo);
-        setSuccessMessage(
-          "Contact information updated successfully! (Note: Using mock data - Supabase tables don't exist)"
-        );
-        setTimeout(() => setSuccessMessage(""), 5000);
-        setIsEditing(false);
-        return;
-      }
-
       // Update or create owner info
       if (ownerInfo) {
         const { error: ownerError } = await supabase
@@ -262,6 +244,7 @@ export default function ContactInfoManager() {
             phone: phone.trim(),
             email: email.trim(),
             whatsapp: whatsapp.trim() || null,
+            line: line.trim() || null,
             avatar: avatarUrl,
             updated_at: new Date().toISOString(),
           })
@@ -459,9 +442,8 @@ export default function ContactInfoManager() {
                       <Button
                         as="label"
                         htmlFor="owner-image-upload"
-                        variant="bordered"
                         startContent={<FiCamera />}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-white bg-accent-600"
                         isDisabled={isUploadingImage}>
                         {ownerImageFile ? "Change Image" : "Upload Image"}
                       </Button>
@@ -523,15 +505,21 @@ export default function ContactInfoManager() {
                   placeholder="+66 (0) 95 102 9528"
                   size="lg"
                 />
+                <Input
+                  label="Line ID"
+                  value={line}
+                  onChange={(e) => setLine(e.target.value)}
+                  placeholder="Enter line id"
+                  size="lg"
+                />
+                <Input
+                  label="Business Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Chiang Mai, Thailand"
+                  size="lg"
+                />
               </div>
-
-              <Input
-                label="Business Address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Chiang Mai, Thailand"
-                size="lg"
-              />
 
               <div className="flex gap-3">
                 <Button

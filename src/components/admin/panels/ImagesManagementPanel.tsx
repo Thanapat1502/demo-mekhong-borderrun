@@ -23,7 +23,7 @@ import {
   uploadPickupPointImageComplete,
   updatePickupPointImage,
   deletePickupPointImageComplete,
-} from "@/lib/pickup-point-storage";
+} from "@/lib/categorized-image-storage";
 
 interface ImageDataItem {
   id: string;
@@ -101,7 +101,7 @@ export default function ImagesManagementPanel() {
     title: img.title,
     location: img.location,
     description: img.description,
-    google_map_url: "", // Will be added in database
+    google_map_url: img.google_map_url || "", // Use actual Google Map URL from database
     size: "1.2 MB", // Default size - in real app would come from file metadata
     uploadDate: "2024-01-17",
   }));
@@ -167,10 +167,11 @@ export default function ImagesManagementPanel() {
 
   const handleUploadSubmit = async () => {
     if (selectedFiles.length === 0) return;
-
+    console.log("upl I");
     setIsUploading(true);
 
     try {
+      console.log("upl II");
       for (const file of selectedFiles) {
         const result = await uploadPickupPointImageComplete(file, {
           title: uploadFormData.title || file.name.split(".")[0],
@@ -205,6 +206,8 @@ export default function ImagesManagementPanel() {
         google_map_url: "",
       });
     } catch (error) {
+      console.log("upl xII");
+
       console.error("Upload error:", error);
       // TODO: Show error toast
     } finally {
@@ -283,7 +286,7 @@ export default function ImagesManagementPanel() {
     if (!editingImage) return;
 
     setIsSaving(true);
-
+    console.log("I");
     try {
       const success = await updatePickupPointImage(editingImage.id, {
         title: formData.title,
@@ -295,6 +298,7 @@ export default function ImagesManagementPanel() {
 
       if (success) {
         console.log("Image updated successfully");
+        console.log("II");
         // TODO: Show success toast
         await fetchPickupPointImages(); // Refresh the list
         onEditModalClose();
@@ -305,6 +309,7 @@ export default function ImagesManagementPanel() {
       }
     } catch (error) {
       console.error("Save error:", error);
+      console.log("xII");
       // TODO: Show error toast
     } finally {
       setIsSaving(false);
@@ -454,9 +459,9 @@ export default function ImagesManagementPanel() {
       {/* Delete Confirmation Modal */}
       <Modal isOpen={isDeleteModalOpen} onClose={onDeleteModalClose} size="md">
         <ModalContent>
-          <ModalHeader>Confirm Delete</ModalHeader>
+          <ModalHeader className="text-gray-800">Confirm Delete</ModalHeader>
           <ModalBody>
-            <p>
+            <p className="text-gray-800">
               Are you sure you want to delete the image &ldquo;
               <strong>{imageToDelete?.name}</strong>&rdquo;?
             </p>

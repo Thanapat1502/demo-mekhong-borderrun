@@ -6,6 +6,9 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import FloatingContactButton from "@/components/base/FloatingContactButton";
+import WebConfigProvider from "@/components/providers/WebConfigProvider";
+import ContactProvider from "@/components/providers/ContactProvider";
+import PerformanceOptimizer from "@/components/optimized/PerformanceOptimizer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -121,32 +124,53 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Preload critical resources */}
-        <link
-          rel="preload"
-          href="/image/home/other3.jpg"
-          as="image"
-          type="image/jpeg"
-        />
-        {/* DNS prefetch for external resources */}
+        {/* Critical resource hints */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        {/* Preconnect to critical third-party origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin=""
         />
+
+        {/* Preload critical images */}
+        <link
+          rel="preload"
+          href="/image/home/other3.jpg"
+          as="image"
+          type="image/jpeg"
+        />
+
+        {/* Prefetch likely next pages */}
+        <link rel="prefetch" href="/our-services" />
+        <link rel="prefetch" href="/contact" />
+
+        {/* Performance optimizations */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta httpEquiv="x-dns-prefetch-control" content="on" />
+
+        {/* Resource hints for Supabase */}
+        <link rel="dns-prefetch" href="//supabase.co" />
+        <link rel="preconnect" href="https://supabase.co" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           <AuthProvider>
-            <Navigation />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-            <FloatingContactButton />
+            <WebConfigProvider>
+              <ContactProvider>
+                <PerformanceOptimizer>
+                  <Navigation />
+                  <main className="min-h-screen">{children}</main>
+                  <Footer />
+                  <FloatingContactButton />
+                </PerformanceOptimizer>
+              </ContactProvider>
+            </WebConfigProvider>
           </AuthProvider>
         </Providers>
       </body>

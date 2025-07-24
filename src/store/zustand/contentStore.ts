@@ -29,6 +29,7 @@ interface PickupPointImage {
   title: string;
   location: string;
   description: string;
+  google_map_url?: string;
   landmark?: string;
   coordinates?: {
     lat: number;
@@ -103,6 +104,7 @@ export const useContentStore = create<State>((set) => ({
         title: item.title,
         location: item.location,
         description: item.description,
+        google_map_url: item.google_map_url,
         landmark: item.landmark,
         coordinates: item.coordinates,
       }));

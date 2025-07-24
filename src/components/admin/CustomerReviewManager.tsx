@@ -37,7 +37,7 @@ import {
 } from "react-icons/fi";
 import { useAdminStore } from "@/store/zustand/adminStore";
 import { useReviewStore } from "@/store/zustand/reviewStore";
-import SupabaseImageUpload from "./SupabaseImageUpload";
+import { uploadCategorizedImage } from "@/lib/categorized-image-storage";
 
 interface CustomerReviewForm {
   name: string;
@@ -66,6 +66,8 @@ export default function CustomerReviewManager() {
   const [formData, setFormData] = useState<CustomerReviewForm>(initialFormData);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const {
     createCustomerReview,
@@ -83,6 +85,8 @@ export default function CustomerReviewManager() {
     setFormData(initialFormData);
     setEditingId(null);
     setIsSubmitting(false);
+    setSelectedImageFile(null);
+    setImagePreview("");
     onClose();
   }, [onClose]);
 
@@ -121,9 +125,13 @@ export default function CustomerReviewManager() {
         verified: review.verified || true,
         trip_date: review.trip_date || new Date().toISOString().split("T")[0],
       });
+      setImagePreview(review.avatar || "");
+      setSelectedImageFile(null);
     } else {
       setEditingId(null);
       setFormData(initialFormData);
+      setImagePreview("");
+      setSelectedImageFile(null);
     }
     clearMessages();
     onOpen();
@@ -134,10 +142,33 @@ export default function CustomerReviewManager() {
     setIsSubmitting(true);
 
     try {
+      let avatarUrl = formData.avatar;
+
+      // Upload image if a new file is selected
+      if (selectedImageFile) {
+        const uploadResult = await uploadCategorizedImage(
+          selectedImageFile,
+          "customer",
+          "images"
+        );
+
+        if (uploadResult.success && uploadResult.url) {
+          avatarUrl = uploadResult.url;
+        } else {
+          throw new Error(uploadResult.error || "Failed to upload image");
+        }
+      }
+
+      // Update form data with the uploaded image URL
+      const reviewData = {
+        ...formData,
+        avatar: avatarUrl,
+      };
+
       if (editingId) {
-        await updateCustomerReview(editingId, formData);
+        await updateCustomerReview(editingId, reviewData);
       } else {
-        await createCustomerReview(formData);
+        await createCustomerReview(reviewData);
       }
     } catch (error) {
       console.error("Error submitting review:", error);
@@ -153,8 +184,37 @@ export default function CustomerReviewManager() {
     }
   };
 
-  const handleImageUpload = (url: string) => {
-    setFormData((prev) => ({ ...prev, avatar: url }));
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert("File size must be less than 5MB");
+        return;
+      }
+
+      setSelectedImageFile(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImageFile(null);
+    setImagePreview("");
+    setFormData((prev) => ({ ...prev, avatar: "" }));
   };
 
   const renderStars = (rating: number) => {
@@ -389,14 +449,45 @@ export default function CustomerReviewManager() {
                 <label className="block text-base font-medium mb-2 text-gray-800">
                   Customer Avatar
                 </label>
-                <SupabaseImageUpload
-                  currentImageUrl={formData.avatar}
-                  category="avatars"
-                  onImageUploaded={(url) => handleImageUpload(url)}
-                  onImageRemoved={() =>
-                    setFormData((prev) => ({ ...prev, avatar: "" }))
-                  }
-                />
+                <div className="space-y-3">
+                  {/* Current/Preview Image */}
+                  {(imagePreview || formData.avatar) && (
+                    <div className="flex items-center gap-3">
+                      <Avatar
+                        src={imagePreview || formData.avatar}
+                        alt="Customer avatar preview"
+                        size="lg"
+                        className="w-16 h-16"
+                      />
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        color="danger"
+                        onPress={handleRemoveImage}>
+                        Remove
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* File Input */}
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Upload will happen when you click &quot;Add Review&quot;.
+                      Max 5MB.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

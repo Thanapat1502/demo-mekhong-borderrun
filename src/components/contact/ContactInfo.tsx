@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Card, CardHeader, CardBody, Button, Avatar } from "@heroui/react";
 import {
   FiPhone,
@@ -9,33 +8,20 @@ import {
   FiMapPin,
   FiClock,
 } from "react-icons/fi";
-import { useContactStore } from "@/store/zustand/contactStore";
+import {
+  useContactStore,
+  getPrimaryContact,
+} from "@/store/zustand/contactStore";
 
 export default function ContactInfo() {
-  const {
-    contactInfo,
-    ownerInfo,
-    businessInfo,
-    fetchContactInfo,
-    fetchOwnerInfo,
-    fetchBusinessInfo,
-  } = useContactStore();
+  const { contactInfo, ownerInfo, businessInfo } = useContactStore();
 
-  useEffect(() => {
-    fetchContactInfo();
-    fetchOwnerInfo();
-    fetchBusinessInfo();
-  }, [fetchContactInfo, fetchOwnerInfo, fetchBusinessInfo]);
-
-  // Get specific contact info
-  const phoneInfo = contactInfo.find(
-    (info) => info.type === "phone" && info.isPrimary
-  );
+  // Get specific contact info using the helper function
+  const phoneInfo = getPrimaryContact(contactInfo, "phone");
   const whatsappInfo = contactInfo.find((info) => info.type === "whatsapp");
-  const emailInfo = contactInfo.find(
-    (info) => info.type === "email" && info.isPrimary
-  );
-  const addressInfo = contactInfo.find((info) => info.type === "address");
+  const emailInfo = getPrimaryContact(contactInfo, "email");
+  const addressInfo = getPrimaryContact(contactInfo, "address");
+  const lineInfo = contactInfo.find((info) => info.type === "line");
 
   // Fallback data
   const defaultPhone = "+66 (0) 95 102 9528";
@@ -103,21 +89,27 @@ export default function ContactInfo() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center">
-              <FiMessageCircle className="text-accent-600" size={20} />
+          {lineInfo && (
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center">
+                <FiMessageCircle className="text-accent-600" size={20} />
+              </div>
+              <div>
+                <h4 className="font-medium text-black">LINE</h4>
+                <a
+                  href={
+                    lineInfo.value.startsWith("http")
+                      ? lineInfo.value
+                      : `https://line.me/ti/p/~${lineInfo.value}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
+                  {lineInfo.value}
+                </a>
+              </div>
             </div>
-            <div>
-              <h4 className="font-medium text-black">LINE</h4>
-              <a
-                href="https://line.me/ti/p/~25171107"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent-600 font-medium hover:text-accent-700 transition-colors duration-200">
-                ID: 25171107
-              </a>
-            </div>
-          </div>
+          )}
 
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center">
@@ -164,41 +156,56 @@ export default function ContactInfo() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
-          <Button
-            as="a"
-            href="tel:+66951029528"
-            className="bg-accent-500 text-white hover:bg-accent-600 rounded-full"
-            size="lg">
-            Call Now
-          </Button>
-          <Button
-            as="a"
-            href="https://wa.me/66951029528"
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="bordered"
-            className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
-            size="lg">
-            WhatsApp
-          </Button>
-          <Button
-            as="a"
-            href="https://line.me/ti/p/25171107"
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="bordered"
-            className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
-            size="lg">
-            LINE
-          </Button>
-          <Button
-            as="a"
-            href="mailto:prpbee711@gmail.com"
-            variant="bordered"
-            className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
-            size="lg">
-            Email
-          </Button>
+          {phoneInfo && (
+            <Button
+              as="a"
+              href={`tel:${phoneInfo.value.replace(/\s/g, "")}`}
+              className="bg-accent-500 text-white hover:bg-accent-600 rounded-full"
+              size="lg">
+              Call Now
+            </Button>
+          )}
+          {whatsappInfo && (
+            <Button
+              as="a"
+              href={`https://wa.me/${whatsappInfo.value.replace(
+                /[^0-9]/g,
+                ""
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="bordered"
+              className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
+              size="lg">
+              WhatsApp
+            </Button>
+          )}
+          {lineInfo && (
+            <Button
+              as="a"
+              href={
+                lineInfo.value.startsWith("http")
+                  ? lineInfo.value
+                  : `https://line.me/ti/p/~${lineInfo.value}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="bordered"
+              className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
+              size="lg">
+              LINE
+            </Button>
+          )}
+          {emailInfo && (
+            <Button
+              as="a"
+              href={`mailto:${emailInfo.value}`}
+              variant="bordered"
+              className="border-accent-500 text-accent-600 hover:bg-accent-50 rounded-full"
+              size="lg">
+              Email
+            </Button>
+          )}
         </div>
       </CardBody>
     </Card>
