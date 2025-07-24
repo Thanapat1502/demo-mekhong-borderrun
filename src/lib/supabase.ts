@@ -23,6 +23,7 @@ export const TABLES = {
   BUSINESS_INFO: "business_info",
   CONTACT_REQUESTS: "contact_requests",
   WEBSITE_ANALYTICS: "website_analytics",
+  WEB_CONFIG: "web_config",
 } as const;
 
 // Database types (these should match your Supabase schema)
@@ -102,8 +103,7 @@ export interface Database {
           title: string;
           location: string;
           description: string;
-          landmark: string | null;
-          coordinates: { lat: number; lng: number } | null;
+          google_map_url?: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -114,8 +114,7 @@ export interface Database {
           title: string;
           location: string;
           description: string;
-          landmark?: string | null;
-          coordinates?: { lat: number; lng: number } | null;
+          google_map_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -126,8 +125,7 @@ export interface Database {
           title?: string;
           location?: string;
           description?: string;
-          landmark?: string | null;
-          coordinates?: { lat: number; lng: number } | null;
+          google_map_url?: string | null;
           updated_at?: string;
         };
       };
@@ -497,6 +495,46 @@ export interface Database {
           updated_at?: string;
         };
       };
+      web_config: {
+        Row: {
+          id: string;
+          key: string;
+          value: string;
+          description?: string;
+          category: string;
+          type: string;
+          is_required: boolean;
+          is_public: boolean;
+          display_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          key: string;
+          value: string;
+          description?: string;
+          category?: string;
+          type?: string;
+          is_required?: boolean;
+          is_public?: boolean;
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          key?: string;
+          value?: string;
+          description?: string;
+          category?: string;
+          type?: string;
+          is_required?: boolean;
+          is_public?: boolean;
+          display_order?: number;
+          updated_at?: string;
+        };
+      };
     };
   };
 }
@@ -531,3 +569,4 @@ export type ContactRequestRow =
   Database["public"]["Tables"]["contact_requests"]["Row"];
 export type WebsiteAnalyticsRow =
   Database["public"]["Tables"]["website_analytics"]["Row"];
+export type WebConfigRow = Database["public"]["Tables"]["web_config"]["Row"];

@@ -103,11 +103,12 @@ export default function LoginForm() {
               <Input
                 type="email"
                 label="Email Address"
-                placeholder="admin@mekong-borderrun.com"
+                placeholder="Enter admin email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 startContent={<FiMail className="text-gray-400" />}
                 variant="bordered"
+                className="text-gray-800"
                 size="lg"
                 isRequired
                 autoComplete="email"
@@ -129,6 +130,7 @@ export default function LoginForm() {
                   </button>
                 }
                 variant="bordered"
+                className="text-gray-800"
                 size="lg"
                 isRequired
                 autoComplete="current-password"
@@ -138,7 +140,7 @@ export default function LoginForm() {
                 type="submit"
                 color="primary"
                 size="lg"
-                className="w-full"
+                className="w-full bg-accent-600"
                 isLoading={isLoading}
                 disabled={isLoading}>
                 {isLoading ? "Signing In..." : "Sign In"}

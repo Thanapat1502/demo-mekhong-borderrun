@@ -9,8 +9,9 @@ import {
   Input,
   Avatar,
 } from "@heroui/react";
-import { FiSave, FiUser, FiEdit, FiX } from "react-icons/fi";
+import { FiSave, FiUser, FiEdit, FiX, FiCamera } from "react-icons/fi";
 import { supabase, TABLES, ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
+import { uploadImageComplete } from "@/lib/supabase-storage";
 
 export default function ContactInfoManager() {
   const [contactInfo, setContactInfo] = useState<ContactInfoRow[]>([]);
@@ -27,6 +28,9 @@ export default function ContactInfoManager() {
   const [email, setEmail] = useState<string>("");
   const [whatsapp, setWhatsapp] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [ownerImageFile, setOwnerImageFile] = useState<File | null>(null);
+  const [ownerImagePreview, setOwnerImagePreview] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Fetch data from Supabase
   const fetchData = async () => {
@@ -132,6 +136,39 @@ export default function ContactInfoManager() {
     }
     const addressInfo = contactInfo.find((info) => info.type === "address");
     setAddress(addressInfo?.value || "");
+
+    // Reset image upload states
+    setOwnerImageFile(null);
+    setOwnerImagePreview("");
+  };
+
+  // Handle owner image upload
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setError("Please select an image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Image size must be less than 5MB");
+        return;
+      }
+
+      setOwnerImageFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setOwnerImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      setError(""); // Clear any previous errors
+    }
   };
 
   const handleSave = async () => {
@@ -161,6 +198,39 @@ export default function ContactInfoManager() {
         return;
       }
 
+      // Handle image upload if a new image is selected
+      let avatarUrl = ownerInfo?.avatar || null;
+      if (ownerImageFile) {
+        setIsUploadingImage(true);
+        try {
+          const uploadResult = await uploadImageComplete(
+            ownerImageFile,
+            {
+              name: `owner-${guideName
+                .trim()
+                .toLowerCase()
+                .replace(/\s+/g, "-")}`,
+              description: `Profile image for ${guideName.trim()}`,
+            },
+            {
+              bucket: "images",
+            }
+          );
+
+          if (uploadResult.success && uploadResult.url) {
+            avatarUrl = uploadResult.url;
+          } else {
+            throw new Error(uploadResult.error || "Failed to upload image");
+          }
+        } catch (uploadError) {
+          console.error("Image upload error:", uploadError);
+          setError("Failed to upload image. Please try again.");
+          return;
+        } finally {
+          setIsUploadingImage(false);
+        }
+      }
+
       // Check if this is mock data
       if (ownerInfo && ownerInfo.id === "mock-owner-1") {
         console.log("Updating mock owner data");
@@ -171,6 +241,7 @@ export default function ContactInfoManager() {
           phone: phone.trim(),
           email: email.trim(),
           whatsapp: whatsapp.trim() || null,
+          avatar: avatarUrl,
           updated_at: new Date().toISOString(),
         };
         setOwnerInfo(updatedOwnerInfo);
@@ -191,6 +262,7 @@ export default function ContactInfoManager() {
             phone: phone.trim(),
             email: email.trim(),
             whatsapp: whatsapp.trim() || null,
+            avatar: avatarUrl,
             updated_at: new Date().toISOString(),
           })
           .eq("id", ownerInfo.id);
@@ -205,6 +277,7 @@ export default function ContactInfoManager() {
             phone: phone.trim(),
             email: email.trim(),
             whatsapp: whatsapp.trim() || null,
+            avatar: avatarUrl,
           });
 
         if (ownerError) throw ownerError;
@@ -241,6 +314,10 @@ export default function ContactInfoManager() {
       // Refresh data and exit edit mode
       await fetchData();
       setIsEditing(false);
+
+      // Clear image upload states
+      setOwnerImageFile(null);
+      setOwnerImagePreview("");
     } catch (err) {
       setError("Failed to update contact information");
       console.error("Error updating data:", err);
@@ -283,7 +360,7 @@ export default function ContactInfoManager() {
                   variant="flat"
                   startContent={<FiEdit />}
                   onPress={handleEdit}
-                  size="sm">
+                  size="md">
                   Edit
                 </Button>
               )}
@@ -348,6 +425,68 @@ export default function ContactInfoManager() {
           ) : (
             // Edit Mode
             <div className="space-y-6">
+              {/* Owner Image Upload Section */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <div className="flex items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <Avatar
+                      src={
+                        ownerImagePreview ||
+                        ownerInfo?.avatar ||
+                        "/owner-photo.jpg"
+                      }
+                      alt={guideName || "Guide"}
+                      className="w-24 h-24"
+                      fallback={<FiUser size={40} />}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-medium text-gray-900 mb-2">
+                      Owner Profile Image
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Upload a professional photo for the owner profile.
+                      Recommended size: 400x400px
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        id="owner-image-upload"
+                      />
+                      <Button
+                        as="label"
+                        htmlFor="owner-image-upload"
+                        variant="bordered"
+                        startContent={<FiCamera />}
+                        className="cursor-pointer"
+                        isDisabled={isUploadingImage}>
+                        {ownerImageFile ? "Change Image" : "Upload Image"}
+                      </Button>
+                      {ownerImageFile && (
+                        <Button
+                          variant="light"
+                          color="danger"
+                          size="sm"
+                          onPress={() => {
+                            setOwnerImageFile(null);
+                            setOwnerImagePreview("");
+                          }}>
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                    {isUploadingImage && (
+                      <p className="text-sm text-blue-600 mt-2">
+                        Uploading image...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   label="Guide Name"
@@ -396,12 +535,12 @@ export default function ContactInfoManager() {
 
               <div className="flex gap-3">
                 <Button
-                  color="primary"
+                  color="success"
                   size="lg"
                   startContent={<FiSave />}
                   onPress={handleSave}
                   isLoading={isSaving}
-                  className="flex-1">
+                  className="flex-1 bg-green-600 text-white hover:bg-green-700">
                   Save Changes
                 </Button>
 
@@ -411,7 +550,8 @@ export default function ContactInfoManager() {
                   size="lg"
                   startContent={<FiX />}
                   onPress={handleCancel}
-                  disabled={isSaving}>
+                  disabled={isSaving}
+                  className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50">
                   Cancel
                 </Button>
               </div>

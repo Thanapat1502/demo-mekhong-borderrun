@@ -80,14 +80,11 @@ export default function Navigation() {
               className="object-contain flex-shrink-0"
             />
             <span
-              className={`hidden xs:inline text-xl sm:text-2xl font-semibold ${textColor}`}>
+              className={`text-lg sm:text-xl lg:text-2xl font-semibold ${textColor}`}>
               Mekong{" "}
               <span className="text-accent-500 font-extralight">
                 Border Run
               </span>
-            </span>
-            <span className={`xs:hidden text-lg font-semibold ${textColor}`}>
-              Mekong
             </span>
           </Link>
         </NavbarBrand>
@@ -113,22 +110,12 @@ export default function Navigation() {
       </NavbarContent>
 
       <NavbarContent justify="end" className="flex-shrink-0">
-        <NavbarItem className="hidden xs:flex">
+        <NavbarItem className="hidden sm:flex">
           <Button
             as="a"
             href="tel:+66951029528"
             className={`font-medium rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base sm:text-base text-white ${buttonStyle}`}>
-            <span className="hidden sm:inline">Call Now</span>
-            <span className="sm:hidden">Call</span>
-          </Button>
-        </NavbarItem>
-        <NavbarItem className="xs:hidden">
-          <Button
-            as="a"
-            href="tel:+66951029528"
-            className={`font-medium rounded-full px-3 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base text-white ${buttonStyle}`}
-            size="sm">
-            Call
+            Call Now
           </Button>
         </NavbarItem>
       </NavbarContent>

@@ -171,7 +171,7 @@ export default function ServicePricingManager() {
                 variant="flat"
                 startContent={<FiEdit />}
                 onPress={() => handleEdit(currentPackage)}
-                size="sm">
+                size="md">
                 Edit
               </Button>
             </div>
@@ -273,12 +273,12 @@ export default function ServicePricingManager() {
 
             <div className="flex gap-3">
               <Button
-                color="primary"
+                color="success"
                 size="lg"
                 startContent={<FiSave />}
                 onPress={handleSave}
                 isLoading={isSaving}
-                className="flex-1">
+                className="flex-1 bg-green-600 text-white hover:bg-green-700">
                 Save Changes
               </Button>
 
@@ -288,7 +288,8 @@ export default function ServicePricingManager() {
                 size="lg"
                 startContent={<FiX />}
                 onPress={handleCancel}
-                disabled={isSaving}>
+                disabled={isSaving}
+                className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50">
                 Cancel
               </Button>
             </div>

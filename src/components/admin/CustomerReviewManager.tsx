@@ -302,7 +302,7 @@ export default function CustomerReviewManager() {
       <Modal isOpen={isOpen} onClose={handleCloseModal} size="2xl">
         <ModalContent>
           <form onSubmit={handleSubmit}>
-            <ModalHeader>
+            <ModalHeader className="text-gray-900">
               {editingId ? "Edit Review" : "Add New Review"}
             </ModalHeader>
             <ModalBody className="space-y-4">
@@ -386,7 +386,7 @@ export default function CustomerReviewManager() {
               />
 
               <div>
-                <label className="block text-base font-medium mb-2">
+                <label className="block text-base font-medium mb-2 text-gray-800">
                   Customer Avatar
                 </label>
                 <SupabaseImageUpload
@@ -412,16 +412,20 @@ export default function CustomerReviewManager() {
                         }))
                       }
                     />
-                    Verified Customer
+                    <p className="text-gray-800">Verified Customer</p>
                   </label>
                 </div>
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button variant="light" onPress={handleCloseModal}>
+              <Button
+                variant="bordered"
+                className="text-gray-600"
+                onPress={handleCloseModal}>
                 Cancel
               </Button>
               <Button
+                className="bg-green-500"
                 color="primary"
                 type="submit"
                 isLoading={isSubmitting || isLoading}>
