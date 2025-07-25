@@ -2,27 +2,38 @@
 
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useContentStore } from "@/store/zustand/contentStore";
 import { heroImages } from "@/data/images/heroImage";
 import { useWebConfigStore } from "@/store/zustand/webConfigStore";
 
-// Optimized loading placeholder component
-const LoadingPlaceholder = ({ height = "h-96" }: { height?: string }) => (
+// Highly optimized loading placeholder to prevent layout shifts
+const LoadingPlaceholder = ({
+  height = "h-96",
+  className = "",
+}: {
+  height?: string;
+  className?: string;
+}) => (
   <div
-    className={`${height} bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-lg`}>
-    <div className="flex items-center justify-center h-full">
-      <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-    </div>
-  </div>
+    className={`${height} bg-gray-100 animate-pulse rounded-lg ${className}`}
+    style={{
+      minHeight:
+        height === "h-96" ? "384px" : height === "h-32" ? "128px" : "200px",
+      contentVisibility: "auto", // Optimize rendering performance
+      containIntrinsicSize: "1px 200px", // Provide intrinsic size for better layout
+    }}
+    aria-label="Loading content..."
+  />
 );
 
-// Dynamic imports with optimized loading states and SSR disabled for performance
+// Critical sections - load immediately with SSR
 const AboutSection = dynamic(() => import("@/components/home/AboutSection"), {
   loading: () => <LoadingPlaceholder />,
-  ssr: false,
+  ssr: true, // Enable SSR for above-fold content
 });
 
+// Non-critical sections - lazy load without SSR
 const JourneySection = dynamic(
   () => import("@/components/home/JourneySection"),
   {
@@ -121,21 +132,43 @@ export default function Home() {
     pickup: false,
   });
 
-  // Optimized data fetching - only fetch when needed
-  const fetchJourneyData = async () => {
+  // Optimized data fetching with debouncing and caching
+  const fetchJourneyData = useCallback(async () => {
     if (!dataFetched.journey) {
-      await fetchJourneyImages();
-      await fetchGalleryImages();
-      setDataFetched((prev) => ({ ...prev, journey: true, gallery: true }));
-    }
-  };
+      try {
+        // Use Promise.allSettled to prevent one failure from blocking others
+        const results = await Promise.allSettled([
+          fetchJourneyImages(),
+          fetchGalleryImages(),
+        ]);
 
-  const fetchPickupData = async () => {
-    if (!dataFetched.pickup) {
-      await fetchPickupPointImages();
-      setDataFetched((prev) => ({ ...prev, pickup: true }));
+        // Log any failures but don't block the UI
+        results.forEach((result, index) => {
+          if (result.status === "rejected") {
+            console.warn(
+              `Failed to fetch ${index === 0 ? "journey" : "gallery"} images:`,
+              result.reason
+            );
+          }
+        });
+
+        setDataFetched((prev) => ({ ...prev, journey: true, gallery: true }));
+      } catch (error) {
+        console.error("Error fetching journey data:", error);
+      }
     }
-  };
+  }, [dataFetched.journey, fetchJourneyImages, fetchGalleryImages]);
+
+  const fetchPickupData = useCallback(async () => {
+    if (!dataFetched.pickup) {
+      try {
+        await fetchPickupPointImages();
+        setDataFetched((prev) => ({ ...prev, pickup: true }));
+      } catch (error) {
+        console.error("Error fetching pickup data:", error);
+      }
+    }
+  }, [dataFetched.pickup, fetchPickupPointImages]);
 
   return (
     <div className="bg-white">
@@ -148,35 +181,56 @@ export default function Home() {
       {/* About Section - Load immediately as it's above fold */}
       <AboutSection />
 
-      {/* Journey Section - Lazy load with data fetching */}
+      {/* Journey Section - Only render when data is available */}
       <LazySection fallback={<LoadingPlaceholder />}>
-        <div onMouseEnter={fetchJourneyData} onFocus={fetchJourneyData}>
-          <JourneySection
-            journeyImages={journeyImages}
-            galleryImages={galleryImages}
-          />
+        <div
+          onMouseEnter={fetchJourneyData}
+          onFocus={fetchJourneyData}
+          onTouchStart={fetchJourneyData} // Add touch support for mobile
+        >
+          {journeyImages.length > 0 && galleryImages.length > 0 ? (
+            <JourneySection
+              journeyImages={journeyImages}
+              galleryImages={galleryImages}
+            />
+          ) : (
+            <div className="h-96 flex items-center justify-center">
+              <p className="text-gray-500">Loading journey content...</p>
+            </div>
+          )}
         </div>
       </LazySection>
 
-      {/* Pickup Points Section - Lazy load with data fetching */}
+      {/* Pickup Points Section - Only render when data is available */}
       <LazySection fallback={<LoadingPlaceholder />}>
-        <div onMouseEnter={fetchPickupData} onFocus={fetchPickupData}>
-          <PickupPointsSection pickupPointImages={pickupPointImages} />
+        <div
+          onMouseEnter={fetchPickupData}
+          onFocus={fetchPickupData}
+          onTouchStart={fetchPickupData} // Add touch support for mobile
+        >
+          {pickupPointImages.length > 0 ? (
+            <PickupPointsSection pickupPointImages={pickupPointImages} />
+          ) : (
+            <div className="h-96 flex items-center justify-center">
+              <p className="text-gray-500">Loading pickup points...</p>
+            </div>
+          )}
         </div>
       </LazySection>
 
-      {/* Testimonial Section - Lazy load */}
-      <LazySection fallback={<LoadingPlaceholder />}>
+      {/* Testimonial Section - Lazy load with minimal fallback */}
+      <LazySection fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
         <TestimonialSection />
       </LazySection>
 
-      {/* Contact Section - Lazy load */}
-      <LazySection fallback={<LoadingPlaceholder />}>
+      {/* Contact Section - Lazy load with minimal fallback */}
+      <LazySection fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
         <ContactSection />
       </LazySection>
 
-      {/* CTA Section - Lazy load */}
-      <LazySection fallback={<LoadingPlaceholder height="h-32" />}>
+      {/* CTA Section - Lazy load with minimal fallback */}
+      <LazySection
+        fallback={<div className="h-32 bg-primary-900 animate-pulse" />}>
         <SharedCTASection
           subtitle="Join hundreds of satisfied travelers who trust us with their visa extension needs"
           backgroundColor="bg-primary-900">

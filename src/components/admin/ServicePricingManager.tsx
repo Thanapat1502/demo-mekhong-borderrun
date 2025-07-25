@@ -38,28 +38,13 @@ export default function ServicePricingManager() {
 
       if (error) {
         console.error("Service packages error:", error);
-        // If table doesn't exist, create mock data
+        // If table doesn't exist, show error
         if (error.code === "42P01") {
-          console.log("Service packages table doesn't exist, using mock data");
-          const mockPackage = {
-            id: "mock-1",
-            name: "Border Run Service",
-            price: 1500,
-            currency: "THB",
-            description: "Professional border run service to Myanmar",
-            features: [
-              "Professional driver",
-              "All documentation",
-              "Same day return",
-            ],
-            duration: "1 day",
-            max_passengers: 4,
-            is_popular: true,
-            is_available: true,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-          setPackages([mockPackage]);
+          console.log("Service packages table doesn't exist");
+          setError(
+            "Service packages table not found. Please contact administrator."
+          );
+          setPackages([]);
           setIsLoading(false);
           return;
         }

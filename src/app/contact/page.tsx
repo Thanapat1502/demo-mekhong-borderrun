@@ -8,7 +8,62 @@ import SharedCTASection from "@/components/shared/SharedCTASection";
 import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function Contact() {
-  const { ownerInfo } = useContactStore();
+  const { ownerInfo, contactInfo, businessInfo, isLoading, error } =
+    useContactStore();
+
+  // Show loading state while fetching contact data
+  if (isLoading) {
+    return (
+      <div className="bg-white min-h-screen">
+        <ContactHero />
+        <section className="py-12 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="animate-pulse">
+                <div className="h-96 bg-gray-200 rounded-lg"></div>
+              </div>
+              <div className="animate-pulse">
+                <div className="h-96 bg-gray-200 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // Show error state if contact data failed to load
+  if (error) {
+    return (
+      <div className="bg-white min-h-screen">
+        <ContactHero />
+        <section className="py-12 px-6">
+          <div className="max-w-6xl mx-auto text-center">
+            <p className="text-red-500 text-lg">
+              Failed to load contact information. Please try again later.
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // Show message if no contact data available
+  if (contactInfo.length === 0 && !ownerInfo && !businessInfo) {
+    return (
+      <div className="bg-white min-h-screen">
+        <ContactHero />
+        <section className="py-12 px-6">
+          <div className="max-w-6xl mx-auto text-center">
+            <p className="text-gray-500 text-lg">
+              Contact information is not available at the moment.
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white min-h-screen">
       <ContactHero />
@@ -23,7 +78,8 @@ export default function Contact() {
         </div>
       </section>
 
-      <ContactFAQ phone={ownerInfo?.phone || "+66 (0) 95 102 9528"} />
+      {/* Only render FAQ if we have owner phone data */}
+      {ownerInfo?.phone && <ContactFAQ phone={ownerInfo.phone} />}
 
       <SharedCTASection
         subtitle="Get in touch with us today and let us handle your visa extension needs"

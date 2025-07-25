@@ -55,13 +55,13 @@ export default function ContactInfoManager() {
 
       // Set form values based on fetched data
       if (!ownerData) {
-        // No owner data, use defaults
+        // No owner data, clear form
         setOwnerInfo(null);
-        setGuideName("Mekong Border Run Guide");
-        setPhone("+66 (0) 95 102 9528");
-        setEmail("info@mekong-borderrun.com");
-        setWhatsapp("+66 (0) 95 102 9528");
-        setAddress("Chiang Mai, Thailand");
+        setGuideName("");
+        setPhone("");
+        setEmail("");
+        setWhatsapp("");
+        setAddress("");
       } else {
         setOwnerInfo(ownerData);
         setGuideName(ownerData.name);

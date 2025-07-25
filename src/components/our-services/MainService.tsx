@@ -13,7 +13,7 @@ import {
 import { usePackageStore } from "@/store/zustand/packageStore";
 
 export default function MainService() {
-  const { packages, fetchPackages, isLoading } = usePackageStore();
+  const { packages, fetchPackages, isLoading, error } = usePackageStore();
 
   useEffect(() => {
     fetchPackages();
@@ -43,6 +43,32 @@ export default function MainService() {
               <div className="h-96 bg-gray-200 rounded"></div>
             </div>
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state if packages failed to load
+  if (error) {
+    return (
+      <section className="py-12 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-red-500 text-lg">
+            Failed to load service packages. Please try again later.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  // Show message if no packages available
+  if (packages.length === 0) {
+    return (
+      <section className="py-12 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-gray-500 text-lg">
+            No service packages available at the moment.
+          </p>
         </div>
       </section>
     );
@@ -98,7 +124,8 @@ export default function MainService() {
             <CardBody className="p-8">
               <div className="text-center mb-6">
                 <div className="text-5xl font-light text-accent-600 mb-2">
-                  {mainPackage?.price?.toLocaleString() || "4,200"}
+                  {mainPackage?.price?.toLocaleString() ||
+                    "Price not available"}
                 </div>
                 <div className="text-black text-lg mb-4">
                   {mainPackage?.currency || "THB"} per person

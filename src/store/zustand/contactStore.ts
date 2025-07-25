@@ -83,98 +83,7 @@ interface ContactState {
   setError: (error: string | null) => void;
 }
 
-// Mock data - replace with API calls in production
-const mockContactInfo: ContactInfo[] = [
-  {
-    id: "phone-primary",
-    type: "phone",
-    label: "Primary Phone",
-    value: "+66 95 102 9528",
-    isPrimary: true,
-    isPublic: true,
-    description: "Main contact number for bookings and inquiries",
-  },
-  {
-    id: "email-primary",
-    type: "email",
-    label: "Primary Email",
-    value: "mekongborderrun@gmail.com",
-    isPrimary: true,
-    isPublic: true,
-    description: "Main email for bookings and support",
-  },
-  {
-    id: "whatsapp-primary",
-    type: "whatsapp",
-    label: "WhatsApp",
-    value: "+66 95 102 9528",
-    isPrimary: false,
-    isPublic: true,
-    description: "Quick messaging and support",
-  },
-  {
-    id: "line-primary",
-    type: "line",
-    label: "LINE Official",
-    value: "@mekongborderrun",
-    isPrimary: false,
-    isPublic: true,
-    description: "LINE official account for Thai customers",
-  },
-  {
-    id: "address-office",
-    type: "address",
-    label: "Office Address",
-    value: "Chiang Mai, Thailand",
-    isPrimary: true,
-    isPublic: true,
-    description: "Main office location",
-  },
-];
-
-const mockOwnerInfo: OwnerInfo = {
-  id: "owner-1",
-  name: "Mekong Border Run Team",
-  title: "Licensed Border Run Operator",
-  email: "mekongborderrun@gmail.com",
-  phone: "+66 95 102 9528",
-  whatsapp: "+66 95 102 9528",
-  line: "@mekongborderrun",
-  bio: "Professional visa extension service provider with years of experience in Thailand-Laos border crossings.",
-  experience: "5+ years",
-  languages: ["English", "Thai", "Basic Lao"],
-  certifications: ["TAT Licensed Operator", "Tourism Business License"],
-};
-
-const mockBusinessInfo: BusinessInfo = {
-  id: "business-1",
-  businessName: "Mekong Border Run",
-  tatLicense: "TAT-XXXX-XXXX",
-  address: {
-    street: "Chiang Mai",
-    city: "Chiang Mai",
-    province: "Chiang Mai",
-    postalCode: "50000",
-    country: "Thailand",
-  },
-  coordinates: {
-    lat: 18.7883,
-    lng: 98.9853,
-  },
-  operatingHours: {
-    monday: { open: "08:00", close: "18:00", isOpen: true },
-    tuesday: { open: "08:00", close: "18:00", isOpen: true },
-    wednesday: { open: "08:00", close: "18:00", isOpen: true },
-    thursday: { open: "08:00", close: "18:00", isOpen: true },
-    friday: { open: "08:00", close: "18:00", isOpen: true },
-    saturday: { open: "08:00", close: "18:00", isOpen: true },
-    sunday: { open: "08:00", close: "18:00", isOpen: true },
-  },
-  socialMedia: {
-    facebook: "https://facebook.com/mekongborderrun",
-    instagram: "https://instagram.com/mekongborderrun",
-  },
-};
+// No fallback mock data - only use real data from Supabase
 
 export const useContactStore = create<ContactState>((set, get) => ({
   // Initial state
@@ -204,9 +113,8 @@ export const useContactStore = create<ContactState>((set, get) => ({
       set({ contactInfo: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch contact info:", error);
-      // Fallback to mock data
       set({
-        contactInfo: mockContactInfo,
+        contactInfo: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error
@@ -223,9 +131,8 @@ export const useContactStore = create<ContactState>((set, get) => ({
       set({ ownerInfo: data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch owner info:", error);
-      // Fallback to mock data
       set({
-        ownerInfo: mockOwnerInfo,
+        ownerInfo: null, // No fallback - null
         isLoading: false,
         error:
           error instanceof Error ? error.message : "Failed to fetch owner info",
@@ -240,9 +147,8 @@ export const useContactStore = create<ContactState>((set, get) => ({
       set({ businessInfo: data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch business info:", error);
-      // Fallback to mock data
       set({
-        businessInfo: mockBusinessInfo,
+        businessInfo: null, // No fallback - null
         isLoading: false,
         error:
           error instanceof Error

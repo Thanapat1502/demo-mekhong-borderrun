@@ -45,88 +45,7 @@ interface PackageState {
   setError: (error: string | null) => void;
 }
 
-// Mock data - replace with API calls in production
-const mockPackages: ServicePackage[] = [
-  {
-    id: "border-run-standard",
-    name: "Standard Border Run",
-    price: 4200,
-    currency: "THB",
-    description: "Complete visa extension service with cultural experience",
-    features: [
-      "Professional pickup from your location",
-      "Air-conditioned vehicle",
-      "White Temple visit in Chiang Rai",
-      "Lunch included",
-      "Border crossing assistance",
-      "Return to Chiang Mai",
-      "Licensed TAT operator",
-    ],
-    duration: "Full Day (8-9 hours)",
-    maxPassengers: 8,
-    isPopular: true,
-    isAvailable: true,
-  },
-  {
-    id: "border-run-premium",
-    name: "Premium Border Run",
-    price: 5500,
-    currency: "THB",
-    description: "Enhanced service with additional comfort and flexibility",
-    features: [
-      "All Standard features",
-      "Private vehicle option",
-      "Flexible pickup time",
-      "Premium lunch",
-      "Personal border assistant",
-      "Photo service at White Temple",
-      "Refreshments during journey",
-    ],
-    duration: "Full Day (8-9 hours)",
-    maxPassengers: 4,
-    isPopular: false,
-    isAvailable: true,
-  },
-];
-
-const mockPricingTiers: PricingTier[] = [
-  {
-    id: "individual",
-    name: "Individual",
-    basePrice: 4200,
-    currency: "THB",
-    description: "Perfect for solo travelers",
-    features: [
-      "Shared transportation",
-      "All standard inclusions",
-      "Group experience",
-    ],
-  },
-  {
-    id: "couple",
-    name: "Couple",
-    basePrice: 4000,
-    currency: "THB",
-    description: "Special rate for two people",
-    features: [
-      "Shared transportation",
-      "All standard inclusions",
-      "Couple discount applied",
-    ],
-  },
-  {
-    id: "group",
-    name: "Group (4+)",
-    basePrice: 3800,
-    currency: "THB",
-    description: "Best value for groups",
-    features: [
-      "Shared transportation",
-      "All standard inclusions",
-      "Group discount applied",
-    ],
-  },
-];
+// No fallback mock data - only use real data from Supabase
 
 export const usePackageStore = create<PackageState>((set, get) => ({
   // Initial state
@@ -160,9 +79,8 @@ export const usePackageStore = create<PackageState>((set, get) => ({
       set({ packages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch packages:", error);
-      // Fallback to mock data
       set({
-        packages: mockPackages,
+        packages: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error ? error.message : "Failed to fetch packages",
@@ -173,14 +91,14 @@ export const usePackageStore = create<PackageState>((set, get) => ({
   fetchPricingTiers: async () => {
     try {
       set({ isLoading: true, error: null });
-      // For now, use mock data since pricing tiers might be stored differently
-      // In the future, you can create a separate service for pricing tiers
+      // TODO: Implement pricing tiers service when available
       set({
-        pricingTiers: mockPricingTiers,
+        pricingTiers: [], // No fallback - empty array
         isLoading: false,
       });
     } catch (error) {
       set({
+        pricingTiers: [], // No fallback - empty array
         error:
           error instanceof Error
             ? error.message
@@ -204,9 +122,8 @@ export const usePackageStore = create<PackageState>((set, get) => ({
       });
     } catch (error) {
       console.error("Failed to fetch current price:", error);
-      // Fallback to default price
       set({
-        currentPrice: 4200,
+        currentPrice: 0, // No fallback - 0 price
         currency: "THB",
         isLoading: false,
         error:

@@ -7,12 +7,7 @@ import {
   customerReviewsService,
 } from "@/services/supabaseService";
 
-// Fallback data imports (for offline/development mode)
-import { galleryImages as fallbackGallery } from "@/data/images/gallery";
-import { journeyImages as fallbackJourney } from "@/data/images/journeyImage";
-import { pickupPointImages as fallbackPickup } from "@/data/images/pickupPointImage";
-import { heroImages as fallbackHero } from "@/data/images/heroImage";
-import { customerReviews as fallbackReviews } from "@/data/images/userReview";
+// No fallback data - only use real data from Supabase
 
 interface HeroImage {
   id: string;
@@ -112,9 +107,8 @@ export const useContentStore = create<State>((set) => ({
       set({ pickupPointImages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch pickup point images:", error);
-      // Fallback to local data
       set({
-        pickupPointImages: fallbackPickup,
+        pickupPointImages: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error
@@ -143,9 +137,8 @@ export const useContentStore = create<State>((set) => ({
       set({ journeyImages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch journey images:", error);
-      // Fallback to local data
       set({
-        journeyImages: fallbackJourney,
+        journeyImages: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error
@@ -175,9 +168,8 @@ export const useContentStore = create<State>((set) => ({
       set({ galleryImages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch gallery images:", error);
-      // Fallback to local data
       set({
-        galleryImages: fallbackGallery,
+        galleryImages: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error
@@ -204,9 +196,8 @@ export const useContentStore = create<State>((set) => ({
       set({ heroImages: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch hero images:", error);
-      // Fallback to local data
       set({
-        heroImages: fallbackHero,
+        heroImages: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error
@@ -235,9 +226,8 @@ export const useContentStore = create<State>((set) => ({
       set({ customerReviews: transformedData, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch customer reviews:", error);
-      // Fallback to local data
       set({
-        customerReviews: fallbackReviews,
+        customerReviews: [], // No fallback - empty array
         isLoading: false,
         error:
           error instanceof Error

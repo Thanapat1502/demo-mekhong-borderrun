@@ -17,10 +17,10 @@ Disallow: /_next/
 Disallow: /private/
 
 # Host
-Host: https://mekong-transfer.vercel.app
+Host: https://www.mekong-borderrun.com/
 
 # Sitemap location
-Sitemap: https://mekong-transfer.vercel.app/sitemap.xml
+Sitemap: https://www.mekong-borderrun.com/
 
 # Crawl delay (optional - helps prevent server overload)
 Crawl-delay: 1

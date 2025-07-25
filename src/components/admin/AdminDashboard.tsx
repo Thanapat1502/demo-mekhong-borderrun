@@ -85,9 +85,12 @@ export default function AdminDashboard() {
 
       if (requestsError) {
         console.error("Contact requests error:", requestsError);
-        // If table doesn't exist, use mock data
+        // If table doesn't exist, show error
         if (requestsError.code === "42P01") {
-          console.log("Contact requests table doesn't exist, using mock data");
+          console.log("Contact requests table doesn't exist");
+          setError(
+            "Contact requests table not found. Please contact administrator."
+          );
           setStats({
             totalRequests: 0,
             newRequests: 0,

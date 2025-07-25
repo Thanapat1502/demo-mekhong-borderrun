@@ -149,7 +149,8 @@ export default function SettingsPanel() {
                   value={websiteTitle}
                   onChange={(e) => setWebsiteTitle(e.target.value)}
                   size="lg"
-                  isDisabled={isLoading}
+                  // isDisabled={isLoading}
+                  disabled={true}
                 />
                 <Input
                   label="Website Description"

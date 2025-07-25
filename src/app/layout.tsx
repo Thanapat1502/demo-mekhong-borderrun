@@ -8,15 +8,22 @@ import Footer from "@/components/Footer";
 import FloatingContactButton from "@/components/base/FloatingContactButton";
 import WebConfigProvider from "@/components/providers/WebConfigProvider";
 import ContactProvider from "@/components/providers/ContactProvider";
+// import WebVitals, {
+//   PerformanceMonitor,
+// } from "@/components/performance/WebVitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Improve font loading performance
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap", // Improve font loading performance
+  preload: false, // Only preload primary font
 });
 
 const siteUrl = process.env.SITE_URL;
@@ -166,6 +173,8 @@ export default function RootLayout({
                 <main className="min-h-screen">{children}</main>
                 <Footer />
                 <FloatingContactButton />
+                {/* <WebVitals />
+                <PerformanceMonitor /> */}
               </ContactProvider>
             </WebConfigProvider>
           </AuthProvider>
