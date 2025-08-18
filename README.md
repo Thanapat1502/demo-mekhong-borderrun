@@ -1,168 +1,51 @@
-# Mekong Border Run - Visa Extension Service
+# 🌏 Visa Border Run Service — Chiang Mai  
 
-A modern, SEO-optimized web application for professional border run service from Chiang Mai to Huay Xai, Laos. Built with Next.js 15, TypeScript, Tailwind CSS 3.4.5, and HeroUI components.
+A modern and minimal web application designed to simplify the **visa border run service** process in Chiang Mai.  
+The platform is built with a clean UI, smooth user experience, and a powerful admin panel for business management.  
 
-## 🚀 Features
+---
 
-- ⚡ **Next.js 15** with App Router
-- 🔷 **TypeScript** for type safety
-- 🎨 **Tailwind CSS 3.4.5** for styling
-- 🎯 **HeroUI** for beautiful React components
-- 🌙 **Dark/Light mode** with next-themes
-- 📱 **Responsive design**
-- 🔍 **SEO optimized** with comprehensive meta tags
-- 🤖 **Robots.txt** and **Sitemap.xml** included
-- 📄 **PWA manifest** for progressive web app support
-- ⚡ **Turbopack** for fast development
-- 🖼️ **Interactive pickup points** with modal gallery
-- 📞 **Multiple contact methods** integration
+## ✨ Features  
 
-## 🛠️ Tech Stack
+### 🖥️ Frontend (Client Side)  
+- Modern & minimal design — responsive across devices  
+- Dynamic content display (images, services, pricing)  
+- User review showcase section  
+- Email subscription for service updates  
 
-- **Framework:** Next.js 15
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 3.4.5
-- **UI Components:** HeroUI
-- **Theme Management:** next-themes
-- **Font:** Geist Sans & Geist Mono
-- **Icons:** React Icons
-- **State Management:** Zustand
+### ⚙️ Backend (Admin Panel)  
+- Update service pricing in real-time  
+- Add / Edit / Remove customer reviews  
+- Manage and update homepage images & media  
+- Collect and manage email subscribers  
 
-## 🏗️ Project Structure
+---
 
-```
-src/
-├── app/
-│   ├── globals.css          # Global styles with Tailwind
-│   ├── layout.tsx           # Root layout with SEO metadata
-│   ├── page.tsx             # Home page
-│   ├── providers.tsx        # HeroUI and theme providers
-│   ├── sitemap.ts           # Dynamic sitemap generation
-│   ├── manifest.ts          # PWA manifest
-│   ├── our-services/            # Services page
-│   ├── customers/           # Customers page
-│   └── contact/             # Contact page
-├── components/
-│   ├── base/                # Reusable base components
-│   ├── home/                # Home page components
-│   ├── our-services/            # Services page components
-│   ├── customers/           # Customers page components
-│   ├── contact/             # Contact page components
-│   ├── Navigation.tsx       # Main navigation
-│   └── Footer.tsx           # Site footer
-└── lib/                     # Utility functions
-```
+## 🛠️ Tech Stack  
+- **Next.js** — Frontend & SSR for SEO  
+- **Tailwind CSS** — Styling with a modern, minimal look  
+- **Supabase / PostgreSQL** — Database & auth (if used)  
+- **Hero UI / shadcn/ui** — UI components  
+- **Vercel** — Deployment  
 
-## 🎨 Key Features
+---
 
-### Interactive Pickup Points
+## 📸 Screenshots  
 
-- Clickable pickup location cards
-- Modal gallery for full-size images
-- Reusable component architecture
+*(Add screenshots or demo GIF here to showcase UI & admin panel)*  
 
-### Responsive Navigation
+---
 
-- Logo integration
-- Conditional styling (transparent on home, white on other pages)
-- Mobile-friendly menu
-
-### SEO Optimization
-
-- Keyword-focused content ("extend visa", "round trip")
-- Comprehensive meta tags
-- Structured data markup
-
-### Professional Branding
-
-- Consistent "Mekong Border Run" branding
-- Orange accent color scheme
-- Professional typography
-
-## 📦 Installation
-
-1. Clone the repository:
+## 🚀 Getting Started  
 
 ```bash
-git clone <your-repo-url>
-cd nextjs-heroui-project
+# Clone repo
+git clone https://github.com/yourusername/visa-border-run-service.git  
+
+# Install dependencies
+npm install  
+
+# Run development server
+npm run dev  
 ```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 🏗️ Build & Deploy
-
-```bash
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Lint code
-npm run lint
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── globals.css          # Global styles with Tailwind
-│   ├── layout.tsx           # Root layout with SEO metadata
-│   ├── page.tsx             # Home page with HeroUI showcase
-│   ├── providers.tsx        # HeroUI and theme providers
-│   ├── sitemap.ts           # Dynamic sitemap generation
-│   └── manifest.ts          # PWA manifest
-├── components/              # Reusable components (add your own)
-└── lib/                     # Utility functions (add your own)
-```
-
-## 🎨 Customization
-
-### Theme Configuration
-
-The project includes a comprehensive theme setup in `tailwind.config.ts` with HeroUI integration.
-
-### SEO Configuration
-
-Update the metadata in `src/app/layout.tsx` to match your project:
-
-- Update `metadataBase` URL
-- Modify OpenGraph and Twitter card settings
-- Update site name and descriptions
-
-### HeroUI Components
-
-All HeroUI components are available. Check the [HeroUI documentation](https://heroui.com/docs) for usage examples.
-
-## 📚 Documentation
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [HeroUI Documentation](https://heroui.com/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[Checkout live website](https://www.mekong-borderrun.com/)
