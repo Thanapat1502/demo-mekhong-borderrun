@@ -89,7 +89,7 @@ The platform is built with a clean UI, smooth user experience, and a powerful ad
 
 ```bash
 # Clone repo
-git clone https://github.com/yourusername/visa-border-run-service.git
+git clone https://github.com/Thanapat1502/demo-mekhong-borderrun/tree/demo
 
 # Install dependencies
 npm install
