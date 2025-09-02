@@ -10,7 +10,7 @@ export default function ContactFAQ(props: { phone: string }) {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardBody className="p-6">
               <h3 className="font-medium text-lg text-black mb-3">
                 How do I book a trip?
@@ -23,7 +23,7 @@ export default function ContactFAQ(props: { phone: string }) {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardBody className="p-6">
               <h3 className="font-medium text-lg text-black mb-3">
                 What should I bring?
@@ -35,7 +35,7 @@ export default function ContactFAQ(props: { phone: string }) {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardBody className="p-6">
               <h3 className="font-medium text-lg text-black mb-3">
                 What&apos;s the cancellation policy?
@@ -47,7 +47,7 @@ export default function ContactFAQ(props: { phone: string }) {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardBody className="p-6">
               <h3 className="font-medium text-lg text-black mb-3">
                 How long does the trip take?

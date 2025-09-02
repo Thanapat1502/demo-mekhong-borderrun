@@ -81,7 +81,7 @@ export default function ContactForm() {
   };
 
   return (
-    <Card className="shadow-2xl">
+    <Card className="shadow-2xl bg-white">
       <CardHeader>
         <h2 className="text-2xl font-light text-black">Send us a Message</h2>
       </CardHeader>
@@ -115,8 +115,10 @@ export default function ContactForm() {
               variant="bordered"
               className="w-full"
               classNames={{
-                input: "text-black",
-                label: "text-black",
+                inputWrapper:
+                  "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                input: "bg-white text-black placeholder:text-gray-500",
+                label: "text-gray-700",
               }}
             />
 
@@ -130,8 +132,10 @@ export default function ContactForm() {
               variant="bordered"
               className="w-full"
               classNames={{
-                input: "text-black",
-                label: "text-black",
+                inputWrapper:
+                  "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                input: "bg-white text-black placeholder:text-gray-500",
+                label: "text-gray-700",
               }}
             />
 
@@ -143,8 +147,10 @@ export default function ContactForm() {
               variant="bordered"
               className="w-full"
               classNames={{
-                input: "text-black",
-                label: "text-black",
+                inputWrapper:
+                  "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                input: "bg-white text-black placeholder:text-gray-500",
+                label: "text-gray-700",
               }}
             />
 
@@ -159,8 +165,10 @@ export default function ContactForm() {
               placeholder="Tell us about your travel dates, pickup location, or any questions you have..."
               className="w-full"
               classNames={{
-                input: "text-black",
-                label: "text-black",
+                inputWrapper:
+                  "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                input: "bg-white text-black placeholder:text-gray-500",
+                label: "text-gray-700",
               }}
             />
 

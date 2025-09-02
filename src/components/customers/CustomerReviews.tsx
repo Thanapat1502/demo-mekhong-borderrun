@@ -30,7 +30,7 @@ export default function CustomerReviews(props: {
           {customerReviews.map((review) => (
             <Card
               key={review.id}
-              className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+              className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white">
               <CardBody className="p-6">
                 <div className="flex items-center gap-4 mb-4">
                   <Avatar

@@ -88,7 +88,7 @@ export default function PickupPointsModal({
           {!isVisible
             ? // Loading skeleton
               Array.from({ length: 5 }).map((_, index) => (
-                <Card key={index} className="shadow-lg">
+                <Card key={index} className="shadow-lg bg-white">
                   <div className="aspect-video bg-gray-200 animate-pulse" />
                   <CardBody className="p-4 text-center">
                     <div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
@@ -99,7 +99,7 @@ export default function PickupPointsModal({
             : pickupPoints.map((point) => (
                 <Card
                   key={point.id}
-                  className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                  className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer bg-white"
                   isPressable
                   onPress={() => handleImageClick(point)}>
                   <div className="aspect-video overflow-hidden relative">

@@ -117,7 +117,7 @@ export default function MainService() {
             </div>
           </div>
 
-          <Card className="shadow-2xl">
+          <Card className="shadow-2xl bg-white">
             <CardHeader className="bg-gradient-to-r from-accent-500 to-accent-600 text-white text-center">
               <h3 className="text-2xl font-light">Complete Package</h3>
             </CardHeader>

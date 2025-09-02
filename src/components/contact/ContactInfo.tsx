@@ -26,7 +26,7 @@ export default function ContactInfo() {
   // Show loading state
   if (isLoading) {
     return (
-      <Card className="shadow-2xl">
+      <Card className="shadow-2xl bg-white">
         <CardHeader className="bg-accent-500 text-white">
           <h2 className="text-2xl font-light">Get In Touch</h2>
         </CardHeader>
@@ -55,7 +55,7 @@ export default function ContactInfo() {
     );
   }
   return (
-    <Card className="shadow-2xl">
+    <Card className="shadow-2xl bg-white">
       <CardHeader className="bg-accent-500 text-white">
         <h2 className="text-2xl font-light">Get In Touch</h2>
       </CardHeader>

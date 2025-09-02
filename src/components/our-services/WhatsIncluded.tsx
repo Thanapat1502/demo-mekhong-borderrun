@@ -11,7 +11,7 @@ export default function WhatsIncluded() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardHeader className="flex gap-3">
               <FiTruck className="text-accent-500" size={24} />
               <h3 className="text-xl font-medium text-black">Transportation</h3>
@@ -26,7 +26,7 @@ export default function WhatsIncluded() {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardHeader className="flex gap-3">
               <FiUser className="text-accent-500" size={24} />
               <h3 className="text-xl font-medium text-black">Services</h3>
@@ -41,7 +41,7 @@ export default function WhatsIncluded() {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardHeader className="flex gap-3">
               <FiCoffee className="text-accent-500" size={24} />
               <h3 className="text-xl font-medium text-black">Meals & Stops</h3>
@@ -56,7 +56,7 @@ export default function WhatsIncluded() {
             </CardBody>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg bg-white">
             <CardHeader className="flex gap-3">
               <FiFileText className="text-accent-500" size={24} />
               <h3 className="text-xl font-medium text-black">Requirements</h3>
