@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.SITE_URL;
+  const baseUrl = "http://localhost:3000/";
   if (!baseUrl) {
     throw new Error("Missing environment variable: SITE_URL");
   }

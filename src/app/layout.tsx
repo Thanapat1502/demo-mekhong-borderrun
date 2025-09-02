@@ -26,7 +26,7 @@ const geistMono = Geist_Mono({
   preload: false, // Only preload primary font
 });
 
-const siteUrl = process.env.SITE_URL;
+const siteUrl = "http://localhost:3000/";
 
 if (!siteUrl) {
   throw new Error("Missing environment variable: SITE_URL");
