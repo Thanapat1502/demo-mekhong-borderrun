@@ -149,13 +149,19 @@ export default function StatusDropdown({
           selectionMode="single"
           disabledKeys={
             disabled || isLoading ? statusOptions.map((opt) => opt.key) : []
-          }>
+          }
+          classNames={{
+            base: "bg-white",
+            list: "bg-white",
+          }}>
           {statusOptions.map((option) => (
             <DropdownItem
               key={option.key}
               startContent={option.icon}
               description={option.description}
-              className={currentStatus === option.key ? "bg-default-100" : ""}>
+              className={`bg-white hover:bg-gray-50 ${
+                currentStatus === option.key ? "bg-gray-100" : ""
+              }`}>
               <div className="flex items-center gap-2">
                 <Chip
                   color={option.color}
@@ -197,13 +203,19 @@ export default function StatusDropdown({
         selectionMode="single"
         disabledKeys={
           disabled || isLoading ? statusOptions.map((opt) => opt.key) : []
-        }>
+        }
+        classNames={{
+          base: "bg-white",
+          list: "bg-white",
+        }}>
         {statusOptions.map((option) => (
           <DropdownItem
             key={option.key}
             startContent={option.icon}
             description={option.description}
-            className={currentStatus === option.key ? "bg-default-100" : ""}>
+            className={`bg-white hover:bg-gray-50 ${
+              currentStatus === option.key ? "bg-gray-100" : ""
+            }`}>
             <div className="flex items-center gap-2">
               <Chip
                 color={option.color}

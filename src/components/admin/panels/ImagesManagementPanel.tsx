@@ -351,7 +351,7 @@ export default function ImagesManagementPanel() {
 
   return (
     <>
-      <Card className="shadow-lg">
+      <Card className="shadow-lg bg-white">
         <CardHeader>
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-gray-800">

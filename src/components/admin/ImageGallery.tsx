@@ -69,7 +69,8 @@ export default function ImageGallery({
 
   if (images.length === 0) {
     return (
-      <Card className={`border-2 border-dashed border-gray-300 ${className}`}>
+      <Card
+        className={`border-2 border-dashed border-gray-300 bg-white ${className}`}>
         <CardBody className="p-12 text-center">
           <div className="text-gray-400 mb-4">
             <FiEye className="text-4xl mx-auto" />
@@ -89,7 +90,7 @@ export default function ImageGallery({
         {images.map((image) => (
           <Card
             key={image.id}
-            className="group hover:shadow-lg transition-shadow duration-300">
+            className="group hover:shadow-lg transition-shadow duration-300 bg-white">
             <CardBody className="p-0">
               {/* Image */}
               <div className="relative aspect-square bg-gray-100 overflow-hidden">

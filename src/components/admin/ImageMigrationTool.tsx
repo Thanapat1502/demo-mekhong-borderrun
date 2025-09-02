@@ -19,23 +19,23 @@ export default function ImageMigrationTool() {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<MigrationResult[]>([]);
   const [progress, setProgress] = useState(0);
-  
-  const { 
-    heroImages, 
-    journeyImages, 
-    pickupPointImages, 
+
+  const {
+    heroImages,
+    journeyImages,
+    pickupPointImages,
     galleryImages,
     fetchHeroImages,
     fetchJourneyImages,
     fetchPickupPointImages,
-    fetchGalleryImages
+    fetchGalleryImages,
   } = useContentStore();
-  
+
   const {
     updateHeroImage,
     updateJourneyImage,
     updatePickupPoint,
-    updateGalleryImage
+    updateGalleryImage,
   } = useAdminStore();
 
   const getAllLocalImages = () => {
@@ -47,49 +47,49 @@ export default function ImageMigrationTool() {
     }> = [];
 
     // Hero images
-    heroImages.forEach(img => {
+    heroImages.forEach((img) => {
       if (!ImageUploadService.isSupabaseStorageUrl(img.src)) {
         images.push({
           id: img.id,
           url: img.src,
           type: "hero",
-          category: "hero"
+          category: "hero",
         });
       }
     });
 
     // Journey images
-    journeyImages.forEach(img => {
+    journeyImages.forEach((img) => {
       if (!ImageUploadService.isSupabaseStorageUrl(img.src)) {
         images.push({
           id: img.id,
           url: img.src,
           type: "journey",
-          category: "journey"
+          category: "journey",
         });
       }
     });
 
     // Pickup point images
-    pickupPointImages.forEach(img => {
+    pickupPointImages.forEach((img) => {
       if (!ImageUploadService.isSupabaseStorageUrl(img.src)) {
         images.push({
           id: img.id,
           url: img.src,
           type: "pickup",
-          category: "pickup"
+          category: "pickup",
         });
       }
     });
 
     // Gallery images
-    galleryImages.forEach(img => {
+    galleryImages.forEach((img) => {
       if (!ImageUploadService.isSupabaseStorageUrl(img.src)) {
         images.push({
           id: img.id,
           url: img.src,
           type: "gallery",
-          category: "gallery"
+          category: "gallery",
         });
       }
     });
@@ -106,13 +106,13 @@ export default function ImageMigrationTool() {
     try {
       // Migrate the image
       const result = await ImageUploadService.migrateLocalImage(url, category);
-      
+
       if (!result.success || !result.url) {
         return {
           id,
           originalUrl: url,
           status: "error",
-          error: result.error || "Migration failed"
+          error: result.error || "Migration failed",
         };
       }
 
@@ -137,7 +137,9 @@ export default function ImageMigrationTool() {
           id,
           originalUrl: url,
           status: "error",
-          error: `Upload succeeded but database update failed: ${dbError instanceof Error ? dbError.message : "Unknown error"}`
+          error: `Upload succeeded but database update failed: ${
+            dbError instanceof Error ? dbError.message : "Unknown error"
+          }`,
         };
       }
 
@@ -145,15 +147,14 @@ export default function ImageMigrationTool() {
         id,
         originalUrl: url,
         newUrl: result.url,
-        status: "success"
+        status: "success",
       };
-
     } catch (error) {
       return {
         id,
         originalUrl: url,
         status: "error",
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   };
@@ -164,16 +165,16 @@ export default function ImageMigrationTool() {
     setProgress(0);
 
     const localImages = getAllLocalImages();
-    
+
     if (localImages.length === 0) {
       setIsRunning(false);
       return;
     }
 
-    const migrationResults: MigrationResult[] = localImages.map(img => ({
+    const migrationResults: MigrationResult[] = localImages.map((img) => ({
       id: img.id,
       originalUrl: img.url,
-      status: "pending" as const
+      status: "pending" as const,
     }));
 
     setResults(migrationResults);
@@ -181,14 +182,17 @@ export default function ImageMigrationTool() {
     // Process images one by one
     for (let i = 0; i < localImages.length; i++) {
       const img = localImages[i];
-      
-      const result = await migrateImage(img.id, img.url, img.type, img.category);
-      
+
+      const result = await migrateImage(
+        img.id,
+        img.url,
+        img.type,
+        img.category
+      );
+
       // Update results
-      setResults(prev => prev.map(r => 
-        r.id === img.id ? result : r
-      ));
-      
+      setResults((prev) => prev.map((r) => (r.id === img.id ? result : r)));
+
       // Update progress
       setProgress(((i + 1) / localImages.length) * 100);
     }
@@ -198,35 +202,40 @@ export default function ImageMigrationTool() {
       fetchHeroImages(),
       fetchJourneyImages(),
       fetchPickupPointImages(),
-      fetchGalleryImages()
+      fetchGalleryImages(),
     ]);
 
     setIsRunning(false);
   };
 
   const localImages = getAllLocalImages();
-  const successCount = results.filter(r => r.status === "success").length;
-  const errorCount = results.filter(r => r.status === "error").length;
+  const successCount = results.filter((r) => r.status === "success").length;
+  const errorCount = results.filter((r) => r.status === "error").length;
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-white">
       <CardBody className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-2">Image Migration Tool</h3>
           <p className="text-gray-600 text-base">
-            Migrate local images to Supabase Storage. This will upload your local images 
-            to Supabase and update the database records to use the new URLs.
+            Migrate local images to Supabase Storage. This will upload your
+            local images to Supabase and update the database records to use the
+            new URLs.
           </p>
         </div>
 
         {/* Status */}
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">{localImages.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {localImages.length}
+            </div>
             <div className="text-base text-blue-600">Local Images</div>
           </div>
           <div className="text-center p-3 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">{successCount}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {successCount}
+            </div>
             <div className="text-base text-green-600">Migrated</div>
           </div>
           <div className="text-center p-3 bg-red-50 rounded-lg">
@@ -252,8 +261,13 @@ export default function ImageMigrationTool() {
             onClick={runMigration}
             disabled={isRunning || localImages.length === 0}
             color="primary"
-            startContent={isRunning ? <FiRefreshCw className="animate-spin" /> : <FiUpload />}
-          >
+            startContent={
+              isRunning ? (
+                <FiRefreshCw className="animate-spin" />
+              ) : (
+                <FiUpload />
+              )
+            }>
             {isRunning ? "Migrating..." : "Start Migration"}
           </Button>
         </div>
@@ -272,19 +286,28 @@ export default function ImageMigrationTool() {
                       : result.status === "error"
                       ? "bg-red-50 text-red-700"
                       : "bg-gray-50 text-gray-700"
-                  }`}
-                >
-                  {result.status === "success" && <FiCheck className="text-green-600" />}
-                  {result.status === "error" && <FiX className="text-red-600" />}
-                  {result.status === "pending" && <FiRefreshCw className="animate-spin text-gray-600" />}
-                  
+                  }`}>
+                  {result.status === "success" && (
+                    <FiCheck className="text-green-600" />
+                  )}
+                  {result.status === "error" && (
+                    <FiX className="text-red-600" />
+                  )}
+                  {result.status === "pending" && (
+                    <FiRefreshCw className="animate-spin text-gray-600" />
+                  )}
+
                   <div className="flex-1 min-w-0">
                     <div className="truncate">{result.originalUrl}</div>
                     {result.error && (
-                      <div className="text-base text-red-600 mt-1">{result.error}</div>
+                      <div className="text-base text-red-600 mt-1">
+                        {result.error}
+                      </div>
                     )}
                     {result.newUrl && (
-                      <div className="text-base text-green-600 mt-1 truncate">→ {result.newUrl}</div>
+                      <div className="text-base text-green-600 mt-1 truncate">
+                        → {result.newUrl}
+                      </div>
                     )}
                   </div>
                 </div>

@@ -5,7 +5,7 @@ import ContactInfoManager from "@/components/admin/ContactInfoManager";
 
 export default function ContactInfoPanel() {
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg bg-white">
       <CardHeader>
         <h2 className="text-xl font-semibold text-gray-800">
           Contact Information

@@ -105,7 +105,7 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <Card className="shadow-lg">
+              <Card className="shadow-lg bg-white">
                 <CardHeader className="pb-3">
                   <h2 className="text-lg font-semibold text-gray-800">
                     Navigation

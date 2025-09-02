@@ -110,7 +110,7 @@ export default function ServicePricingManager() {
 
       {/* Current Package Info */}
       {currentPackage && !editingPackage && (
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
             <div className="flex justify-between items-center w-full">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -160,7 +160,7 @@ export default function ServicePricingManager() {
 
       {/* Edit Package Form */}
       {editingPackage && (
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
             <div className="flex justify-between items-center w-full">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -249,7 +249,7 @@ export default function ServicePricingManager() {
 
       {/* Loading State */}
       {isLoading && (
-        <Card>
+        <Card className="bg-white">
           <CardBody className="text-center py-8">
             <p className="text-gray-600">Loading packages...</p>
           </CardBody>

@@ -128,7 +128,7 @@ export default function SettingsPanel() {
 
   return (
     <>
-      <Card className="shadow-lg">
+      <Card className="shadow-lg bg-white">
         <CardHeader>
           <h2 className="text-xl font-semibold text-gray-800">
             General Settings
@@ -145,6 +145,12 @@ export default function SettingsPanel() {
                 <Input
                   label="Website Title"
                   className="text-gray-800"
+                  classNames={{
+                    inputWrapper:
+                      "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                    input: "bg-white text-black placeholder:text-gray-500",
+                    label: "text-gray-700",
+                  }}
                   placeholder="Enter website title"
                   value={websiteTitle}
                   onChange={(e) => setWebsiteTitle(e.target.value)}
@@ -155,6 +161,12 @@ export default function SettingsPanel() {
                 <Input
                   label="Website Description"
                   className="text-gray-800"
+                  classNames={{
+                    inputWrapper:
+                      "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                    input: "bg-white text-black placeholder:text-gray-500",
+                    label: "text-gray-700",
+                  }}
                   placeholder="Enter website description"
                   value={websiteDescription}
                   onChange={(e) => setWebsiteDescription(e.target.value)}
@@ -175,6 +187,12 @@ export default function SettingsPanel() {
                 <Input
                   label="Business Hours"
                   className="text-gray-800"
+                  classNames={{
+                    inputWrapper:
+                      "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                    input: "bg-white text-black placeholder:text-gray-500",
+                    label: "text-gray-700",
+                  }}
                   placeholder="Enter business hours"
                   value={businessHours}
                   onChange={(e) => setBusinessHours(e.target.value)}
@@ -184,6 +202,12 @@ export default function SettingsPanel() {
                 <Input
                   label="Service Area"
                   className="text-gray-800"
+                  classNames={{
+                    inputWrapper:
+                      "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                    input: "bg-white text-black placeholder:text-gray-500",
+                    label: "text-gray-700",
+                  }}
                   placeholder="Enter service area"
                   value={serviceArea}
                   onChange={(e) => setServiceArea(e.target.value)}
@@ -267,6 +291,12 @@ export default function SettingsPanel() {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     type={showCurrentPassword ? "text" : "password"}
+                    classNames={{
+                      inputWrapper:
+                        "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                      input: "bg-white text-black placeholder:text-gray-500",
+                      label: "text-gray-700",
+                    }}
                     endContent={
                       <button
                         className="focus:outline-none"
@@ -289,6 +319,12 @@ export default function SettingsPanel() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     type={showNewPassword ? "text" : "password"}
+                    classNames={{
+                      inputWrapper:
+                        "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                      input: "bg-white text-black placeholder:text-gray-500",
+                      label: "text-gray-700",
+                    }}
                     endContent={
                       <button
                         className="focus:outline-none"
@@ -309,6 +345,12 @@ export default function SettingsPanel() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     type={showConfirmPassword ? "text" : "password"}
+                    classNames={{
+                      inputWrapper:
+                        "bg-white hover:bg-white focus:bg-white data-[hover=true]:bg-white",
+                      input: "bg-white text-black placeholder:text-gray-500",
+                      label: "text-gray-700",
+                    }}
                     endContent={
                       <button
                         className="focus:outline-none"

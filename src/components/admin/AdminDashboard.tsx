@@ -109,7 +109,7 @@ export default function AdminDashboard() {
           <div className="space-y-6 mt-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
+              <Card className="bg-white">
                 <CardBody className="flex flex-row items-center space-x-4">
                   <div className="p-3 bg-blue-100 rounded-full">
                     <FiUsers className="text-blue-600" size={24} />
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card className="bg-white">
                 <CardBody className="flex flex-row items-center space-x-4">
                   <div className="p-3 bg-red-100 rounded-full">
                     <FiMail className="text-red-600" size={24} />
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card className="bg-white">
                 <CardBody className="flex flex-row items-center space-x-4">
                   <div className="p-3 bg-green-100 rounded-full">
                     <FiEye className="text-green-600" size={24} />
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card className="bg-white">
                 <CardBody className="flex flex-row items-center space-x-4">
                   <div className="p-3 bg-purple-100 rounded-full">
                     <FiTrendingUp className="text-purple-600" size={24} />
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Recent Contact Requests */}
-            <Card>
+            <Card className="bg-white">
               <CardHeader>
                 <div className="flex justify-between items-center w-full">
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
                               {request.name}
                             </h4>
                             <StatusDropdown
-                              className="text-gray-700"
+                              className="text-gray-700 bg-white"
                               currentStatus={request.status}
                               statusOptions={DEFAULT_CONTACT_STATUS_OPTIONS}
                               onStatusChange={(newStatus) =>

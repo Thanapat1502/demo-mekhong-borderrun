@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-} from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import CustomerReviewManager from "@/components/admin/CustomerReviewManager";
 
 export default function CustomerReviewsPanel() {
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg bg-white">
       <CardHeader>
         <h2 className="text-xl font-semibold text-gray-800">
           Customer Reviews

@@ -260,14 +260,24 @@ export default function CustomerReviewManager() {
       )}
 
       {/* Reviews Table */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
           <h3 className="text-lg font-semibold text-gray-900">
             All Reviews ({reviews.length})
           </h3>
         </CardHeader>
         <CardBody>
-          <Table aria-label="Customer reviews table">
+          <Table
+            aria-label="Customer reviews table"
+            classNames={{
+              wrapper: "bg-white",
+              table: "bg-white",
+              thead: "bg-white",
+              tbody: "bg-white",
+              tr: "bg-white hover:bg-gray-50",
+              th: "bg-white",
+              td: "bg-white",
+            }}>
             <TableHeader>
               <TableColumn>CUSTOMER</TableColumn>
               <TableColumn>RATING</TableColumn>

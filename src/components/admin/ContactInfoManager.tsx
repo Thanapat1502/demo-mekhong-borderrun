@@ -196,7 +196,7 @@ export default function ContactInfoManager() {
       )}
 
       {/* Guide Information */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader className="flex gap-3">
           <FiUser className="text-2xl text-primary-600" />
           <div className="flex flex-col flex-1">
@@ -428,7 +428,7 @@ export default function ContactInfoManager() {
 
       {/* Loading State */}
       {isLoading && (
-        <Card>
+        <Card className="bg-white">
           <CardBody className="text-center py-8">
             <p className="text-gray-600">Loading contact information...</p>
           </CardBody>
