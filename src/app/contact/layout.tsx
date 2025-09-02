@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Us - Book Your Border Run Service Chiang Mai",
   description:
-    "Contact Mekong Border Run to book your visa extension service from Chiang Mai to Laos. Call +66 95 102 9528 or use our contact form. Professional TAT licensed service with daily departures.",
+    "Contact Visa Border Run to book your visa extension service from Chiang Mai to Laos. Call +66850994775 or use our contact form. Professional TAT licensed service with daily departures.",
   keywords: [
     "contact border run service",
     "book visa extension",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Thailand Laos border contact",
     "TAT licensed contact",
     "visa extension booking",
-    "Mekong transfer contact",
+    "Visa transfer contact",
     "border run phone number",
     "visa service inquiry",
     "Chiang Mai visa contact",

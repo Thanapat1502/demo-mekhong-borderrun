@@ -120,11 +120,11 @@ export default function HeroSection({
               </Button>
               <Button
                 as="a"
-                href="tel:+66951029528"
+                href="tel:+66850994775"
                 variant="bordered"
                 size="lg"
                 className="border-2 border-white text-white hover:bg-white hover:text-primary-800 px-12 py-4 text-lg font-light rounded-full transition-all duration-300">
-                +66 95 102 9528
+                +66 85 099 4775
               </Button>
             </div>
           </div>

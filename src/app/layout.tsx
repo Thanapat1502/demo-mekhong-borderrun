@@ -35,8 +35,8 @@ if (!siteUrl) {
 export const metadata: Metadata = {
   title: {
     default:
-      "Mekong Border Run - Professional Visa Extension Service Chiang Mai to Laos",
-    template: "%s | Mekong Border Run",
+      "Visa Border Run - Professional Visa Extension Service Chiang Mai to Laos",
+    template: "%s | Visa Border Run",
   },
   description:
     "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension. Licensed TAT operator offering an all-inclusive service at a reasonable price. Book your one-day trip today!",

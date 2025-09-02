@@ -3,7 +3,7 @@
     "id": "primary-phone",
     "type": "phone",
     "label": "Primary Phone",
-    "value": "+66 123 456 789",
+    "value": "+66850994775",
     "is_primary": true,
     "is_public": true,
     "icon": "phone"
@@ -12,7 +12,7 @@
     "id": "whatsapp",
     "type": "phone",
     "label": "WhatsApp",
-    "value": "+66 987 654 321",
+    "value": "+66850994775",
     "is_primary": false,
     "is_public": true,
     "icon": "whatsapp"
@@ -21,7 +21,7 @@
     "id": "primary-email",
     "type": "email",
     "label": "Primary Email",
-    "value": "info@mekong-borderrun.com",
+    "value": "thanapat15020@gmail.com",
     "is_primary": true,
     "is_public": true,
     "icon": "email"
@@ -30,7 +30,7 @@
     "id": "booking-email",
     "type": "email",
     "label": "Booking Email",
-    "value": "booking@mekong-borderrun.com",
+    "value": "thanapat15020@gmail.com",
     "is_primary": false,
     "is_public": true,
     "icon": "email"
@@ -39,7 +39,7 @@
     "id": "office-address",
     "type": "address",
     "label": "Office Address",
-    "value": "123 Chang Khlan Road, Mueang Chiang Mai District, Chiang Mai 50100, Thailand",
+    "value": "123 Chiang Mai 00000, Thailand",
     "is_primary": true,
     "is_public": true,
     "icon": "location"
@@ -48,27 +48,27 @@
     "id": "facebook",
     "type": "social",
     "label": "Facebook",
-    "value": "https://facebook.com/mekongborderrun",
+    "value": "",
     "is_primary": false,
-    "is_public": true,
+    "is_public": false,
     "icon": "facebook"
   },
   {
     "id": "instagram",
     "type": "social",
     "label": "Instagram",
-    "value": "https://instagram.com/mekongborderrun",
+    "value": "",
     "is_primary": false,
-    "is_public": true,
+    "is_public": false,
     "icon": "instagram"
   },
   {
     "id": "line",
     "type": "social",
     "label": "LINE",
-    "value": "@mekongborderrun",
+    "value": "",
     "is_primary": false,
-    "is_public": true,
+    "is_public": false,
     "icon": "line"
   }
 ]

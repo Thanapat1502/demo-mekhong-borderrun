@@ -22,7 +22,7 @@ export default function ServicesCTA() {
           </Button>
           <Button
             as="a"
-            href="tel:+66951029528"
+            href="tel:+66850994775"
             variant="bordered"
             size="lg"
             className="border-2 border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-white px-12 py-4 text-lg font-light rounded-full transition-all duration-300">

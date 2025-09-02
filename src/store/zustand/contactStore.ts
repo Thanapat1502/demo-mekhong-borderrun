@@ -138,10 +138,10 @@ export const useContactStore = create<ContactState>((set, get) => ({
         id: ownerInfoData.id,
         name: ownerInfoData.owner_name,
         title: "Owner & Tour Guide", // Default title
-        email: "info@mekong-borderrun.com", // Default from web config
-        phone: "+66 123 456 789", // Default from web config
-        whatsapp: "+66 987 654 321", // From contact info
-        line: "@mekongborderrun", // From contact info
+        email: "thanapat15020@gmail.com", // Default from web config
+        phone: "+66850994775", // Default from web config
+        whatsapp: "+66850994775", // From contact info
+        line: "", // From contact info
         address:
           "123 Chang Khlan Road, Mueang Chiang Mai District, Chiang Mai 50100, Thailand",
         avatar: ownerInfoData.owner_photo,
@@ -197,8 +197,8 @@ export const useContactStore = create<ContactState>((set, get) => ({
           sunday: { open: "09:00", close: "18:00", isOpen: true },
         },
         socialMedia: {
-          facebook: "https://facebook.com/mekongborderrun",
-          instagram: "https://instagram.com/mekongborderrun",
+          facebook: "",
+          instagram: "",
         },
       };
 

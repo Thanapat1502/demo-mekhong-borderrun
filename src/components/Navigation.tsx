@@ -73,15 +73,15 @@ export default function Navigation() {
             href="/"
             className={`flex items-center gap-2 font-light transition-colors duration-300 ${textColor}`}>
             <Image
-              src="/image/logo/40028.png"
-              alt="Mekong Border Run Logo"
+              src="/image/logo/visa-border-run-logo.svg"
+              alt="Visa Border Run Logo"
               width={32}
               height={32}
               className="object-contain flex-shrink-0"
             />
             <span
               className={`text-lg sm:text-xl lg:text-2xl font-semibold ${textColor}`}>
-              Mekong{" "}
+              Visa{" "}
               <span className="text-accent-500 font-extralight">
                 Border Run
               </span>
@@ -113,7 +113,7 @@ export default function Navigation() {
         <NavbarItem className="hidden sm:flex">
           <Button
             as="a"
-            href="tel:+66951029528"
+            href="tel:+66850994775"
             className={`font-medium rounded-full px-4 sm:px-6 border-0 shadow-md hover:shadow-lg transition-all duration-300 text-base sm:text-base text-white ${buttonStyle}`}>
             Call Now
           </Button>

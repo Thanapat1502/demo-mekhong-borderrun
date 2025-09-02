@@ -23,14 +23,14 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Image
-                src="/image/logo/40028.png"
-                alt="Mekong Border Run Logo"
+                src="/image/logo/visa-border-run-logo.svg"
+                alt="Visa Border Run Logo"
                 width={32}
                 height={32}
                 className="object-contain"
               />
               <h3 className="font-bold text-xl text-accent-500">
-                {"Mekong Border Run"}
+                {"Visa Border Run"}
               </h3>
             </div>
             <p className="text-gray-600 mb-4">
@@ -118,7 +118,7 @@ export default function Footer() {
             © 2024{" "}
             {businessInfo?.businessName ||
               config.website_title ||
-              "Mekong Border Run"}
+              "Visa Border Run"}
             . All rights reserved.
           </p>
           <p className="text-gray-500 text-base mt-2 md:mt-0">

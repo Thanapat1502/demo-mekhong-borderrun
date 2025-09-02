@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Mekong Border Run - Professional Visa Extension Service",
-    short_name: "Mekong Border Run",
+    name: "Visa Border Run - Professional Visa Extension Service",
+    short_name: "Visa Border Run",
     description:
       "Professional border run service from Chiang Mai to Huay Xai, Laos. Daily departures for visa extension with licensed TAT operator.",
     start_url: "/",
