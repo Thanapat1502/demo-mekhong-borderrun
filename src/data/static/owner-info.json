@@ -1,0 +1,19 @@
+{
+  "id": "owner-profile",
+  "owner_name": "Somchai Mekong",
+  "owner_bio": "With over 10 years of experience in the tourism industry, Somchai has been providing reliable border run services to the expat community in Chiang Mai. His deep knowledge of border procedures and cultural sites ensures a smooth and enriching experience for all travelers.",
+  "owner_photo": "/image/owner/owner-profile.jpg",
+  "owner_experience": "10+ years in tourism and border run services",
+  "owner_languages": [
+    "Thai (Native)",
+    "English (Fluent)",
+    "Lao (Conversational)",
+    "Chinese (Basic)"
+  ],
+  "owner_certifications": [
+    "Licensed Tour Guide - Tourism Authority of Thailand",
+    "First Aid Certified",
+    "Professional Driver's License",
+    "Cross-Border Transportation Permit"
+  ]
+}

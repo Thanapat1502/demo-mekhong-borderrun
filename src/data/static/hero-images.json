@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hero-1",
+    "src": "/image/home/other3.jpg",
+    "alt": "Mekong Border Run - Professional visa run service",
+    "title": "Professional Border Run Service",
+    "description": "Comfortable and reliable visa extension service",
+    "priority": true
+  },
+  {
+    "id": "hero-2",
+    "src": "/image/home/other2.jpg",
+    "alt": "Chiang Mai to Laos border crossing",
+    "title": "Chiang Mai to Laos",
+    "description": "Daily departures to Huay Xai border"
+  },
+  {
+    "id": "hero-3",
+    "src": "/image/home/other1.jpg",
+    "alt": "White Temple visit during border run",
+    "title": "Cultural Experience",
+    "description": "Visit the famous White Temple in Chiang Rai"
+  },
+  {
+    "id": "hero-4",
+    "src": "/image/home/commercial/commercial1.jpg",
+    "alt": "Comfortable transportation for border runs",
+    "title": "Comfortable Journey",
+    "description": "Air-conditioned vehicles for your comfort"
+  },
+  {
+    "id": "hero-5",
+    "src": "/image/home/commercial/commercial2.jpg",
+    "alt": "Professional border run team",
+    "title": "Expert Service",
+    "description": "Experienced team to guide you through the process"
+  }
+]

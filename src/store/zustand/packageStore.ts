@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { servicePackagesService } from "@/services/supabaseService";
+import servicePackagesData from "@/data/static/service-packages.json";
 
 export interface ServicePackage {
   id: string;
@@ -60,10 +60,12 @@ export const usePackageStore = create<PackageState>((set, get) => ({
   fetchPackages: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await servicePackagesService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = servicePackagesData.map((item) => ({
         id: item.id,
         name: item.name,
         price: item.price,
@@ -71,19 +73,19 @@ export const usePackageStore = create<PackageState>((set, get) => ({
         description: item.description,
         features: item.features,
         duration: item.duration,
-        maxPassengers: item.max_passengers,
-        isPopular: item.is_popular,
-        isAvailable: item.is_available,
+        maxPassengers: item.maxPassengers,
+        isPopular: item.isPopular,
+        isAvailable: item.isAvailable,
       }));
 
       set({ packages: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch packages:", error);
+      console.error("Failed to load packages:", error);
       set({
-        packages: [], // No fallback - empty array
+        packages: [], // Fallback to empty array
         isLoading: false,
         error:
-          error instanceof Error ? error.message : "Failed to fetch packages",
+          error instanceof Error ? error.message : "Failed to load packages",
       });
     }
   },
@@ -111,9 +113,16 @@ export const usePackageStore = create<PackageState>((set, get) => ({
   fetchCurrentPrice: async () => {
     try {
       set({ isLoading: true, error: null });
-      // Get the first available package price as current price
-      const packages = await servicePackagesService.getAvailable();
-      const currentPrice = packages.length > 0 ? packages[0].price : 4200;
+
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Get the first available package price as current price from static data
+      const availablePackages = servicePackagesData.filter(
+        (pkg) => pkg.isAvailable
+      );
+      const currentPrice =
+        availablePackages.length > 0 ? availablePackages[0].price : 4200;
 
       set({
         currentPrice,
@@ -121,15 +130,15 @@ export const usePackageStore = create<PackageState>((set, get) => ({
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to fetch current price:", error);
+      console.error("Failed to load current price:", error);
       set({
-        currentPrice: 0, // No fallback - 0 price
+        currentPrice: 4200, // Fallback to default price
         currency: "THB",
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch current price",
+            : "Failed to load current price",
       });
     }
   },

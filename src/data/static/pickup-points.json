@@ -1,0 +1,86 @@
+[
+  {
+    "id": "tha-pae-gate",
+    "src": "/image/home/pickup/tha-pae-gate.jpg",
+    "alt": "Tha Pae Gate pickup point",
+    "title": "Tha Pae Gate",
+    "location": "Old City Center",
+    "description": "Historic gate and popular meeting point in Chiang Mai's old city",
+    "google_map_url": "https://maps.google.com/?q=18.7883,98.9917",
+    "landmark": "Famous ancient city gate",
+    "coordinates": {
+      "lat": 18.7883,
+      "lng": 98.9917
+    }
+  },
+  {
+    "id": "central-festival",
+    "src": "/image/home/pickup/central.webp",
+    "alt": "Central Festival Chiang Mai pickup point",
+    "title": "Central Festival",
+    "location": "Shopping Mall",
+    "description": "Major shopping center with easy access and parking",
+    "google_map_url": "https://maps.google.com/?q=18.8021,99.0158",
+    "landmark": "Large shopping mall",
+    "coordinates": {
+      "lat": 18.8021,
+      "lng": 99.0158
+    }
+  },
+  {
+    "id": "maya-mall",
+    "src": "/image/home/pickup/maya.jpg",
+    "alt": "Maya Lifestyle Shopping Center pickup point",
+    "title": "Maya Lifestyle",
+    "location": "Nimman Area",
+    "description": "Modern shopping center in trendy Nimman district",
+    "google_map_url": "https://maps.google.com/?q=18.7969,98.9683",
+    "landmark": "Popular shopping destination",
+    "coordinates": {
+      "lat": 18.7969,
+      "lng": 98.9683
+    }
+  },
+  {
+    "id": "downtown-area",
+    "src": "/image/home/pickup/downtown1.jpg",
+    "alt": "Downtown Chiang Mai pickup point",
+    "title": "Downtown Area",
+    "location": "City Center",
+    "description": "Central business district with multiple pickup options",
+    "google_map_url": "https://maps.google.com/?q=18.7883,98.9853",
+    "landmark": "Business and commercial center",
+    "coordinates": {
+      "lat": 18.7883,
+      "lng": 98.9853
+    }
+  },
+  {
+    "id": "chiang-mai-gate",
+    "src": "/image/home/pickup/chiang-mai-gate.webp",
+    "alt": "Chiang Mai Gate pickup point",
+    "title": "Chiang Mai Gate",
+    "location": "South Gate",
+    "description": "Historic southern entrance to the old city",
+    "google_map_url": "https://maps.google.com/?q=18.7833,98.9867",
+    "landmark": "Ancient city gate",
+    "coordinates": {
+      "lat": 18.7833,
+      "lng": 98.9867
+    }
+  },
+  {
+    "id": "airport-area",
+    "src": "/image/home/pickup/downtown1.jpg",
+    "alt": "Chiang Mai Airport area pickup point",
+    "title": "Airport Area",
+    "location": "Airport District",
+    "description": "Convenient pickup for travelers staying near the airport",
+    "google_map_url": "https://maps.google.com/?q=18.7669,98.9628",
+    "landmark": "Near Chiang Mai International Airport",
+    "coordinates": {
+      "lat": 18.7669,
+      "lng": 98.9628
+    }
+  }
+]

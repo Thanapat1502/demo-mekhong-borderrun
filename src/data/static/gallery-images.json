@@ -1,0 +1,113 @@
+[
+  {
+    "id": "gallery-featured",
+    "src": "/image/home/commercial/commercial1.jpg",
+    "alt": "Professional border run service vehicle",
+    "title": "Professional Service",
+    "description": "Comfortable air-conditioned vehicles for your journey",
+    "category": "service",
+    "featured": true,
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-commercial-2",
+    "src": "/image/home/commercial/commercial2.jpg",
+    "alt": "Border crossing experience",
+    "title": "Border Experience",
+    "description": "Smooth and efficient border crossing process",
+    "category": "journey",
+    "aspectRatio": "square"
+  },
+  {
+    "id": "gallery-commercial-3",
+    "src": "/image/home/commercial/commercial3.jpg",
+    "alt": "White Temple visit during journey",
+    "title": "White Temple Visit",
+    "description": "Cultural stop at the magnificent White Temple",
+    "category": "cultural",
+    "featured": true,
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-commercial-4",
+    "src": "/image/home/commercial/commercial4.jpg",
+    "alt": "Cultural sites during the journey",
+    "title": "Cultural Highlights",
+    "description": "Visit amazing cultural sites along the way",
+    "category": "cultural",
+    "aspectRatio": "square"
+  },
+  {
+    "id": "gallery-commercial-5",
+    "src": "/image/home/commercial/commercial5.jpg",
+    "alt": "Border crossing at Chiang Khong",
+    "title": "Chiang Khong Border",
+    "description": "Professional assistance at the border crossing",
+    "category": "destination",
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-commercial-6",
+    "src": "/image/home/commercial/commercial6.jpg",
+    "alt": "Scenic views during border run",
+    "title": "Scenic Journey",
+    "description": "Beautiful landscapes throughout the trip",
+    "category": "destination",
+    "aspectRatio": "square"
+  },
+  {
+    "id": "gallery-commercial-7",
+    "src": "/image/home/commercial/commercial7.jpeg",
+    "alt": "Return journey comfort",
+    "title": "Comfortable Return",
+    "description": "Relaxing journey back to Chiang Mai",
+    "category": "journey",
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-commercial-8",
+    "src": "/image/home/commercial/commercial8.jpg",
+    "alt": "Professional border run team",
+    "title": "Expert Guidance",
+    "description": "Experienced team to assist with all procedures",
+    "category": "service",
+    "aspectRatio": "square"
+  },
+  {
+    "id": "gallery-commercial-9",
+    "src": "/image/home/commercial/commercial9.JPG",
+    "alt": "Border crossing documentation",
+    "title": "Documentation Support",
+    "description": "Complete assistance with visa and border procedures",
+    "category": "service",
+    "aspectRatio": "square"
+  },
+  {
+    "id": "gallery-commercial-10",
+    "src": "/image/home/commercial/commercial10.jpg",
+    "alt": "Huay Xai border town",
+    "title": "Huay Xai Experience",
+    "description": "Explore the charming border town in Laos",
+    "category": "destination",
+    "featured": true,
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-mekong-river",
+    "src": "/image/home/other1.jpg",
+    "alt": "Mekong River views",
+    "title": "Mekong River",
+    "description": "Stunning views of the mighty Mekong River",
+    "category": "destination",
+    "aspectRatio": "landscape"
+  },
+  {
+    "id": "gallery-chiang-rai",
+    "src": "/image/home/other2.jpg",
+    "alt": "Chiang Rai province scenery",
+    "title": "Chiang Rai Beauty",
+    "description": "Beautiful landscapes of northern Thailand",
+    "category": "destination",
+    "aspectRatio": "square"
+  }
+]

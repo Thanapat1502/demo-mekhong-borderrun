@@ -1,13 +1,13 @@
 import { create } from "zustand";
-import {
-  heroImagesService,
-  journeyImagesService,
-  pickupPointImagesService,
-  galleryImagesService,
-  customerReviewsService,
-} from "@/services/supabaseService";
 
-// No fallback data - only use real data from Supabase
+// Import static data
+import heroImagesData from "@/data/static/hero-images.json";
+import journeyImagesData from "@/data/static/journey-images.json";
+import pickupPointImagesData from "@/data/static/pickup-points.json";
+import galleryImagesData from "@/data/static/gallery-images.json";
+import customerReviewsData from "@/data/static/customer-reviews.json";
+
+// Static data implementation - no API calls needed
 
 interface HeroImage {
   id: string;
@@ -89,10 +89,12 @@ export const useContentStore = create<State>((set) => ({
   fetchPickupPointImages: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await pickupPointImagesService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = pickupPointImagesData.map((item) => ({
         id: item.id,
         src: item.src,
         alt: item.alt,
@@ -106,14 +108,14 @@ export const useContentStore = create<State>((set) => ({
 
       set({ pickupPointImages: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch pickup point images:", error);
+      console.error("Failed to load pickup point images:", error);
       set({
-        pickupPointImages: [], // No fallback - empty array
+        pickupPointImages: [], // Fallback to empty array
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch pickup point images",
+            : "Failed to load pickup point images",
       });
     }
   },
@@ -121,10 +123,12 @@ export const useContentStore = create<State>((set) => ({
   fetchJourneyImages: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await journeyImagesService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = journeyImagesData.map((item) => ({
         id: item.id,
         src: item.src,
         alt: item.alt,
@@ -136,14 +140,14 @@ export const useContentStore = create<State>((set) => ({
 
       set({ journeyImages: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch journey images:", error);
+      console.error("Failed to load journey images:", error);
       set({
-        journeyImages: [], // No fallback - empty array
+        journeyImages: [], // Fallback to empty array
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch journey images",
+            : "Failed to load journey images",
       });
     }
   },
@@ -151,10 +155,12 @@ export const useContentStore = create<State>((set) => ({
   fetchGalleryImages: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await galleryImagesService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = galleryImagesData.map((item) => ({
         id: item.id,
         src: item.src,
         alt: item.alt,
@@ -162,19 +168,19 @@ export const useContentStore = create<State>((set) => ({
         description: item.description,
         category: item.category,
         featured: item.featured,
-        aspectRatio: item.aspect_ratio,
+        aspectRatio: item.aspectRatio,
       }));
 
       set({ galleryImages: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch gallery images:", error);
+      console.error("Failed to load gallery images:", error);
       set({
-        galleryImages: [], // No fallback - empty array
+        galleryImages: [], // Fallback to empty array
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch gallery images",
+            : "Failed to load gallery images",
       });
     }
   },
@@ -182,10 +188,12 @@ export const useContentStore = create<State>((set) => ({
   fetchHeroImages: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await heroImagesService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = heroImagesData.map((item) => ({
         id: item.id,
         src: item.src,
         alt: item.alt,
@@ -195,14 +203,12 @@ export const useContentStore = create<State>((set) => ({
       }));
       set({ heroImages: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch hero images:", error);
+      console.error("Failed to load hero images:", error);
       set({
-        heroImages: [], // No fallback - empty array
+        heroImages: [], // Fallback to empty array
         isLoading: false,
         error:
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch hero images",
+          error instanceof Error ? error.message : "Failed to load hero images",
       });
     }
   },
@@ -210,10 +216,12 @@ export const useContentStore = create<State>((set) => ({
   fetchCustomerReviews: async () => {
     try {
       set({ isLoading: true, error: null });
-      const data = await customerReviewsService.getAll();
 
-      // Transform database data to match interface
-      const transformedData = data.map((item) => ({
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use static data directly
+      const transformedData = customerReviewsData.map((item) => ({
         id: item.id,
         name: item.name,
         country: item.country,
@@ -225,14 +233,14 @@ export const useContentStore = create<State>((set) => ({
 
       set({ customerReviews: transformedData, isLoading: false });
     } catch (error) {
-      console.error("Failed to fetch customer reviews:", error);
+      console.error("Failed to load customer reviews:", error);
       set({
-        customerReviews: [], // No fallback - empty array
+        customerReviews: [], // Fallback to empty array
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch customer reviews",
+            : "Failed to load customer reviews",
       });
     }
   },

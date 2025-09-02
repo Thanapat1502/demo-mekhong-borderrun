@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { supabase } from "@/lib/supabase";
+import webConfigData from "@/data/static/web-config.json";
 
 export interface WebConfig {
   website_title: string;
@@ -39,27 +39,11 @@ export const useWebConfigStore = create<WebConfigStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const { data, error } = await supabase
-        .from("web_config")
-        .select("key, value");
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      if (error) {
-        throw error;
-      }
-
-      // Transform array of key-value pairs to config object
-      const configData: Partial<WebConfig> = {};
-
-      if (data) {
-        data.forEach((item) => {
-          if (item.key in defaultConfig) {
-            (configData as Record<string, string>)[item.key] = item.value;
-          }
-        });
-      }
-
-      // Merge with default config to ensure all fields are present
-      const finalConfig = { ...defaultConfig, ...configData };
+      // Use static data directly
+      const finalConfig = { ...defaultConfig, ...webConfigData };
 
       set({
         config: finalConfig,
@@ -67,11 +51,11 @@ export const useWebConfigStore = create<WebConfigStore>((set, get) => ({
         error: null,
       });
     } catch (error) {
-      console.error("Error fetching web config:", error);
+      console.error("Error loading web config:", error);
       set({
         isLoading: false,
         error:
-          error instanceof Error ? error.message : "Failed to fetch web config",
+          error instanceof Error ? error.message : "Failed to load web config",
         config: defaultConfig, // Fallback to default config
       });
     }

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "journey-booking",
+    "src": "/image/home/commercial/commercial2.jpg",
+    "alt": "Book your border run in advance",
+    "step": "01",
+    "title": "Book in Advance",
+    "description": "Reserve your spot at least 24 hours before departure for guaranteed availability",
+    "time": "24h"
+  },
+  {
+    "id": "journey-departure",
+    "src": "/image/home/commercial/commercial1.jpg",
+    "alt": "Professional pickup service in Chiang Mai",
+    "step": "02",
+    "title": "Departure",
+    "description": "Professional pickup from your accommodation in Chiang Mai",
+    "time": "09:30"
+  },
+  {
+    "id": "journey-cultural",
+    "src": "/image/home/commercial/commercial3.jpg",
+    "alt": "White Temple visit in Chiang Rai",
+    "step": "03",
+    "title": "Cultural Stop",
+    "description": "Lunch and visit to the magnificent White Temple in Chiang Rai",
+    "time": "12:30"
+  },
+  {
+    "id": "journey-border",
+    "src": "/image/home/commercial/commercial5.jpg",
+    "alt": "Border crossing at Chiang Khong to Huay Xai",
+    "step": "04",
+    "title": "Border Crossing",
+    "description": "Arrive at Chiang Khong and cross to Huay Xai, Laos",
+    "time": "15:30"
+  },
+  {
+    "id": "journey-return",
+    "src": "/image/home/commercial/commercial7.jpeg",
+    "alt": "Return journey to Chiang Mai with new visa stamp",
+    "step": "05",
+    "title": "Return Journey",
+    "description": "Begin comfortable return to Chiang Mai with new entry stamp",
+    "time": "16:00"
+  },
+  {
+    "id": "journey-arrival",
+    "src": "/image/home/commercial/commercial8.jpg",
+    "alt": "Safe arrival back in Chiang Mai",
+    "step": "06",
+    "title": "Safe Arrival",
+    "description": "Arrive back in Chiang Mai with your new visa stamp",
+    "time": "19:00"
+  }
+]

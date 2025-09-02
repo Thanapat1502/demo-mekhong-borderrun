@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import ContactHero from "@/components/contact/ContactHero";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactForm from "@/components/contact/ContactForm";
@@ -8,8 +9,23 @@ import SharedCTASection from "@/components/shared/SharedCTASection";
 import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function Contact() {
-  const { ownerInfo, contactInfo, businessInfo, isLoading, error } =
-    useContactStore();
+  const {
+    ownerInfo,
+    contactInfo,
+    businessInfo,
+    isLoading,
+    error,
+    fetchContactInfo,
+    fetchOwnerInfo,
+    fetchBusinessInfo,
+  } = useContactStore();
+
+  // Fetch contact data on page load
+  useEffect(() => {
+    fetchContactInfo();
+    fetchOwnerInfo();
+    fetchBusinessInfo();
+  }, [fetchContactInfo, fetchOwnerInfo, fetchBusinessInfo]);
 
   // Show loading state while fetching contact data
   if (isLoading) {

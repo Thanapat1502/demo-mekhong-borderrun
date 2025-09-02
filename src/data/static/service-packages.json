@@ -1,0 +1,105 @@
+[
+  {
+    "id": "standard-border-run",
+    "name": "Standard Border Run",
+    "price": 4200,
+    "currency": "THB",
+    "description": "Complete border run service with cultural stops and comfortable transportation",
+    "features": [
+      "Round-trip transportation from Chiang Mai",
+      "Professional English-speaking guide",
+      "White Temple visit in Chiang Rai",
+      "Lunch included",
+      "Border crossing assistance",
+      "All necessary documentation support",
+      "Air-conditioned vehicle",
+      "Small group size (max 8 people)"
+    ],
+    "duration": "Full Day (10-12 hours)",
+    "maxPassengers": 8,
+    "isPopular": true,
+    "isAvailable": true
+  },
+  {
+    "id": "premium-border-run",
+    "name": "Premium Border Run",
+    "price": 5500,
+    "currency": "THB",
+    "description": "Enhanced border run experience with additional cultural sites and premium service",
+    "features": [
+      "All Standard package features",
+      "Private vehicle option available",
+      "Blue Temple visit",
+      "Premium lunch at local restaurant",
+      "Complimentary refreshments",
+      "Priority border crossing assistance",
+      "Photo stops at scenic locations",
+      "Flexible pickup times"
+    ],
+    "duration": "Full Day (10-12 hours)",
+    "maxPassengers": 6,
+    "isPopular": false,
+    "isAvailable": true
+  },
+  {
+    "id": "express-border-run",
+    "name": "Express Border Run",
+    "price": 3800,
+    "currency": "THB",
+    "description": "Quick and efficient border run service for those short on time",
+    "features": [
+      "Direct transportation to border",
+      "English-speaking guide",
+      "Border crossing assistance",
+      "Light refreshments",
+      "Fast-track service",
+      "No cultural stops",
+      "Air-conditioned vehicle"
+    ],
+    "duration": "8-9 hours",
+    "maxPassengers": 10,
+    "isPopular": false,
+    "isAvailable": true
+  },
+  {
+    "id": "private-border-run",
+    "name": "Private Border Run",
+    "price": 12000,
+    "currency": "THB",
+    "description": "Exclusive private service for individuals or small groups",
+    "features": [
+      "Private vehicle and driver",
+      "Dedicated English-speaking guide",
+      "Customizable itinerary",
+      "All cultural sites included",
+      "Premium lunch",
+      "Flexible timing",
+      "Door-to-door service",
+      "Complimentary water and snacks"
+    ],
+    "duration": "Flexible (8-12 hours)",
+    "maxPassengers": 4,
+    "isPopular": false,
+    "isAvailable": true
+  },
+  {
+    "id": "group-border-run",
+    "name": "Group Border Run",
+    "price": 3500,
+    "currency": "THB",
+    "description": "Budget-friendly option for larger groups",
+    "features": [
+      "Shared transportation",
+      "English-speaking guide",
+      "White Temple visit",
+      "Basic lunch included",
+      "Border crossing assistance",
+      "Air-conditioned bus",
+      "Group discounts available"
+    ],
+    "duration": "Full Day (10-12 hours)",
+    "maxPassengers": 15,
+    "isPopular": false,
+    "isAvailable": true
+  }
+]

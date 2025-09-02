@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { customerReviewsService } from "@/services/supabaseService";
-import type { CustomerReviewRow } from "@/lib/supabase";
+import customerReviewsData from "@/data/static/customer-reviews.json";
 
 // Transform database row to display format
 export interface Review {
@@ -45,35 +44,35 @@ export const useReviewStore = create<ReviewState>((set) => ({
     try {
       set({ isLoading: true, error: null });
 
-      const data = await customerReviewsService.getAll();
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const transformedReviews: Review[] = data.map(
-        (item: CustomerReviewRow) => ({
-          id: item.id,
-          name: item.name,
-          avatar: item.avatar,
-          country: item.country,
-          rating: item.rating,
-          review: item.review,
-          date: item.date,
-          verified: item.verified,
-          trip_date: item.trip_date,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-        })
-      );
+      // Use static data directly
+      const transformedReviews: Review[] = customerReviewsData.map((item) => ({
+        id: item.id,
+        name: item.name,
+        avatar: item.avatar,
+        country: item.country,
+        rating: item.rating,
+        review: item.review,
+        date: item.date,
+        verified: true, // Default to verified for static data
+        trip_date: item.date, // Use review date as trip date
+        created_at: item.date,
+        updated_at: item.date,
+      }));
 
       set({
         reviews: transformedReviews,
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to fetch reviews:", error);
+      console.error("Failed to load reviews:", error);
       set({
-        reviews: [], // No fallback - empty array
+        reviews: [], // Fallback to empty array
         isLoading: false,
         error:
-          error instanceof Error ? error.message : "Failed to fetch reviews",
+          error instanceof Error ? error.message : "Failed to load reviews",
       });
     }
   },
@@ -82,60 +81,65 @@ export const useReviewStore = create<ReviewState>((set) => ({
     try {
       set({ isLoading: true, error: null });
 
-      const data = await customerReviewsService.getFeatured();
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const transformedReviews: Review[] = data.map(
-        (item: CustomerReviewRow) => ({
-          id: item.id,
-          name: item.name,
-          avatar: item.avatar,
-          country: item.country,
-          rating: item.rating,
-          review: item.review,
-          date: item.date,
-          verified: item.verified,
-          trip_date: item.trip_date,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-        })
-      );
+      // Use first 6 reviews as featured from static data
+      const featuredData = customerReviewsData.slice(0, 6);
+
+      const transformedReviews: Review[] = featuredData.map((item) => ({
+        id: item.id,
+        name: item.name,
+        avatar: item.avatar,
+        country: item.country,
+        rating: item.rating,
+        review: item.review,
+        date: item.date,
+        verified: true, // Default to verified for static data
+        trip_date: item.date, // Use review date as trip date
+        created_at: item.date,
+        updated_at: item.date,
+      }));
 
       set({
         featuredReviews: transformedReviews,
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to fetch featured reviews:", error);
+      console.error("Failed to load featured reviews:", error);
       set({
-        featuredReviews: [], // No fallback - empty array
+        featuredReviews: [], // Fallback to empty array
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch featured reviews",
+            : "Failed to load featured reviews",
       });
     }
   },
 
   fetchHighlight: async () => {
     try {
-      // Fetch the first customer from Supabase
       set({ isLoading: true, error: null });
 
-      const data = await customerReviewsService.getHighlight();
+      // Simulate async loading for consistency
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use first customer review as highlight from static data
+      const highlightData = customerReviewsData[0];
 
       const transformedReview: Review = {
-        id: data.id,
-        name: data.name,
-        avatar: data.avatar,
-        country: data.country,
-        rating: data.rating,
-        review: data.review,
-        date: data.date,
-        verified: data.verified,
-        trip_date: data.trip_date,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
+        id: highlightData.id,
+        name: highlightData.name,
+        avatar: highlightData.avatar,
+        country: highlightData.country,
+        rating: highlightData.rating,
+        review: highlightData.review,
+        date: highlightData.date,
+        verified: true, // Default to verified for static data
+        trip_date: highlightData.date, // Use review date as trip date
+        created_at: highlightData.date,
+        updated_at: highlightData.date,
       };
 
       set({
@@ -143,14 +147,14 @@ export const useReviewStore = create<ReviewState>((set) => ({
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to fetch highlight review:", error);
+      console.error("Failed to load highlight review:", error);
       set({
-        highlight: null, // No fallback - null
+        highlight: null, // Fallback to null
         isLoading: false,
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch highlight review",
+            : "Failed to load highlight review",
       });
     }
   },
