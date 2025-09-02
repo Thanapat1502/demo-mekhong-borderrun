@@ -10,60 +10,38 @@ import {
   Divider,
 } from "@heroui/react";
 import { FiSave, FiDollarSign, FiEdit, FiX } from "react-icons/fi";
-import { supabase, TABLES, ServicePackageRow } from "@/lib/supabase";
+import { usePackageStore } from "@/store/zustand/packageStore";
 
 export default function ServicePricingManager() {
-  const [packages, setPackages] = useState<ServicePackageRow[]>([]);
-  const [editingPackage, setEditingPackage] =
-    useState<ServicePackageRow | null>(null);
+  // Use package store instead of local state
+  const {
+    packages,
+    isLoading,
+    error: storeError,
+    fetchPackages,
+  } = usePackageStore();
+
+  const [editingPackage, setEditingPackage] = useState<any>(null);
   const [price, setPrice] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  // Fetch packages from Supabase
-  const fetchPackages = async () => {
-    setIsLoading(true);
-    try {
-      console.log("Fetching service packages...");
-      const { data, error } = await supabase
-        .from(TABLES.SERVICE_PACKAGES)
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      console.log("Service packages result:", { data, error });
-
-      if (error) {
-        console.error("Service packages error:", error);
-        // If table doesn't exist, show error
-        if (error.code === "42P01") {
-          console.log("Service packages table doesn't exist");
-          setError(
-            "Service packages table not found. Please contact administrator."
-          );
-          setPackages([]);
-          setIsLoading(false);
-          return;
-        }
-        throw error;
-      }
-      setPackages(data || []);
-    } catch (err) {
-      setError(`Failed to fetch packages: ${err}`);
-      console.error("Error fetching packages:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Fetch packages using store
   useEffect(() => {
     fetchPackages();
-  }, []);
+  }, [fetchPackages]);
 
-  const handleEdit = (pkg: ServicePackageRow) => {
+  // Update error state from store
+  useEffect(() => {
+    if (storeError) {
+      setError(storeError);
+    }
+  }, [storeError]);
+
+  const handleEdit = (pkg: any) => {
     setEditingPackage(pkg);
     setPrice(pkg.price.toString());
     setName(pkg.name);
@@ -96,28 +74,15 @@ export default function ServicePricingManager() {
         setError("Package name is required");
         return;
       }
-      console.log("check for id", editingPackage.id);
+      // DEMO MODE: Simulate save operation
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const { error } = await supabase
-        .from(TABLES.SERVICE_PACKAGES)
-        .update({
-          price: numericPrice,
-          name: name.trim(),
-          description: description.trim(),
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", editingPackage.id);
-
-      if (error) {
-        console.error("Update error:", error);
-        throw error;
-      }
-
-      setSuccessMessage("Package updated successfully!");
+      setSuccessMessage(
+        "Package updated successfully! (Demo mode - changes not persisted)"
+      );
       setTimeout(() => setSuccessMessage(""), 3000);
 
-      // Refresh packages and reset form
-      await fetchPackages();
+      // Reset form
       handleCancel();
     } catch (err) {
       setError(`Failed to update package: ${err}`);

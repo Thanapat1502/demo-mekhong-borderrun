@@ -1,0 +1,122 @@
+[
+  {
+    "id": "req-001",
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@email.com",
+    "phone": "+66 98 765 4321",
+    "message": "Hi, I'm interested in booking a border run for next week. Could you please provide more information about the schedule and pricing?",
+    "status": "new",
+    "created_at": "2024-01-20T10:30:00Z",
+    "updated_at": "2024-01-20T10:30:00Z"
+  },
+  {
+    "id": "req-002",
+    "name": "Mark Thompson",
+    "email": "mark.thompson@gmail.com",
+    "phone": "+66 87 654 3210",
+    "message": "I need to do a visa run urgently. Do you have any availability for tomorrow or the day after?",
+    "status": "in_progress",
+    "created_at": "2024-01-19T14:15:00Z",
+    "updated_at": "2024-01-20T09:00:00Z"
+  },
+  {
+    "id": "req-003",
+    "name": "Lisa Chen",
+    "email": "lisa.chen@yahoo.com",
+    "phone": "+66 91 234 5678",
+    "message": "Can you pick me up from Maya Mall? Also, do you provide lunch during the trip?",
+    "status": "completed",
+    "created_at": "2024-01-18T16:45:00Z",
+    "updated_at": "2024-01-19T11:30:00Z"
+  },
+  {
+    "id": "req-004",
+    "name": "David Miller",
+    "email": "david.miller@hotmail.com",
+    "phone": "+66 82 345 6789",
+    "message": "I'm traveling with my family (2 adults, 1 child). Do you have family packages available?",
+    "status": "new",
+    "created_at": "2024-01-20T08:20:00Z",
+    "updated_at": "2024-01-20T08:20:00Z"
+  },
+  {
+    "id": "req-005",
+    "name": "Emma Wilson",
+    "email": "emma.wilson@outlook.com",
+    "phone": "+66 93 456 7890",
+    "message": "What documents do I need to bring for the border crossing? This is my first time doing a visa run.",
+    "status": "in_progress",
+    "created_at": "2024-01-19T12:00:00Z",
+    "updated_at": "2024-01-19T15:30:00Z"
+  },
+  {
+    "id": "req-006",
+    "name": "James Brown",
+    "email": "james.brown@email.com",
+    "phone": "+66 84 567 8901",
+    "message": "I heard you visit the White Temple during the trip. Is this included in the standard package?",
+    "status": "completed",
+    "created_at": "2024-01-17T11:30:00Z",
+    "updated_at": "2024-01-18T10:00:00Z"
+  },
+  {
+    "id": "req-007",
+    "name": "Maria Rodriguez",
+    "email": "maria.rodriguez@gmail.com",
+    "phone": "+66 95 678 9012",
+    "message": "Do you offer private tours? I prefer a more personalized experience.",
+    "status": "new",
+    "created_at": "2024-01-20T13:45:00Z",
+    "updated_at": "2024-01-20T13:45:00Z"
+  },
+  {
+    "id": "req-008",
+    "name": "Hans Mueller",
+    "email": "hans.mueller@web.de",
+    "phone": "+66 86 789 0123",
+    "message": "Can you accommodate dietary restrictions? I'm vegetarian and have some food allergies.",
+    "status": "in_progress",
+    "created_at": "2024-01-19T09:15:00Z",
+    "updated_at": "2024-01-20T08:00:00Z"
+  },
+  {
+    "id": "req-009",
+    "name": "Sophie Dubois",
+    "email": "sophie.dubois@orange.fr",
+    "phone": "+66 97 890 1234",
+    "message": "Is it possible to book for a group of 6 people? We're all friends traveling together.",
+    "status": "completed",
+    "created_at": "2024-01-16T15:20:00Z",
+    "updated_at": "2024-01-17T14:00:00Z"
+  },
+  {
+    "id": "req-010",
+    "name": "Yuki Tanaka",
+    "email": "yuki.tanaka@gmail.com",
+    "phone": "+66 88 901 2345",
+    "message": "What time does the trip usually start and end? I need to plan my schedule accordingly.",
+    "status": "new",
+    "created_at": "2024-01-20T07:30:00Z",
+    "updated_at": "2024-01-20T07:30:00Z"
+  },
+  {
+    "id": "req-011",
+    "name": "Roberto Silva",
+    "email": "roberto.silva@gmail.com",
+    "phone": "+66 89 012 3456",
+    "message": "I'm staying near the airport. Do you have pickup service from that area?",
+    "status": "in_progress",
+    "created_at": "2024-01-19T18:00:00Z",
+    "updated_at": "2024-01-19T20:30:00Z"
+  },
+  {
+    "id": "req-012",
+    "name": "Anna Kowalski",
+    "email": "anna.kowalski@wp.pl",
+    "phone": "+66 90 123 4567",
+    "message": "How far in advance should I book? I'm planning to travel next month.",
+    "status": "completed",
+    "created_at": "2024-01-15T13:10:00Z",
+    "updated_at": "2024-01-16T09:45:00Z"
+  }
+]

@@ -10,18 +10,22 @@ import {
   Avatar,
 } from "@heroui/react";
 import { FiSave, FiUser, FiEdit, FiX, FiCamera } from "react-icons/fi";
-import { ContactInfoRow, OwnerInfoRow } from "@/lib/supabase";
-import {
-  fetchContactData,
-  saveContactInfo,
-  ContactFormData,
-} from "@/services/contactInfoService";
+import { useContactStore } from "@/store/zustand/contactStore";
 
 export default function ContactInfoManager() {
-  const [contactInfo, setContactInfo] = useState<ContactInfoRow[]>([]);
-  const [ownerInfo, setOwnerInfo] = useState<OwnerInfoRow | null>(null);
+  // Use contact store instead of local state
+  const {
+    contactInfo,
+    ownerInfo,
+    businessInfo,
+    isLoading,
+    error: storeError,
+    fetchContactInfo,
+    fetchOwnerInfo,
+    fetchBusinessInfo,
+  } = useContactStore();
+
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -36,57 +40,44 @@ export default function ContactInfoManager() {
   const [ownerImageFile, setOwnerImageFile] = useState<File | null>(null);
   const [ownerImagePreview, setOwnerImagePreview] = useState<string>("");
 
-  // Fetch data using the service
-  const fetchData = async () => {
-    console.log("fetchData called");
-    setIsLoading(true);
-    try {
-      const result = await fetchContactData();
-
-      if (!result.success) {
-        setError(result.error || "Failed to fetch contact information");
-        return;
-      }
-
-      const { contactInfo: contactData, ownerInfo: ownerData } =
-        result.data || {};
-
-      setContactInfo(contactData || []);
-
-      // Set form values based on fetched data
-      if (!ownerData) {
-        // No owner data, clear form
-        setOwnerInfo(null);
-        setGuideName("");
-        setPhone("");
-        setEmail("");
-        setWhatsapp("");
-        setAddress("");
-      } else {
-        setOwnerInfo(ownerData);
-        setGuideName(ownerData.name);
-        setPhone(ownerData.phone);
-        setEmail(ownerData.email);
-        setWhatsapp(ownerData.whatsapp || "");
-        setLine(ownerData.line || "");
-
-        // Set address from contact info
-        const addressInfo = contactData?.find(
-          (info: ContactInfoRow) => info.type === "address"
-        );
-        setAddress(addressInfo?.value || "");
-      }
-    } catch (err) {
-      setError("Failed to fetch contact information");
-      console.error("Error fetching data:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Fetch data using store
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchContactInfo();
+    fetchOwnerInfo();
+    fetchBusinessInfo();
+  }, [fetchContactInfo, fetchOwnerInfo, fetchBusinessInfo]);
+
+  // Update error state from store
+  useEffect(() => {
+    if (storeError) {
+      setError(storeError);
+    }
+  }, [storeError]);
+
+  // Set form values when owner info is loaded
+  useEffect(() => {
+    if (ownerInfo) {
+      setGuideName(ownerInfo.name || "");
+      setPhone(ownerInfo.phone || "");
+      setEmail(ownerInfo.email || "");
+      setWhatsapp(ownerInfo.whatsapp || "");
+      setLine(ownerInfo.line || "");
+
+      // Set address from business info
+      if (businessInfo?.address) {
+        const addressStr =
+          typeof businessInfo.address === "string"
+            ? businessInfo.address
+            : `${businessInfo.address.street}, ${businessInfo.address.city}`;
+        setAddress(addressStr);
+      }
+
+      // Set owner image preview if available
+      if (ownerInfo.avatar) {
+        setOwnerImagePreview(ownerInfo.avatar);
+      }
+    }
+  }, [ownerInfo, businessInfo]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -169,34 +160,19 @@ export default function ContactInfoManager() {
         return;
       }
 
-      // Prepare form data
-      const formData: ContactFormData = {
-        guideName: guideName.trim(),
-        phone: phone.trim(),
-        email: email.trim(),
-        whatsapp: whatsapp.trim(),
-        line: line.trim(),
-        address: address.trim(),
-      };
+      // DEMO MODE: Simulate save operation
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Call the service to save all data
-      const result = await saveContactInfo(formData, ownerImageFile, ownerInfo);
-
-      if (!result.success) {
-        setError(result.error || "Failed to save contact information");
-        return;
-      }
-
-      setSuccessMessage("Contact information updated successfully!");
+      setSuccessMessage(
+        "Contact information updated successfully! (Demo mode - changes not persisted)"
+      );
       setTimeout(() => setSuccessMessage(""), 3000);
 
-      // Refresh data and exit edit mode
-      await fetchData();
+      // Exit edit mode
       setIsEditing(false);
 
       // Clear image upload states
       setOwnerImageFile(null);
-      setOwnerImagePreview("");
     } catch (err) {
       setError("Failed to update contact information");
       console.error("Error updating data:", err);

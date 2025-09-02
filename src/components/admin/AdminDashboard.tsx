@@ -19,142 +19,41 @@ import {
   FiDollarSign,
   FiSettings,
 } from "react-icons/fi";
-import { supabase, TABLES, ContactRequestRow } from "@/lib/supabase";
 import StatusDropdown, {
   DEFAULT_CONTACT_STATUS_OPTIONS,
-  useStatusManager,
 } from "@/components/admin/StatusDropdown";
 import ServicePricingManager from "./ServicePricingManager";
 import ContactInfoManager from "./ContactInfoManager";
-
-interface DashboardStats {
-  totalRequests: number;
-  newRequests: number;
-  monthlyVisitors: number;
-  monthlyInquiries: number;
-  conversionRate: number;
-}
+import {
+  useDashboardStore,
+  type ContactRequest,
+  type DashboardStats,
+} from "@/store/zustand/dashboardStore";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [stats, setStats] = useState<DashboardStats>({
-    totalRequests: 0,
-    newRequests: 0,
-    monthlyVisitors: 0,
-    monthlyInquiries: 0,
-    conversionRate: 0,
-  });
-  const [recentRequests, setRecentRequests] = useState<ContactRequestRow[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>("");
 
-  // Status manager for handling status updates
-  const { updateStatus, isLoading: isStatusLoading } = useStatusManager(
-    {},
-    async (requestId: string, newStatus: string) => {
-      const { error } = await supabase
-        .from(TABLES.CONTACT_REQUESTS)
-        .update({
-          status: newStatus,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", requestId);
+  // Use dashboard store
+  const {
+    stats,
+    recentRequests,
+    isLoading,
+    error,
+    fetchContactRequests,
+    fetchDashboardStats,
+    updateRequestStatus,
+  } = useDashboardStore();
 
-      if (error) throw error;
-
-      // Update local state
-      setRecentRequests((prev) =>
-        prev.map((request) =>
-          request.id === requestId
-            ? { ...request, status: newStatus as ContactRequestRow["status"] }
-            : request
-        )
-      );
-    }
-  );
-
-  // Fetch dashboard data
-  const fetchDashboardData = async () => {
-    setIsLoading(true);
-    try {
-      // Fetch contact requests
-      const { data: requests, error: requestsError } = await supabase
-        .from(TABLES.CONTACT_REQUESTS)
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (requestsError) {
-        console.error("Contact requests error:", requestsError);
-        // If table doesn't exist, show error
-        if (requestsError.code === "42P01") {
-          console.log("Contact requests table doesn't exist");
-          setError(
-            "Contact requests table not found. Please contact administrator."
-          );
-          setStats({
-            totalRequests: 0,
-            newRequests: 0,
-            monthlyVisitors: 0,
-            monthlyInquiries: 0,
-            conversionRate: 0,
-          });
-          setRecentRequests([]);
-          setIsLoading(false);
-          return;
-        }
-        throw requestsError;
-      }
-
-      // Calculate stats
-      const totalRequests = requests?.length || 0;
-
-      // Count new requests (created within 3 days)
-      const newRequests =
-        requests?.filter((r) => {
-          const requestDate = new Date(r.created_at);
-          const currentDate = new Date();
-          const daysDifference =
-            (currentDate.getTime() - requestDate.getTime()) /
-            (1000 * 3600 * 24);
-          return daysDifference <= 3 && r.status === "new";
-        }).length || 0;
-
-      // Use real data instead of mock numbers
-      const monthlyInquiries =
-        requests?.filter((r) => {
-          const requestDate = new Date(r.created_at);
-          const currentDate = new Date();
-          return (
-            requestDate.getMonth() === currentDate.getMonth() &&
-            requestDate.getFullYear() === currentDate.getFullYear()
-          );
-        }).length || 0;
-
-      // Set monthly visitors to 0 if no real data available
-      const monthlyVisitors = 0; // Real visitor tracking would need analytics integration
-      const conversionRate =
-        monthlyVisitors > 0 ? (monthlyInquiries / monthlyVisitors) * 100 : 0;
-
-      setStats({
-        totalRequests,
-        newRequests,
-        monthlyVisitors,
-        monthlyInquiries,
-        conversionRate,
-      });
-
-      setRecentRequests(requests?.slice(0, 5) || []);
-    } catch (err) {
-      setError("Failed to fetch dashboard data");
-      console.error("Error fetching dashboard data:", err);
-    } finally {
-      setIsLoading(false);
-    }
+  // Handle status updates using dashboard store
+  const handleStatusUpdate = async (requestId: string, newStatus: string) => {
+    await updateRequestStatus(requestId, newStatus as ContactRequest["status"]);
   };
 
+  // Fetch dashboard data using store
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    fetchContactRequests();
+    fetchDashboardStats();
+  }, [fetchContactRequests, fetchDashboardStats]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -304,9 +203,9 @@ export default function AdminDashboard() {
                               currentStatus={request.status}
                               statusOptions={DEFAULT_CONTACT_STATUS_OPTIONS}
                               onStatusChange={(newStatus) =>
-                                updateStatus(request.id, newStatus)
+                                handleStatusUpdate(request.id, newStatus)
                               }
-                              isLoading={isStatusLoading(request.id)}
+                              isLoading={false}
                               size="sm"
                               showCurrentAsChip={true}
                             />

@@ -149,8 +149,21 @@ export default function LoginForm() {
 
             <Divider />
 
-            {/* Additional Info */}
+            {/* Demo Credentials Info */}
             <div className="text-center">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-blue-700 font-medium mb-2">
+                  Demo Credentials
+                </p>
+                <p className="text-sm text-blue-600">
+                  Username:{" "}
+                  <code className="bg-blue-100 px-2 py-1 rounded">admin</code>
+                </p>
+                <p className="text-sm text-blue-600">
+                  Password:{" "}
+                  <code className="bg-blue-100 px-2 py-1 rounded">admin</code>
+                </p>
+              </div>
               <p className="text-base text-gray-500">
                 For security purposes, only authorized administrators can access
                 this panel.

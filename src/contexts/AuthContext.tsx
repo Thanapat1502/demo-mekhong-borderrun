@@ -46,16 +46,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
+      // DEMO MODE: Check for static credentials
+      if (email === "admin" && password === "admin") {
+        const demoUser: AuthUser = {
+          id: "demo-admin-001",
+          email: "admin@demo.com",
+          role: "admin",
+        };
+        setUser(demoUser);
+        return { error: null };
+      }
+
+      // If not demo credentials, try real authentication
       const response = await authService.signIn({ email, password });
 
       if (response.user) {
         setUser(response.user);
         return { error: null };
       } else {
-        return { error: response.error || "Login failed" };
+        return {
+          error:
+            response.error || "Invalid credentials. For demo, use: admin/admin",
+        };
       }
     } catch {
-      return { error: "An unexpected error occurred" };
+      return { error: "Invalid credentials. For demo, use: admin/admin" };
     } finally {
       setIsLoading(false);
     }

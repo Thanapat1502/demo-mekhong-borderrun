@@ -28,9 +28,23 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { user, signOut } = useAuth();
 
+  // Demo mode: Use static user data if no authenticated user
+  const demoUser = {
+    email: "admin@demo.com",
+    id: "demo-admin",
+    role: "admin",
+  };
+
+  const currentUser = user || demoUser;
+
   const handleLogout = async () => {
     if (confirm("Are you sure you want to logout?")) {
-      await signOut();
+      if (user) {
+        await signOut();
+      } else {
+        // Demo mode: redirect to login page
+        window.location.href = "/admin/login";
+      }
     }
   };
 
@@ -61,7 +75,7 @@ export default function AdminPage() {
                 {/* User Info */}
                 <div className="flex items-center gap-2 text-base text-gray-600">
                   <FiUser />
-                  <span>{user?.email}</span>
+                  <span>{currentUser?.email}</span>
                 </div>
 
                 {/* Navigation Buttons */}
