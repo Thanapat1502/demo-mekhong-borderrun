@@ -69,17 +69,17 @@ The platform is built with a clean UI, smooth user experience, and a powerful ad
 
 <div align="center">
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142719.pn)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20094911.png)
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142734.png)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20094930.png)
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142745.png)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20094947.png)
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142754.png)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20095004.png)
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142806.png)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20095024.png)
 
-![screenshot 1](./public/admin-screenshot/Screenshot%202025-08-19%20142815.png)
+![screenshot 1](./public/admin-screenshot/Screenshot%202025-09-09%20095051.png)
 
 </div>
 
